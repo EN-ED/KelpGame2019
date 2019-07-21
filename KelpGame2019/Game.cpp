@@ -9,29 +9,29 @@ void Game::SpeedProcess()
 	if (m_speedChangeCount++ > 60) m_isSpeedChange = true;		// 速度を少し変えるようにする
 
 
-	// 現在の速度が68以下だったら
-	if (m_nowSpeed < 68)
+	// 現在の速度がプレイヤーの最大速度 - 2以下だったら
+	if (m_nowSpeed < m_playerMaxSpeed - 2)
 	{
 		m_nowSpeed++;		// 速度を加算していく
 	}
-	// 現在の速度が68より大きかったら
+	// 現在の速度がプレイヤーの最大速度 - 2より大きかったら
 	else
 	{
 		// 速度を少し変えるときだったら
 		if (m_isSpeedChange)
 		{
-			m_nowSpeed = 69;		// 現在の速度を69にする
+			m_nowSpeed = m_playerMaxSpeed - 1;		// 現在の速度をプレイヤーの最大速度 - 1にする
 		}
 		// 速度を少しも変えないときだったら
 		else
 		{
-			m_nowSpeed = 70;		// 現在の速度を70にする
+			m_nowSpeed = m_playerMaxSpeed;		// 現在の速度をプレイヤーの最大速度にする
 		}
 	}
 
 
-	// 現在の速度が68以下もしくは速度を少し変えるときだったら
-	if (m_nowSpeed < 68 || m_isSpeedChange)
+	// 現在の速度がm_playerMaxSpeed - 2以下もしくは速度を少し変えるときだったら
+	if (m_nowSpeed < m_playerMaxSpeed - 2 || m_isSpeedChange)
 	{
 		// 速度変換カウントが10で割り切れる値だったら
 		if (m_speedChangeCount % 10 == 0)
@@ -115,7 +115,7 @@ void Game::Draw()
 
 
 	// 追いかけるもの
-	DrawGraph(0, m_mostMaxY - 512, mD_chaserDraw, false);
+	DrawGraph(0, m_mostMaxY - 512, mD_chaserDraw, true);
 
 
 	// 速度

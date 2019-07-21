@@ -16,6 +16,7 @@ private:
 	int m_playerHP;							// プレイヤーの体力
 	const int m_playerMaxHP = 512;						// プレイヤーの最大体力値
 	const int m_playerHPdiv = m_playerMaxHP / 32;		// プレイヤーの体力に応じて大きさを小さくするための除算値
+	const int m_playerMaxSpeed = 70;			// プレイヤーの最大速度
 
 	int m_scrollX;
 
