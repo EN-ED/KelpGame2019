@@ -21,7 +21,7 @@ void Manager::SceneChange()
 	case ESceneNumber::TITLE:
 		delete p_baseMove;
 		p_baseMove = nullptr;
-		/*SetDrawBright(255, 255, 255);*/
+		SetDrawBright(255, 255, 255);
 
 		p_baseMove = new Title();
 		break;
@@ -38,8 +38,8 @@ void Manager::SceneChange()
 Manager::Manager()
 {
 	// ‰Šú‰»
-	BASICPARAM::e_preScene = ESceneNumber::TITLE;
-	BASICPARAM::e_nowScene = ESceneNumber::TITLE;
+	BASICPARAM::e_preScene = ESceneNumber::LOGO;
+	BASICPARAM::e_nowScene = ESceneNumber::LOGO;
 
 
 	// ƒƒ‚ƒŠ‚Ì‰Šú‰»

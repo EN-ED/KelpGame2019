@@ -28,14 +28,14 @@ Logo::~Logo()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Logo::Draw()
 {
-	/*if (m_logoTransTime < 50)
+	if (m_logoTransTime < 50)
 	{
 		SetDrawBright(m_logoTransTime * 5, m_logoTransTime * 5, m_logoTransTime * 5);
 	}
 	else if (m_logoTransTime > 250)
 	{
 		SetDrawBright(250 - ((m_logoTransTime - 250) * 5), 250 - ((m_logoTransTime - 250) * 5), 250 - ((m_logoTransTime - 250) * 5));
-	}*/
+	}
 
 
 	if (m_nowLogoNumber == 0)
@@ -46,11 +46,6 @@ void Logo::Draw()
 	{
 		DrawExtendGraph(960 - 480 - m_movieZoom * 2, 540 - 220 - m_movieZoom, 960 + 480 + m_movieZoom * 2, 540 + 220 + m_movieZoom, mD_movieDraw, false);
 	}
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "logo");
-
-
-	// debug
-	printfDx("%d\n", m_logoTransTime);
 }
 
 
@@ -60,8 +55,7 @@ void Logo::Process()
 {
 	if (m_nowLogoNumber == 0)
 	{
-		m_logoTransTime++;
-		if (m_logoTransTime >= 300)
+		if (m_logoTransTime++ >= 300)
 		{
 			m_logoTransTime = 0;
 			m_nowLogoNumber = 1;
@@ -70,12 +64,13 @@ void Logo::Process()
 	}
 	else if (m_nowLogoNumber == 1)
 	{
-		m_logoTransTime++;
-		m_movieZoom += 3;
-
-		if (m_logoTransTime >= 300)
+		if (m_logoTransTime++ >= 300)
 		{
 			BASICPARAM::e_nowScene = ESceneNumber::TITLE;
+		}
+		else
+		{
+			m_movieZoom += 3;
 		}
 	}
 }
