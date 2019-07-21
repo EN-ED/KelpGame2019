@@ -53,13 +53,63 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);	// 背景描画
 	SetMouseDispFlag(FALSE);		// マウスカーソルを非表示にする
 
+
+	KeyData::UpDate();
+
+
+	int movieDraw = LoadGraph("media\\movieLogo.mp4");
+	int dxlibLogo = LoadGraph("media\\DxLogo.jpg");
+
+	int nowLogoNumber = 0;
+	int movieZoom = 0;
+	int logoTransTime = 0;
+
+
 	
 	// メインループ
-	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen())
+	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen() && KeyData::CheckEnd())
 	{
-		break;
+		KeyData::UpDate();
+
+		if (logoTransTime < 50)
+		{
+			SetDrawBright(logoTransTime * 5, logoTransTime * 5, logoTransTime * 5);
+		}
+		else if(logoTransTime > 250)
+		{
+			SetDrawBright(250 - ((logoTransTime - 250) * 5), 250 - ((logoTransTime - 250) * 5), 250 - ((logoTransTime - 250) * 5));
+		}
+		if (nowLogoNumber == 0)
+		{
+			logoTransTime++;
+			DrawGraph(960 - 120, 540 - 120, dxlibLogo, false);
+			if (logoTransTime >= 300)
+			{
+				logoTransTime = 0;
+				nowLogoNumber = 1;
+				PlayMovieToGraph(movieDraw);
+			}
+		}
+		else if (nowLogoNumber == 1)
+		{
+			logoTransTime++;
+			movieZoom += 3;
+			DrawExtendGraph(960 - 480 - movieZoom * 2, 540 - 220 - movieZoom, 960 + 480 + movieZoom * 2, 540 + 220 + movieZoom, movieDraw, false);
+
+			if (logoTransTime >= 300)
+			{
+				logoTransTime = 0;
+				nowLogoNumber = 0;
+				movieZoom = 0;
+				SeekMovieToGraph(movieDraw, 0);
+				PauseMovieToGraph(movieDraw);
+			}
+		}
 	}
 
+	PauseMovieToGraph(movieDraw);
+
+	DeleteGraph(movieDraw);
 
 	// 削除
 	Effkseer_End();		// Effekseerを終了する
