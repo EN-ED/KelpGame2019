@@ -33,7 +33,11 @@ private:
 
 	const int m_playerMaxX = 180;		// プレイヤーのずらしたZ座標の最大値
 
-	const int m_playerMaxMomentSpeed = 30;
+	const int m_maxMomentSpeed = 30;		// プレイヤーの瞬間的に加速時の加算最大値
+
+	const int m_playerHitHaleX = 20;		// プレイヤーがぶつかってひるんだ時のZ座標の最大値
+
+	const int m_haleDownMaxSpeed = 20;		// プレイヤーがぶつかったときの減少最大値
 
 	/// ジャンプ関連--------------------------------------------
 

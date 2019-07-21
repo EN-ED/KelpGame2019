@@ -67,7 +67,7 @@ void Game::SpeedProcess()
 	// Xキーを押されたら
 	if (KeyData::Get(KEY_INPUT_X) == 1)
 	{
-		m_nowSpeed = m_playerMaxSpeed + m_playerMaxMomentSpeed;		// 瞬間的にスピードを速くする
+		m_nowSpeed = m_playerMaxSpeed + m_maxMomentSpeed;		// 瞬間的にスピードを速くする
 		m_playerX = m_playerMaxX;							// プレイヤーの位置を右にずらす
 	}
 
@@ -76,6 +76,26 @@ void Game::SpeedProcess()
 	if (m_playerX > 0)
 	{
 		m_playerX--;		// 戻していく
+	}
+	else if (m_playerX < 0)
+	{
+		m_playerX++;
+	}
+
+
+	// デバッグ
+	// Cキーが押されたらぶつかったときを想定する
+	if (KeyData::Get(KEY_INPUT_C) == 1)
+	{
+		if (m_nowSpeed - m_haleDownMaxSpeed < 0)
+		{
+			m_nowSpeed = 0;
+		}
+		else
+		{
+			m_nowSpeed -= m_haleDownMaxSpeed;
+		}
+		m_playerX = -m_playerHitHaleX;
 	}
 }
 
