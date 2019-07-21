@@ -27,6 +27,24 @@ void Manager::SceneChange()
 		break;
 
 
+		// ゲーム本編
+	case ESceneNumber::GAME:
+		delete p_baseMove;
+		p_baseMove = nullptr;
+
+		p_baseMove = new Game();
+		break;
+
+
+		// ゲームオーバー
+	case ESceneNumber::GAMEOVER:
+		delete p_baseMove;
+		p_baseMove = nullptr;
+
+		p_baseMove = new GameOver();
+		break;
+
+
 	default:
 		break;
 	}

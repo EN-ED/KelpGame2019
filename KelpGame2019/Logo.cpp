@@ -11,6 +11,8 @@ Logo::Logo()
 	m_nowLogoNumber = 0;
 	m_movieZoom = 0;
 	m_logoTransTime = 0;
+
+	m_endFlag = false;
 }
 
 
@@ -19,8 +21,8 @@ Logo::Logo()
 Logo::~Logo()
 {
 	PauseMovieToGraph(mD_movieDraw);
-	DeleteGraph(mD_movieDraw);
-	DeleteGraph(mD_dxlibLogo);
+	if (mD_movieDraw != -1) DeleteGraph(mD_movieDraw);
+	if (mD_dxlibLogo != -1) DeleteGraph(mD_dxlibLogo);
 }
 
 

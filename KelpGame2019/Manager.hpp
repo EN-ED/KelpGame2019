@@ -2,6 +2,8 @@
 #include "BaseScene.hpp"
 #include "Logo.hpp"
 #include "Title.hpp"
+#include "Game.hpp"
+#include "GameOver.hpp"
 
 
 

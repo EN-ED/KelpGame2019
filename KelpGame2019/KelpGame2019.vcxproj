@@ -150,6 +150,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="InputKey.cpp" />
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="main.cpp" />
@@ -158,6 +160,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseScene.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="GameOver.hpp" />
     <ClInclude Include="InputKey.hpp" />
     <ClInclude Include="Logo.hpp" />
     <ClInclude Include="Manager.hpp" />
