@@ -20,6 +20,8 @@ Title::~Title()
 void Title::Draw()
 {
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "title");
+
+	DrawFormatString(800, 500, GetColor(255, 255, 255), "ZÉLÅ[Ç≈èâÇﬂÇƒÇÀ");
 }
 
 

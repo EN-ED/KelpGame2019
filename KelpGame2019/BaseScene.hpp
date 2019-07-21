@@ -1,5 +1,6 @@
 #pragma once
 #include "EffekseerForDXLib.h"
+#include "InputKey.hpp"
 
 
 

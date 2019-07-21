@@ -55,6 +55,20 @@ void Logo::Process()
 {
 	if (m_nowLogoNumber == 0)
 	{
+		if (KeyData::Get(KEY_INPUT_Z) == 1)
+		{
+			if (m_logoTransTime < 150)
+			{
+				m_logoTransTime = 150;
+				SetDrawBright(250, 250, 250);
+			}
+			else
+			{
+				m_logoTransTime = 300;
+			}
+		}
+
+
 		if (m_logoTransTime++ >= 300)
 		{
 			m_logoTransTime = 0;
@@ -64,6 +78,21 @@ void Logo::Process()
 	}
 	else if (m_nowLogoNumber == 1)
 	{
+		if (KeyData::Get(KEY_INPUT_Z) == 1)
+		{
+			if (m_logoTransTime < 150)
+			{
+				m_logoTransTime = 150;
+				m_movieZoom = 450;
+				SetDrawBright(250, 250, 250);
+			}
+			else
+			{
+				BASICPARAM::e_nowScene = ESceneNumber::TITLE;
+			}
+		}
+
+
 		if (m_logoTransTime++ >= 300)
 		{
 			BASICPARAM::e_nowScene = ESceneNumber::TITLE;
