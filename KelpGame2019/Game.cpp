@@ -112,6 +112,7 @@ void Game::PlayerJump()
 	{
 		m_gravityPower += 2;
 		m_playerY += m_gravityPower;
+		m_playerX += m_jumpMoveX;
 
 		// ’n–Ê‚É–„‚Ü‚Á‚½‚ç
 		if (m_playerY > m_mostMaxY)

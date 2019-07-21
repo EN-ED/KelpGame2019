@@ -39,6 +39,8 @@ private:
 
 	const int m_haleDownMaxSpeed = 20;		// プレイヤーがぶつかったときの減少最大値
 
+	const int m_jumpMoveX = 3;				// プレイヤーのジャンプ時に少し右にずれるようにするときの最大X値
+
 	/// ジャンプ関連--------------------------------------------
 
 	int m_playerY;	// プレイヤーのY座標
