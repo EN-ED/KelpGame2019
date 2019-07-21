@@ -1,4 +1,4 @@
-#include "InputKey.hpp"
+#include "Manager.hpp"
 
 
 /// --------------------------------------------------------------------------------------------------
@@ -56,62 +56,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	KeyData::UpDate();
 
-
-	int movieDraw = LoadGraph("media\\movieLogo.mp4");
-	int dxlibLogo = LoadGraph("media\\DxLogo.jpg");
-
-	int nowLogoNumber = 0;
-	int movieZoom = 0;
-	int logoTransTime = 0;
-
+	
+	Manager m_manager = Manager();
 
 	
 	// メインループ
-	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen() && KeyData::CheckEnd())
+	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen() && KeyData::CheckEnd() && m_manager.GetEnd())
 	{
 		KeyData::UpDate();
 
-		if (logoTransTime < 50)
-		{
-			SetDrawBright(logoTransTime * 5, logoTransTime * 5, logoTransTime * 5);
-		}
-		else if(logoTransTime > 250)
-		{
-			SetDrawBright(250 - ((logoTransTime - 250) * 5), 250 - ((logoTransTime - 250) * 5), 250 - ((logoTransTime - 250) * 5));
-		}
-		if (nowLogoNumber == 0)
-		{
-			logoTransTime++;
-			DrawGraph(960 - 120, 540 - 120, dxlibLogo, false);
-			if (logoTransTime >= 300)
-			{
-				logoTransTime = 0;
-				nowLogoNumber = 1;
-				PlayMovieToGraph(movieDraw);
-			}
-		}
-		else if (nowLogoNumber == 1)
-		{
-			logoTransTime++;
-			movieZoom += 3;
-			DrawExtendGraph(960 - 480 - movieZoom * 2, 540 - 220 - movieZoom, 960 + 480 + movieZoom * 2, 540 + 220 + movieZoom, movieDraw, false);
 
-			if (logoTransTime >= 300)
-			{
-				logoTransTime = 0;
-				nowLogoNumber = 0;
-				movieZoom = 0;
-				SeekMovieToGraph(movieDraw, 0);
-				PauseMovieToGraph(movieDraw);
-			}
-		}
+		m_manager.Update();
 	}
 
-	PauseMovieToGraph(movieDraw);
-
-	DeleteGraph(movieDraw);
-
 	// 削除
+	m_manager.~Manager();
 	Effkseer_End();		// Effekseerを終了する
 	DxLib_End();		// DXライブラリの後始末
 
