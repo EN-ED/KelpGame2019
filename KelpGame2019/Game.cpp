@@ -14,6 +14,10 @@ void Game::SpeedProcess()
 	{
 		m_nowSpeed++;		// 速度を加算していく
 	}
+	else if (m_nowSpeed > m_playerMaxSpeed + 1)
+	{
+		m_nowSpeed--;
+	}
 	// 現在の速度がプレイヤーの最大速度 - 2より大きかったら
 	else
 	{
@@ -31,7 +35,7 @@ void Game::SpeedProcess()
 
 
 	// 現在の速度がm_playerMaxSpeed - 2以下もしくは速度を少し変えるときだったら
-	if (m_nowSpeed < m_playerMaxSpeed - 2 || m_isSpeedChange)
+	if ((m_nowSpeed < m_playerMaxSpeed - 2 || m_nowSpeed > m_playerMaxSpeed + 1) || m_isSpeedChange)
 	{
 		// 速度変換カウントが10で割り切れる値だったら
 		if (m_speedChangeCount % 10 == 0)
@@ -57,6 +61,79 @@ void Game::SpeedProcess()
 	{
 		m_speedChangeCount = 0;		// 速度変換カウントを0にする
 		m_isSpeedChange = false;	// 速度を少し変えるフラッグを倒す
+	}
+
+
+	// Xキーを押されたら
+	if (KeyData::Get(KEY_INPUT_X) == 1)
+	{
+		m_nowSpeed = m_playerMaxSpeed + m_playerMaxMomentSpeed;		// 瞬間的にスピードを速くする
+		m_playerX = m_playerMaxX;							// プレイヤーの位置を右にずらす
+	}
+
+
+	// プレイヤーの座標位置が0以上だったら
+	if (m_playerX > 0)
+	{
+		m_playerX--;		// 戻していく
+	}
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Game::PlayerJump()
+{
+	m_preY = m_playerY;
+
+
+	// 地面に触れてない(浮いてる
+	if (!m_isGroundFlag)
+	{
+		m_gravityPower += 2;
+		m_playerY += m_gravityPower;
+
+		// 地面に埋まったら
+		if (m_playerY > m_mostMaxY)
+		{
+			m_playerY = m_mostMaxY;
+			m_isFallNow = false;
+			m_gravityPower = 0;
+			m_jumpPower = m_jumpMinPower;
+			m_isGroundFlag = true;
+			m_isJumpFlag = false;
+		}
+	}
+
+	// 地面にいてジャンプボタン押したら
+	if (m_isGroundFlag && KeyData::Get(KEY_INPUT_SPACE) == 1)
+	{
+		m_isJumpFlag = true;
+		m_isLongJump = true;
+		m_isGroundFlag = false;
+		m_isFallNow = false;
+		m_jumpPower = m_jumpMinPower;
+	}
+
+	// ジャンプ動作していたら
+	if (m_isJumpFlag)
+	{
+		if (KeyData::Get(KEY_INPUT_SPACE) == -1)
+		{
+			m_isLongJump = false;
+		}
+		// 長押ししていたら
+		if (m_isLongJump && KeyData::Get(KEY_INPUT_SPACE) > 1 && m_jumpPower <= m_jumpMaxPower)
+		{
+			m_jumpPower += 5;
+		}
+		m_playerY -= m_jumpPower;
+	}
+
+	// 直前のY座標が今のY座標より上だったら
+	if (m_preY < m_playerY)
+	{
+		m_isFallNow = true;
 	}
 }
 
@@ -85,6 +162,16 @@ Game::Game()
 	m_endFlag = false;
 
 	m_scrollX = 0;
+	m_playerY = m_mostMaxY;
+	m_preY = m_playerY;
+	m_playerX = 0;
+	
+	m_isGroundFlag = true;
+	m_isJumpFlag = false;
+	m_isLongJump = false;
+	m_jumpPower = m_jumpMinPower;
+	m_gravityPower = 0;
+	m_isFallNow = false;
 }
 
 
@@ -123,8 +210,15 @@ void Game::Draw()
 	
 
 	// プレイヤー
-	DrawExtendGraph(284 + ((m_playerMaxHP - m_playerHP) / m_playerHPdiv), (m_mostMaxY - 64) + ((m_playerMaxHP - m_playerHP) / (m_playerHPdiv / 2))
-		, 284 + 64 - ((m_playerMaxHP - m_playerHP) / m_playerHPdiv), m_mostMaxY, mD_playerDraw, true);
+	DrawExtendGraph(284 + ((m_playerMaxHP - m_playerHP) / m_playerHPdiv) + m_playerX, (m_playerY - 64) + ((m_playerMaxHP - m_playerHP) / (m_playerHPdiv / 2))
+		, 284 + 64 - ((m_playerMaxHP - m_playerHP) / m_playerHPdiv) + m_playerX, m_playerY, mD_playerDraw, true);
+	if (m_playerX > m_playerMaxX - 10)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
+		DrawExtendGraph(284 + ((m_playerMaxHP - m_playerHP) / m_playerHPdiv), (m_playerY - 64) + ((m_playerMaxHP - m_playerHP) / (m_playerHPdiv / 2))
+			, 284 + 64 - ((m_playerMaxHP - m_playerHP) / m_playerHPdiv), m_playerY, mD_playerDraw, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 }
 
 
@@ -133,6 +227,9 @@ void Game::Draw()
 void Game::Process()
 {
 	SpeedProcess();
+
+
+	PlayerJump();
 
 
 	// 現在のスピードが0じゃなかったら
