@@ -24,11 +24,11 @@ GameOver::~GameOver()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void GameOver::Draw()
 {
-	DrawExtendGraph(960 - 480 - 900 * 2, 540 - 220 - 900, 960 + 480 + 900 * 2, 540 + 220 + 900, mD_movieDraw, false);
+	DrawExtendGraph(960 - 480 - 900 * 2, 540 - 220 - 900, 960 + 480 + 900 * 2, 540 + 220 + 900, mD_movieDraw, false);		// 動画を表示
 
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "gameover");
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "gameover");				// ゲームオーバーのシーンだと表示
 
-	DrawFormatString(800, 500, GetColor(255, 255, 255), "Zキーでタイトル戻るよ");
+	DrawFormatString(800, 500, GetColor(255, 255, 255), "Zキーでタイトル戻るよ");			// タイトルへの移動キーを表示
 }
 
 
@@ -36,15 +36,17 @@ void GameOver::Draw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void GameOver::Process()
 {
+	// Zキーを押したら
 	if (KeyData::Get(KEY_INPUT_Z) == 1)
 	{
-		BASICPARAM::e_nowScene = ESceneNumber::TITLE;
+		BASICPARAM::e_nowScene = ESceneNumber::TITLE;				// TITLEのシーンへ移行する
 	}
 
 
+	// 動画が終了していたら
 	if (!GetMovieStateToGraph(mD_movieDraw))
 	{
-		SeekMovieToGraph(mD_movieDraw, 0);
-		PlayMovieToGraph(mD_movieDraw);
+		SeekMovieToGraph(mD_movieDraw, 0);		// 位置を最初に戻す
+		PlayMovieToGraph(mD_movieDraw);			// 動画を再生する
 	}
 }

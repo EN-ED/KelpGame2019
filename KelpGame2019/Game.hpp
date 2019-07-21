@@ -14,12 +14,17 @@ private:
 
 	const int m_mostMaxY = 1080 - 128;		// プレイヤーの最大最底辺位置
 	int m_playerHP;							// プレイヤーの体力
-	const int m_playerMaxHP = 256;
+	const int m_playerMaxHP = 512;						// プレイヤーの最大体力値
+	const int m_playerHPdiv = m_playerMaxHP / 32;		// プレイヤーの体力に応じて大きさを小さくするための除算値
+
+	int m_scrollX;
 
 	int m_nowSpeed;							// 現在のスピード
 	int m_lowNowSpeed;						// 現在のコンマ以下のスピード
-	bool m_lowSpeedChange;					// コンマ以下のスピードの数値変換タイミング
+	int m_speedChangeCount;					// コンマ以下のスピードの数値変換タイミング
+	bool m_isSpeedChange;					// コンマ以下のスピードの数値変換タイミング
 
+	void SpeedProcess();
 
 public:
 	Game();
