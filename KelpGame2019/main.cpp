@@ -21,6 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetBackgroundColor(0, 0, 0);			// 背景色を白に変更
 	ChangeWindowMode(TRUE);						// ウィンドウズモードにさせる
 	SetEnableXAudioFlag(TRUE);					// XAudioを使用するようにする
+	SetUseDirect3DVersion(DX_DIRECT3D_11);
 
 
 	SetGraphMode(winWidth, winHeight, bitColor);			// 画面サイズ設定
@@ -47,7 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
 
 
-	Effekseer_Set2DSetting(1920, 1080);	// 2Dエフェクトの最大範囲を設定
+	Effekseer_Set2DSetting(winWidth, winHeight);	// 2Dエフェクトの最大範囲を設定
 
 
 	SetDrawScreen(DX_SCREEN_BACK);	// 背景描画
