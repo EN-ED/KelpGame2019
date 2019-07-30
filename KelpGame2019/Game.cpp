@@ -164,7 +164,7 @@ void Game::PlayerJump()
 Game::Game()
 {
 	mD_backGroundDraw = LoadGraph("media\\background.png");
-	mD_playerDraw = LoadGraph("media\\player.png");
+	mD_playerDraw = LoadGraph("media\\player_size_diffe\\player×2.png");
 	mD_chaserDraw = LoadGraph("media\\chaser.png");
 	mD_garbageDraw = LoadGraph("media\\garbage.png");
 	mD_underGroundDraw = LoadGraph("media\\underground.png");
@@ -229,15 +229,15 @@ void Game::Draw()
 	// 速度
 	DrawFormatString(199, 131, GetColor(255, 255, 255), "%d.%d", m_nowSpeed, m_lowNowSpeed);
 	
-
+	int size = 128;
 	// プレイヤー
-	DrawExtendGraph(284 + ((m_playerMaxHP - m_playerHP) / m_playerHPdiv) + m_playerX, (m_playerY - 64) + ((m_playerMaxHP - m_playerHP) / (m_playerHPdiv / 2))
-		, 284 + 64 - ((m_playerMaxHP - m_playerHP) / m_playerHPdiv) + m_playerX, m_playerY, mD_playerDraw, true);
+	DrawExtendGraph(284 + ((m_playerMaxHP - m_playerHP) / m_playerHPdiv) + m_playerX, (m_playerY - size) + ((m_playerMaxHP - m_playerHP) / (m_playerHPdiv / 2))
+		, 284 + size - ((m_playerMaxHP - m_playerHP) / m_playerHPdiv) + m_playerX, m_playerY, mD_playerDraw, true);
 	if (m_playerX > m_playerMaxX - 10)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
-		DrawExtendGraph(284 + ((m_playerMaxHP - m_playerHP) / m_playerHPdiv), (m_playerY - 64) + ((m_playerMaxHP - m_playerHP) / (m_playerHPdiv / 2))
-			, 284 + 64 - ((m_playerMaxHP - m_playerHP) / m_playerHPdiv), m_playerY, mD_playerDraw, true);
+		DrawExtendGraph(284 + ((m_playerMaxHP - m_playerHP) / m_playerHPdiv), (m_playerY - size) + ((m_playerMaxHP - m_playerHP) / (m_playerHPdiv / 2))
+			, 284 + size - ((m_playerMaxHP - m_playerHP) / m_playerHPdiv), m_playerY, mD_playerDraw, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 }
