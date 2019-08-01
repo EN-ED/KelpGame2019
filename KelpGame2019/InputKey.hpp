@@ -1,5 +1,5 @@
 #pragma once
-#include "EffekseerForDXLib.h"
+#include "DxLib.h"
 
 
 

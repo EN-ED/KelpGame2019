@@ -20,8 +20,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetWindowText("KelpGame2019");					// メインウインドウのウインドウタイトルを変更する
 	SetBackgroundColor(0, 0, 0);			// 背景色を白に変更
 	ChangeWindowMode(TRUE);						// ウィンドウズモードにさせる
-	SetEnableXAudioFlag(TRUE);					// XAudioを使用するようにする
-	SetUseDirect3DVersion(DX_DIRECT3D_11);
 
 
 	SetGraphMode(winWidth, winHeight, bitColor);			// 画面サイズ設定
@@ -34,21 +32,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{
 		return -1;			// エラーが起きたら直ちに終了
 	}
-
-
-	// Effekseerを初期化する。引数には画面に表示する最大パーティクル数を設定する。
-	if (Effkseer_Init(500) == -1)
-	{
-		DxLib_End();
-		return -1;
-	}
-
-
-	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
-	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
-
-
-	Effekseer_Set2DSetting(winWidth, winHeight);	// 2Dエフェクトの最大範囲を設定
 
 
 	SetDrawScreen(DX_SCREEN_BACK);	// 背景描画
@@ -72,7 +55,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// 削除
 	m_manager.~Manager();
-	Effkseer_End();		// Effekseerを終了する
 	DxLib_End();		// DXライブラリの後始末
 
 
