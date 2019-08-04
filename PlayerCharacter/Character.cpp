@@ -49,10 +49,11 @@ void Character::SpeedProcess()
 
 	if (m_isSpeedUp == 1)
 	{
-		if (++m_speedUpCount < 15)
+		m_speedUpCount += 0.1f;
+		if (m_speedUpCount < 1.0)
 		{
-			m_addSpeed += std::sinf(PI_MATHF / 4.0f) * 2.0f;
-			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 4.0f) * 80.0f);
+			m_addSpeed += std::sinf(PI_MATHF * m_speedUpCount) * 4.0f;
+			m_playerX += static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
 		}
 		else
 		{
@@ -83,10 +84,11 @@ void Character::SpeedProcess()
 		{
 			m_speedMaxWaitCount--;
 		}
-		if (--m_speedUpCount > 0)
+		m_speedUpCount -= 0.1f;
+		if (m_speedUpCount > 0)
 		{
-			m_addSpeed -= std::sinf(PI_MATHF / 4.0f) * 2.0f;
-			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 4.0f) * 80.0f);
+			m_addSpeed -= std::sinf(PI_MATHF * m_speedUpCount) * 4.0f;
+			m_playerX -= static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
 		}
 	}
 }

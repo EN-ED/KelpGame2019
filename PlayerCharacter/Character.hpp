@@ -24,7 +24,7 @@ private:
 	const float m_jumpDownSpeed = -1.25f;		// ジャンプ中に減少する数値
 
 	int m_isSpeedUp;				// 加速するかどうか
-	int m_speedUpCount;				// 加速が完了するまでの時間
+	float m_speedUpCount;				// 加速が完了するまでの時間
 
 	int m_speedMaxWaitCount;		// 加速最大値の時に持続する時間
 
