@@ -7,7 +7,7 @@ void Title::SceneOneDraw()
 {
 	// スタート文字
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_sceneOneStartBlendCount);
-	DrawGraph(m_sceneSideDrawX + 960 - 200, 800 - 24, m_sceneOneStart, true);
+	DrawGraph(m_sceneSideDrawX + 960 - 200, 800 - 24, mD_sceneOneStart, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
@@ -49,24 +49,24 @@ void Title::SceneTwoDraw()
 	if (m_cursolArea == TwoCursolArea::start)
 	{
 		// スタート文字
-		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 400 - 24, m_sceneTwoFontBigCount, -0.2, m_sceneTwoStart, true);
+		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 400 - 24, m_sceneTwoFontBigCount, -0.2, mD_sceneTwoStart, true);
 
 
 		// 終了文字
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
-		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 600 - 24, 1.0, -0.2, m_sceneTwoEnd, true);
+		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 600 - 24, 1.0, -0.2, mD_sceneTwoEnd, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else if (m_cursolArea == TwoCursolArea::end)
 	{
 		// スタート文字
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
-		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 400 - 24, 1.0, -0.2, m_sceneTwoStart, true);
+		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 400 - 24, 1.0, -0.2, mD_sceneTwoStart, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 
 		// 終了文字
-		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 600 - 24, m_sceneTwoFontBigCount, -0.2, m_sceneTwoEnd, true);
+		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 600 - 24, m_sceneTwoFontBigCount, -0.2, mD_sceneTwoEnd, true);
 	}
 }
 
@@ -117,13 +117,13 @@ void Title::SceneTwoProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Title::Title()
 {
-	m_sceneOneStart = LoadGraph("media\\start_sceneOne.png");
+	mD_sceneOneStart = LoadGraph("media\\start_sceneOne.png");
 
 	m_sceneOneStartBlendCount = 50;
 	m_isBlendDownSwitch = false;
 
-	m_sceneTwoStart = LoadGraph("media\\start_sceneTwo.png");
-	m_sceneTwoEnd = LoadGraph("media\\end_sceneTwo.png");
+	mD_sceneTwoStart = LoadGraph("media\\start_sceneTwo.png");
+	mD_sceneTwoEnd = LoadGraph("media\\end_sceneTwo.png");
 
 	m_cursolArea = TwoCursolArea::start;
 	m_sceneTwoFontBigCount = 1.0f;
@@ -143,9 +143,9 @@ Title::Title()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Title::~Title()
 {
-	if (m_sceneTwoEnd != -1) DeleteGraph(m_sceneTwoEnd);
-	if (m_sceneTwoStart != -1) DeleteGraph(m_sceneTwoStart);
-	if (m_sceneOneStart != -1) DeleteGraph(m_sceneOneStart);
+	if (mD_sceneTwoEnd != -1) DeleteGraph(mD_sceneTwoEnd);
+	if (mD_sceneTwoStart != -1) DeleteGraph(mD_sceneTwoStart);
+	if (mD_sceneOneStart != -1) DeleteGraph(mD_sceneOneStart);
 }
 
 
