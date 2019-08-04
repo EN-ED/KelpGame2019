@@ -1,4 +1,8 @@
 #include "Character.hpp"
+#include <random>
+#include <cmath>
+
+#define PI_MATHF 3.14159265359f
 
 
 
@@ -6,16 +10,84 @@
 void Character::SpeedProcess()
 {
 	// 現在の速度がプレイヤーの最大速度以下だったら
-	if (m_nowSpeed < m_playerMaxSpeed)
+	if (m_isSpeedUp == 1)
 	{
-		m_nowSpeed += 1.0f;		// 速度を加算していく
+		if (m_nowSpeed < (m_playerMaxSpeed + m_isSpeedUp * 30.0f) - 1.0f)
+		{
+			m_nowSpeed += m_addSpeed;		// 速度を加算していく
+		}
+		else if (m_nowSpeed > (m_playerMaxSpeed + m_isSpeedUp * 30.0f) + 1.0f)
+		{
+			m_nowSpeed -= m_addSpeed;		// 速度を加算していく
+		}
+	}
+	else
+	{
+		if (m_nowSpeed < (m_playerMaxSpeed) - 1.0f)
+		{
+			m_nowSpeed += m_addSpeed;		// 速度を加算していく
+		}
+		else if (m_nowSpeed > (m_playerMaxSpeed) + 1.0f)
+		{
+			m_nowSpeed -= m_addSpeed;		// 速度を加算していく
+		}
 	}
 
 
 	// 地面に触れてない(浮いてる
 	if (!m_isGroundFlag)
 	{
-		m_nowSpeed -= 1.25f;
+		m_nowSpeed += m_jumpDownSpeed;
+	}
+
+
+	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedMaxWaitCount == 0)
+	{
+		m_isSpeedUp = 1;
+		m_speedUpCount = 0;
+	}
+
+	if (m_isSpeedUp == 1)
+	{
+		if (++m_speedUpCount < 15)
+		{
+			m_addSpeed += std::sinf(PI_MATHF / 4.0f) * 2.0f;
+			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 4.0f) * 80.0f);
+		}
+		else
+		{
+			m_isSpeedUp = 2;
+		}
+	}
+	else if (m_isSpeedUp == 2)
+	{
+		m_speedMaxWaitCount++;
+		if (m_speedMaxWaitCount > m_speedMaxWaitMaxCount / 2 && m_speedMaxWaitCount <= m_speedMaxWaitMaxCount)
+		{
+			m_addSpeed -= std::sinf(PI_MATHF / 5.0f) * 0.1f;
+			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 10.0f);
+		}
+		else if (m_speedMaxWaitCount <= m_speedMaxWaitMaxCount / 2)
+		{
+			m_addSpeed += std::sinf(PI_MATHF / 5.0f) * 0.1f;
+			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 10.0f);
+		}
+		else
+		{
+			m_isSpeedUp = 0;
+		}
+	}
+	else
+	{
+		if (m_speedMaxWaitCount > 0)
+		{
+			m_speedMaxWaitCount--;
+		}
+		if (--m_speedUpCount > 0)
+		{
+			m_addSpeed -= std::sinf(PI_MATHF / 4.0f) * 2.0f;
+			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 4.0f) * 80.0f);
+		}
 	}
 }
 
@@ -74,6 +146,10 @@ Character::Character()
 	mD_playerDraw = LoadGraph("media\\player.png");
 
 	m_nowSpeed = 0.0f;
+	m_addSpeed = 1.0f;
+	m_isSpeedUp = 0;
+	m_speedUpCount = 0;
+	m_speedMaxWaitCount = 0;
 
 	m_playerUnderY = m_mostMaxY;
 	m_playerY = m_playerUnderY - m_playerSize;
@@ -115,6 +191,7 @@ void Character::Draw()
 	/// 関係ないもの
 	// 背景
 	DrawBox(0, 0, 1920, 1080, GetColor(m_backGroundColorRed, m_backGroundColorGreen, m_backGroundColorBlue), true);
+	DrawBox(100, 140, 150, 140 - static_cast<int>(m_nowSpeed), GetColor(125, 125, 125), true);
 
 
 	// 速度
@@ -123,6 +200,9 @@ void Character::Draw()
 
 	// プレイヤー
 	DrawGraph(m_playerX, m_playerY, mD_playerDraw, true);
+
+
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", m_playerX);
 }
 
 

@@ -1,7 +1,6 @@
 #pragma once
 #include "DxLib.h"
 #include "InputKey.hpp"
-#include <random>
 
 
 class Character
@@ -13,20 +12,34 @@ private:
 	const int m_mostMaxY = 1080 - 128;		// プレイヤーの最大最底辺位置
 	const int m_defaultX = 284;				// プレイヤーの基準X座標
 
+
+	/// スピード関連-------------------------------------------
+
 	const int m_playerMaxSpeed = 70;			// プレイヤーの最大速度
 
 	float m_nowSpeed;							// 現在のスピード
 
-	void SpeedProcess();
+	float m_addSpeed;							// 加算するスピード値
 
-	void PlayerJump();
+	const float m_jumpDownSpeed = -1.25f;		// ジャンプ中に減少する数値
+
+	int m_isSpeedUp;				// 加速するかどうか
+	int m_speedUpCount;				// 加速が完了するまでの時間
+
+	int m_speedMaxWaitCount;		// 加速最大値の時に持続する時間
+
+	const int m_speedMaxWaitMaxCount = 20;		// 加速最大値の時に持続する時間の最大(2で割り切れないと少しずれる
 
 	int m_playerX;		// プレイヤーのX座標
-	int m_playerY;
-	int m_playerUnderY;		// プレイヤーのY座標
+	int m_playerY;		// プレイヤーのY座標
+
+	void SpeedProcess();
+	/// --------------------------------------------------------
 
 
 	/// ジャンプ関連--------------------------------------------
+
+	int m_playerUnderY;		// プレイヤーの足元のY座標
 
 	bool m_isGroundFlag;	// 地面に触れてるか
 
@@ -41,6 +54,8 @@ private:
 	const int m_jumpMaxPower = 40;		// ジャンプ力の最大値
 
 	const int m_jumpMinPower = 10;		// ジャンプ力の最小値
+
+	void PlayerJump();
 	/// --------------------------------------------------------
 
 
