@@ -157,6 +157,8 @@ Character::Character()
 {
 	mD_playerDraw = LoadGraph("media\\player.png");
 
+	m_damageCount = 0;
+
 	m_nowSpeed = 0.0f;
 	m_addSpeed = 1.0f;
 	m_isSpeedUp = 0;
@@ -211,8 +213,10 @@ void Character::Draw()
 
 
 	// ƒvƒŒƒCƒ„[
-	DrawGraph(m_playerX, m_playerY, mD_playerDraw, true);
-
+	if (m_damageCount >= 15)
+	{
+		DrawGraph(m_playerX, m_playerY, mD_playerDraw, true);
+	}
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", m_playerX);
 }
@@ -229,6 +233,9 @@ void Character::Process()
 
 
 	m_playerY = m_playerUnderY - m_playerSize;
+
+
+	if (++m_damageCount > 30) m_damageCount = 0;
 
 
 

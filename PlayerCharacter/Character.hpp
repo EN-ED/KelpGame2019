@@ -11,6 +11,11 @@ private:
 
 	const int m_mostMaxY = 1080 - 128;		// プレイヤーの最大最底辺位置
 	const int m_defaultX = 284;				// プレイヤーの基準X座標
+	
+
+	int m_damageCount;
+
+
 
 
 	/// スピード関連-------------------------------------------
