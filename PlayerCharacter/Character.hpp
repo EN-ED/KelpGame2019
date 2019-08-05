@@ -28,7 +28,7 @@ private:
 
 	int m_speedMaxWaitCount;		// 加速最大値の時に持続する時間
 
-	const int m_speedMaxWaitMaxCount = 20;		// 加速最大値の時に持続する時間の最大(2で割り切れないと少しずれる
+	const int m_speedMaxWaitMaxCount = 60;		// 加速最大値の時に持続する時間の最大(2で割り切れないと少しずれる
 
 	int m_playerX;		// プレイヤーのX座標
 	int m_playerY;		// プレイヤーのY座標

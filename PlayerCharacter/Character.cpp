@@ -63,15 +63,25 @@ void Character::SpeedProcess()
 	else if (m_isSpeedUp == 2)
 	{
 		m_speedMaxWaitCount++;
-		if (m_speedMaxWaitCount > m_speedMaxWaitMaxCount / 2 && m_speedMaxWaitCount <= m_speedMaxWaitMaxCount)
-		{
-			m_addSpeed -= std::sinf(PI_MATHF / 5.0f) * 0.1f;
-			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 10.0f);
-		}
-		else if (m_speedMaxWaitCount <= m_speedMaxWaitMaxCount / 2)
+		if (m_speedMaxWaitCount > (m_speedMaxWaitMaxCount / 4) * 3 && m_speedMaxWaitCount <= m_speedMaxWaitMaxCount)
 		{
 			m_addSpeed += std::sinf(PI_MATHF / 5.0f) * 0.1f;
-			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 10.0f);
+			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 5.0f);
+		}
+		else if (m_speedMaxWaitCount > (m_speedMaxWaitMaxCount / 4) * 2 && m_speedMaxWaitCount <= (m_speedMaxWaitMaxCount / 4) * 3)
+		{
+			m_addSpeed -= std::sinf(PI_MATHF / 5.0f) * 0.1f;
+			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 5.0f);
+		}
+		else if (m_speedMaxWaitCount > m_speedMaxWaitMaxCount / 4 && m_speedMaxWaitCount <= (m_speedMaxWaitMaxCount / 4) * 2)
+		{
+			m_addSpeed -= std::sinf(PI_MATHF / 5.0f) * 0.1f;
+			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 5.0f);
+		}
+		else if (m_speedMaxWaitCount <= m_speedMaxWaitMaxCount / 4)
+		{
+			m_addSpeed += std::sinf(PI_MATHF / 5.0f) * 0.1f;
+			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 5.0f);
 		}
 		else
 		{
@@ -240,7 +250,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorRed++;
+			m_backGroundColorRed += m_speedMaxWaitCount > 0 ? 4 : 1;
 			break;
 
 		case 1:
@@ -248,7 +258,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorGreen++;
+			m_backGroundColorGreen += m_speedMaxWaitCount > 0 ? 4 : 1;
 			break;
 
 		case 2:
@@ -256,7 +266,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorBlue++;
+			m_backGroundColorBlue += m_speedMaxWaitCount > 0 ? 4 : 1;
 			break;
 
 		case 3:
@@ -264,7 +274,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorRed--;
+			m_backGroundColorRed -= m_speedMaxWaitCount > 0 ? 4 : 1;
 			break;
 
 		case 4:
@@ -272,7 +282,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorGreen--;
+			m_backGroundColorGreen -= m_speedMaxWaitCount > 0 ? 4 : 1;
 			break;
 
 		case 5:
@@ -280,7 +290,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorBlue--;
+			m_backGroundColorBlue -= m_speedMaxWaitCount > 0 ? 4 : 1;
 			break;
 
 		default:
