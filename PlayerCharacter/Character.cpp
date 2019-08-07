@@ -135,12 +135,8 @@ void Character::SpeedProcess()
 	// 加速最大時だったら
 	else if (m_isSpeedUp == 2)
 	{
-		// 加速最大中カウントを進める
-		m_speedMaxWaitCount++;
-
-
 		// 加速最大中カウントが上限半分以上だったら(軽く左に戻っている中
-		if (m_speedMaxWaitCount > m_speedMaxWaitMaxCount)
+		if (++m_speedMaxWaitCount > m_speedMaxWaitMaxCount)
 		{
 			// 通常時に戻る
 			m_isSpeedUp = 0;
