@@ -7,29 +7,94 @@
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-void Character::SpeedProcess()
+void Character::PositionProcess()
 {
-	// 現在の速度がプレイヤーの最大速度以下だったら
+	// 最大まで加速中
 	if (m_isSpeedUp == 1)
 	{
-		if (m_nowSpeed < (m_playerMaxSpeed + m_isSpeedUp * 30.0f) - 1.0f)
+		// 加速カウントが足りていなかったら
+		if (m_speedUpCount < 1.0)
 		{
-			m_nowSpeed += m_addSpeed;		// 速度を加算していく
+			m_playerX += static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
 		}
-		else if (m_nowSpeed > (m_playerMaxSpeed + m_isSpeedUp * 30.0f) + 1.0f)
+	}
+	// 加速最大時だったら
+	else if (m_isSpeedUp == 2)
+	{
+		// 加速最大中カウントが上限半分以上だったら(軽く左に戻っている中
+		if (m_speedMaxWaitCount > m_speedMaxWaitMaxCount / 2 && m_speedMaxWaitCount <= m_speedMaxWaitMaxCount)
 		{
-			m_nowSpeed -= m_addSpeed;		// 速度を加算していく
+			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 8.0f);
+		}
+		// 加速最大中カウントが上限半分以下だったら(軽く右に進んでいる中
+		else if (m_speedMaxWaitCount < /* [<]なのはSpeedProcessに合わせるため */ m_speedMaxWaitMaxCount / 2)
+		{
+			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 8.0f);
 		}
 	}
 	else
 	{
-		if (m_nowSpeed < (m_playerMaxSpeed) - 1.0f)
+		// 加速から戻す
+		if (m_speedUpCount > 0.1f)
+		{
+			m_playerX -= static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
+		}
+	}
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Character::DamageProcess()
+{
+	// ダメージを受けたら
+	if (m_isDamageHit)
+	{
+		// ダメージカウントが最大になったら
+		if (++m_damageCount > m_damageMaxCount)
+		{
+			m_damageCount = 0;
+			m_isDamageHit = false;
+		}
+	}
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Character::SpeedProcess()
+{
+	// 加速中時
+	if (m_isSpeedUp == 1)
+	{
+		m_nowSpeed += m_addSpeed;		// 速度を加算していく
+	}
+	// 最大加速時
+	else if (m_isSpeedUp == 2)
+	{
+
+	}
+	// 通常時
+	else
+	{
+		// 最大加速より小さかったら
+		if (m_nowSpeed < m_playerMaxSpeed - 0.5f)
 		{
 			m_nowSpeed += m_addSpeed;		// 速度を加算していく
 		}
-		else if (m_nowSpeed > (m_playerMaxSpeed) + 1.0f)
+		// 最大加速より大きかったら
+		else if (m_nowSpeed > m_playerMaxSpeed + 0.5f)
 		{
-			m_nowSpeed -= m_addSpeed;		// 速度を加算していく
+			m_nowSpeed -= m_addSpeed;		// 速度を減少していく
+		}
+		// 浮動小数点的に間にいたら
+		else
+		{
+			// 同じにさせる
+			if (m_nowSpeed != static_cast<float>(m_playerMaxSpeed))
+			{
+				m_nowSpeed = static_cast<float>(m_playerMaxSpeed);
+			}
 		}
 	}
 
@@ -41,64 +106,60 @@ void Character::SpeedProcess()
 	}
 
 
+	// Zキーを押され、加速ができるようになっていたら
 	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedMaxWaitCount == 0)
 	{
 		m_isSpeedUp = 1;
-		m_speedUpCount = 0;
 	}
 
+
+	// 最大まで加速中
 	if (m_isSpeedUp == 1)
 	{
+		// 加速カウントを進める
 		m_speedUpCount += 0.1f;
+
+
+		// 加速カウントが足りていなかったら
 		if (m_speedUpCount < 1.0)
 		{
-			m_addSpeed += std::sinf(PI_MATHF * m_speedUpCount) * 4.0f;
-			m_playerX += static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
+			m_addSpeed += std::sinf(PI_MATHF * m_speedUpCount) * 1.5f;
 		}
+		// 加速カントがたまったら
 		else
 		{
+			// 加速最大中とする
 			m_isSpeedUp = 2;
 		}
 	}
+	// 加速最大時だったら
 	else if (m_isSpeedUp == 2)
 	{
+		// 加速最大中カウントを進める
 		m_speedMaxWaitCount++;
-		if (m_speedMaxWaitCount > (m_speedMaxWaitMaxCount / 4) * 3 && m_speedMaxWaitCount <= m_speedMaxWaitMaxCount)
+
+
+		// 加速最大中カウントが上限半分以上だったら(軽く左に戻っている中
+		if (m_speedMaxWaitCount > m_speedMaxWaitMaxCount)
 		{
-			m_addSpeed += std::sinf(PI_MATHF / 5.0f) * 0.1f;
-			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 5.0f);
-		}
-		else if (m_speedMaxWaitCount > (m_speedMaxWaitMaxCount / 4) * 2 && m_speedMaxWaitCount <= (m_speedMaxWaitMaxCount / 4) * 3)
-		{
-			m_addSpeed -= std::sinf(PI_MATHF / 5.0f) * 0.1f;
-			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 5.0f);
-		}
-		else if (m_speedMaxWaitCount > m_speedMaxWaitMaxCount / 4 && m_speedMaxWaitCount <= (m_speedMaxWaitMaxCount / 4) * 2)
-		{
-			m_addSpeed -= std::sinf(PI_MATHF / 5.0f) * 0.1f;
-			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 5.0f);
-		}
-		else if (m_speedMaxWaitCount <= m_speedMaxWaitMaxCount / 4)
-		{
-			m_addSpeed += std::sinf(PI_MATHF / 5.0f) * 0.1f;
-			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 5.0f);
-		}
-		else
-		{
+			// 通常時に戻る
 			m_isSpeedUp = 0;
 		}
 	}
 	else
 	{
+		// 加速が出来るまでカウントを減らす
 		if (m_speedMaxWaitCount > 0)
 		{
 			m_speedMaxWaitCount--;
 		}
-		m_speedUpCount -= 0.1f;
-		if (m_speedUpCount > 0)
+
+
+		// 加速から戻す
+		if (m_speedUpCount > 0.1f)
 		{
-			m_addSpeed -= std::sinf(PI_MATHF * m_speedUpCount) * 4.0f;
-			m_playerX -= static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
+			m_speedUpCount -= 0.1f;
+			m_addSpeed -= std::sinf(PI_MATHF * m_speedUpCount) * 1.5f;
 		}
 	}
 }
@@ -137,15 +198,21 @@ void Character::PlayerJump()
 	// ジャンプ動作していたら
 	if (m_isJumpFlag)
 	{
+		// ジャンプボタンを話したら
 		if (KeyData::Get(KEY_INPUT_SPACE) == -1)
 		{
 			m_isLongJump = false;
 		}
+
+
 		// 長押ししていたら
 		if (m_isLongJump && KeyData::Get(KEY_INPUT_SPACE) > 1 && m_jumpPower <= m_jumpMaxPower)
 		{
 			m_jumpPower += 5;
 		}
+
+
+		// 上に上げる
 		m_playerUnderY -= m_jumpPower;
 	}
 }
@@ -160,6 +227,7 @@ Character::Character()
 	GraphFilter(mD_playerDamageDraw, DX_GRAPH_FILTER_HSB, 1, 0, 90, -60);
 
 	m_damageCount = 0;
+	m_isDamageHit = false;
 
 	m_nowSpeed = 0.0f;
 	m_addSpeed = 1.0f;
@@ -207,8 +275,8 @@ void Character::Draw()
 {
 	/// 関係ないもの
 	// 背景
-	//DrawBox(0, 0, 1920, 1080, GetColor(m_backGroundColorRed, m_backGroundColorGreen, m_backGroundColorBlue), true);
-	//DrawBox(100, 140, 150, 140 - static_cast<int>(m_nowSpeed), GetColor(125, 125, 125), true);
+	DrawBox(0, 0, 1920, 1080, GetColor(m_backGroundColorRed, m_backGroundColorGreen, m_backGroundColorBlue), true);
+	DrawBox(100, 140, 150, 140 - static_cast<int>(m_nowSpeed), GetColor(125, 125, 125), true);
 
 
 	// 速度
@@ -216,13 +284,13 @@ void Character::Draw()
 
 
 	// プレイヤー
-	if (m_damageCount >= 10)
+	if (m_damageCount >= m_damageMaxCount / 2)
 	{
-		DrawGraph(m_playerX, m_playerY, mD_playerDraw, true);
+		DrawGraph(m_playerX, m_playerY, mD_playerDamageDraw, true);
 	}
 	else
 	{
-		DrawGraph(m_playerX, m_playerY, mD_playerDamageDraw, true);
+		DrawGraph(m_playerX, m_playerY, mD_playerDraw, true);
 	}
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", m_playerX);
@@ -239,10 +307,13 @@ void Character::Process()
 	PlayerJump();
 
 
+	DamageProcess();
+
+
+	PositionProcess();
+
+
 	m_playerY = m_playerUnderY - m_playerSize;
-
-
-	if (++m_damageCount > 20) m_damageCount = 0;
 
 
 
@@ -264,7 +335,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorRed += m_speedMaxWaitCount > 0 ? 4 : 1;
+			m_backGroundColorRed += 1;
 			break;
 
 		case 1:
@@ -272,7 +343,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorGreen += m_speedMaxWaitCount > 0 ? 4 : 1;
+			m_backGroundColorGreen += 1;
 			break;
 
 		case 2:
@@ -280,7 +351,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorBlue += m_speedMaxWaitCount > 0 ? 4 : 1;
+			m_backGroundColorBlue += 1;
 			break;
 
 		case 3:
@@ -288,7 +359,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorRed -= m_speedMaxWaitCount > 0 ? 4 : 1;
+			m_backGroundColorRed -= 1;
 			break;
 
 		case 4:
@@ -296,7 +367,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorGreen -= m_speedMaxWaitCount > 0 ? 4 : 1;
+			m_backGroundColorGreen -= 1;
 			break;
 
 		case 5:
@@ -304,7 +375,7 @@ void Character::Process()
 			{
 				m_isBackGroundChange = true;
 			}
-			m_backGroundColorBlue -= m_speedMaxWaitCount > 0 ? 4 : 1;
+			m_backGroundColorBlue -= 1;
 			break;
 
 		default:

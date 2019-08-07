@@ -11,13 +11,23 @@ private:
 
 	const int m_mostMaxY = 1080 - 128;		// プレイヤーの最大最底辺位置
 	const int m_defaultX = 284;				// プレイヤーの基準X座標
+
+
+	void PositionProcess();
 	
 
-	int m_damageCount;
+	/// ダメージ関連--------------------------------------------
 
-	int mD_playerDamageDraw;
+	int m_damageCount;						// ダメージを受けた演出のカウント
 
+	const int m_damageMaxCount = 16;		// ダメージを受けた演出のカウントの最大
 
+	int mD_playerDamageDraw;				// ダメージ演出用の画像
+
+	bool m_isDamageHit;						// ダメージを受けたかどうか
+
+	void DamageProcess();
+	/// --------------------------------------------------------
 
 
 	/// スピード関連-------------------------------------------
@@ -35,7 +45,7 @@ private:
 
 	int m_speedMaxWaitCount;		// 加速最大値の時に持続する時間
 
-	const int m_speedMaxWaitMaxCount = 60;		// 加速最大値の時に持続する時間の最大(2で割り切れないと少しずれる
+	const int m_speedMaxWaitMaxCount = 40;		// 加速最大値の時に持続する時間の最大(2で割り切れないと少しずれる
 
 	int m_playerX;		// プレイヤーのX座標
 	int m_playerY;		// プレイヤーのY座標
