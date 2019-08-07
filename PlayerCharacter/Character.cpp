@@ -156,6 +156,8 @@ void Character::PlayerJump()
 Character::Character()
 {
 	mD_playerDraw = LoadGraph("media\\player.png");
+	mD_playerDamageDraw = LoadGraph("media\\player.png");
+	GraphFilter(mD_playerDamageDraw, DX_GRAPH_FILTER_HSB, 1, 0, 90, -60);
 
 	m_damageCount = 0;
 
@@ -194,6 +196,7 @@ Character::Character()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Character::~Character()
 {
+	if (mD_playerDamageDraw != -1) DeleteGraph(mD_playerDamageDraw);
 	if (mD_playerDraw != -1) DeleteGraph(mD_playerDraw);
 }
 
@@ -204,8 +207,8 @@ void Character::Draw()
 {
 	/// ŠÖŒW‚È‚¢‚à‚Ì
 	// ”wŒi
-	DrawBox(0, 0, 1920, 1080, GetColor(m_backGroundColorRed, m_backGroundColorGreen, m_backGroundColorBlue), true);
-	DrawBox(100, 140, 150, 140 - static_cast<int>(m_nowSpeed), GetColor(125, 125, 125), true);
+	//DrawBox(0, 0, 1920, 1080, GetColor(m_backGroundColorRed, m_backGroundColorGreen, m_backGroundColorBlue), true);
+	//DrawBox(100, 140, 150, 140 - static_cast<int>(m_nowSpeed), GetColor(125, 125, 125), true);
 
 
 	// ‘¬“x
@@ -213,9 +216,13 @@ void Character::Draw()
 
 
 	// ƒvƒŒƒCƒ„[
-	if (m_damageCount >= 15)
+	if (m_damageCount >= 10)
 	{
 		DrawGraph(m_playerX, m_playerY, mD_playerDraw, true);
+	}
+	else
+	{
+		DrawGraph(m_playerX, m_playerY, mD_playerDamageDraw, true);
 	}
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", m_playerX);
@@ -235,7 +242,7 @@ void Character::Process()
 	m_playerY = m_playerUnderY - m_playerSize;
 
 
-	if (++m_damageCount > 30) m_damageCount = 0;
+	if (++m_damageCount > 20) m_damageCount = 0;
 
 
 

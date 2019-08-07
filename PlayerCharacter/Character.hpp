@@ -15,6 +15,8 @@ private:
 
 	int m_damageCount;
 
+	int mD_playerDamageDraw;
+
 
 
 
