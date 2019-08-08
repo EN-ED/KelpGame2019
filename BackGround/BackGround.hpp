@@ -5,6 +5,8 @@ class BackGround
 {
 private:
 	int mD_backGround;
+	int m_areaX;
+	int m_speed;
 
 
 public:
