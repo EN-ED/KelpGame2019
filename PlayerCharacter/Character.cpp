@@ -1,8 +1,10 @@
 #include "Character.hpp"
+#include "DxLib.h"
+#include "InputKey.hpp"
 #include <random>
 #include <cmath>
 
-#define PI_MATHF 3.14159265359f
+constexpr float PI_MATHF = 3.14159265359f;
 
 
 

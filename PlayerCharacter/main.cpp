@@ -1,4 +1,6 @@
 #include "Character.hpp"
+#include "DxLib.h"
+#include "InputKey.hpp"
 
 
 /// --------------------------------------------------------------------------------------------------
@@ -45,7 +47,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 	// ÉÅÉCÉìÉãÅ[Év
-	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen() && KeyData::CheckEnd())
+	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen() && !KeyData::IsCheckEnd())
 	{
 		KeyData::UpDate();
 
