@@ -1,8 +1,6 @@
 #pragma once
-#include "DxLib.h"
 
 
-enum class ELOGONOW { dxlib, team };
 
 
 class Logo
@@ -16,6 +14,7 @@ private:
 
 	/// ƒV[ƒ“‘JˆÚ‚ÉŠÖ‚·‚é
 
+	enum class ELOGONOW { dxlib, team };
 	ELOGONOW m_nowLogoNumber;	// Œ»İ‚ÌƒƒS
 	int m_logoTransTime;	// ƒƒS‚Ì‘JˆÚŠÔ
 
