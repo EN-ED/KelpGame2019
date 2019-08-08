@@ -1,4 +1,6 @@
 #include "Title.hpp"
+#include "DxLib.h"
+#include "InputKey.hpp"
 
 
 
