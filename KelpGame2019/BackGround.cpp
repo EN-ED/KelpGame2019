@@ -15,6 +15,10 @@ BackGround::BackGround()
 	m_areaX = 0;
 
 	m_speed = 10;
+
+	m_isSpeedUp = false;
+
+	m_isFirstSpeedUp = false;
 }
 
 
@@ -32,20 +36,26 @@ BackGround::~BackGround()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void BackGround::Draw()
 {
-	if (KeyData::Get(KEY_INPUT_Z) > 1)
+	if (m_isSpeedUp)
 	{
-		BlurScreen::PreRenderBlurScreen();
-		DrawRectGraph(0, 0, m_areaX, 0, 1920, 1080, mD_backGround, false);
-		DrawRectGraph(1920 - m_areaX, 0, 0, 0, m_areaX, 1080, mD_backGround, false);
-		BlurScreen::PostRenderBlurScreen();
-	}
-	else if (KeyData::Get(KEY_INPUT_Z) == 1)
-	{
-		BlurScreen::ReplayInit();
-		BlurScreen::PreRenderBlurScreen();
-		DrawRectGraph(0, 0, m_areaX, 0, 1920, 1080, mD_backGround, false);
-		DrawRectGraph(1920 - m_areaX, 0, 0, 0, m_areaX, 1080, mD_backGround, false);
-		BlurScreen::PostRenderBlurScreen();
+		if (!m_isFirstSpeedUp)
+		{
+			BlurScreen::PreRenderBlurScreen();
+			DrawRectGraph(0, 0, m_areaX, 0, 1920, 1080, mD_backGround, false);
+			DrawRectGraph(1920 - m_areaX, 0, 0, 0, m_areaX, 1080, mD_backGround, false);
+			BlurScreen::PostRenderBlurScreen();
+		}
+		else
+		{
+			m_isFirstSpeedUp = false;
+
+
+			BlurScreen::ReplayInit();
+			BlurScreen::PreRenderBlurScreen();
+			DrawRectGraph(0, 0, m_areaX, 0, 1920, 1080, mD_backGround, false);
+			DrawRectGraph(1920 - m_areaX, 0, 0, 0, m_areaX, 1080, mD_backGround, false);
+			BlurScreen::PostRenderBlurScreen();
+		}
 	}
 	else
 	{
@@ -59,7 +69,7 @@ void BackGround::Draw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void BackGround::Process()
 {
-	if (KeyData::Get(KEY_INPUT_Z) > 0)
+	if (m_isSpeedUp)
 	{
 		if (m_speed < 70)
 		{
@@ -79,4 +89,17 @@ void BackGround::Process()
 	}
 	m_areaX += m_speed;
 	if (m_areaX > 1920) m_areaX = 0;
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void BackGround::SetIsSpeedUp(const bool& t_isSpeedUp)
+{
+	if (!m_isSpeedUp)
+	{
+		m_isFirstSpeedUp = true;
+	}
+
+	m_isSpeedUp = t_isSpeedUp;
 }

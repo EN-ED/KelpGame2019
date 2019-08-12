@@ -1,5 +1,6 @@
 #include "Logo.hpp"
 #include "DxLib.h"
+#include "InputKey.hpp"
 
 
 
@@ -61,6 +62,11 @@ void Logo::Process()
 	// Œ»Ý‚ÌƒƒS‚ÌID‚ª0”Ô–Ú‚¾‚Á‚½‚ç
 	if (m_nowLogoNumber == ELOGONOW::dxlib)
 	{
+		if (KeyData::Get(KEY_INPUT_Z) == 1)
+		{
+			m_logoTransTime = 0;				// ƒƒS•\Ž¦ŽžŠÔ‚ðƒŠƒZƒbƒg‚·‚é
+			m_nowLogoNumber = ELOGONOW::team;				// ƒƒS‚ÌID‚ð1”Ô–Ú‚É‚·‚é
+		}
 		// ƒƒS•\Ž¦ŽžŠÔ‚ª300‚æ‚è‘å‚«‚©‚Á‚½‚ç
 		if (m_logoTransTime++ >= 300)
 		{
@@ -71,6 +77,10 @@ void Logo::Process()
 	// Œ»Ý‚ÌƒƒS‚ÌID‚ª1”Ô–Ú‚¾‚Á‚½‚ç
 	else if (m_nowLogoNumber == ELOGONOW::team)
 	{
+		if (KeyData::Get(KEY_INPUT_Z) == 1)
+		{
+			BASICPARAM::e_nowScene = ESceneNumber::TITLE;					// ƒƒS‚ÌID‚ð1”Ô–Ú‚É‚·‚é
+		}
 		// ƒƒS•\Ž¦ŽžŠÔ‚ª300‚æ‚è‘å‚«‚©‚Á‚½‚ç
 		if (m_logoTransTime++ >= 300)
 		{
