@@ -1,6 +1,7 @@
 #include "Manager.hpp"
 #include "DxLib.h"
 #include "InputKey.hpp"
+#include "InputController.hpp"
 
 
 /// --------------------------------------------------------------------------------------------------
@@ -42,14 +43,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	KeyData::UpDate();
 
+	PadData::SetPadNum();
+	PadData::SetDedZone(20000, -20000, 20000, -20000, 20000, -20000, 20000, -20000);
+	PadData::UpDate();
 	
 	Manager m_manager = Manager();
 
 	
 	// ÉÅÉCÉìÉãÅ[Év
-	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen() && !KeyData::IsCheckEnd() && !m_manager.GetEnd())
+	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen() && !KeyData::IsCheckEnd() && !PadData::IsCheckEnd() && !m_manager.GetEnd())
 	{
 		KeyData::UpDate();
+		PadData::UpDate();
 
 
 		m_manager.Update();
