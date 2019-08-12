@@ -1,6 +1,4 @@
 #pragma once
-#include "DxLib.h"
-#include "InputKey.hpp"
 
 
 
@@ -34,6 +32,8 @@ protected:
 
 
 public:
+	virtual ~BaseScene() {};
+
 	// •`‰æ
 	virtual void Draw() = 0;
 

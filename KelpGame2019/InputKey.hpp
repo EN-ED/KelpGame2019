@@ -1,5 +1,7 @@
 #pragma once
-#include "DxLib.h"
+#ifndef _INPUTKEY_HPP
+#define _INPUTKEY_HPP
+
 
 
 
@@ -15,3 +17,5 @@ public:
 	static int Get(int t_keyCode);	// ƒL[“ü—Íó‘Ôæ“¾
 	static bool CheckEnd();			// ‹­§I—¹
 };
+
+#endif // !_INPUTKEY_HPP
