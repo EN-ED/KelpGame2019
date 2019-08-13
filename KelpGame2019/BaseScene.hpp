@@ -28,7 +28,7 @@ class BaseScene
 {
 protected:
 	// 強制終了フラッグ
-	bool m_endFlag;
+	bool m_endFlag = false;
 
 
 public:

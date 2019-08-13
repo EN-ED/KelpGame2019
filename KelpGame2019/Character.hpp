@@ -5,7 +5,7 @@ class Character
 {
 private:
 	int mD_playerDraw;						// プレイヤー画像
-	const int m_playerSize = 128;			// プレイヤーの画像サイズ
+	const int m_playerSize = 196;			// プレイヤーの画像サイズ
 
 	const int m_mostMaxY = 1080 - 128;		// プレイヤーの最大最底辺位置
 	const int m_defaultX = 284;				// プレイヤーの基準X座標
@@ -98,6 +98,6 @@ public:
 	void Process();
 
 
-	const bool& GetIsSpeedUp() const;
+	const bool GetIsSpeedUp() const;
 };
 

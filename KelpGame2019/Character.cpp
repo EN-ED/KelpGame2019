@@ -380,7 +380,7 @@ void Character::Process()
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const bool& Character::GetIsSpeedUp() const
+const bool Character::GetIsSpeedUp() const
 {
 	if (m_isSpeedUp == 0)
 	{
