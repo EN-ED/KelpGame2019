@@ -8,6 +8,8 @@ private:
 	int m_areaX;
 	int m_speed;
 
+	int mD_underGround;
+
 
 public:
 	BackGround();
