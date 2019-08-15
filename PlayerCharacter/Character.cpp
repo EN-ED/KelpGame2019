@@ -226,7 +226,7 @@ Character::Character()
 	for (int i = 0; i != m_playerDrawNum; ++i)
 	{
 		std::string str = "media\\anim_blink\\" + std::to_string(i) + ".png";
-		mD_playerDrawArray[i] = LoadGraph(str.c_str());
+		mD_playerArray[i] = LoadGraph(str.c_str());
 	}
 	m_playerDrawAnimCount = 0;
 
@@ -272,6 +272,10 @@ Character::Character()
 Character::~Character()
 {
 	if (mD_playerDamageDraw != -1) DeleteGraph(mD_playerDamageDraw);
+	for (int i = 0; i != m_playerDrawNum; ++i)
+	{
+		if (mD_playerArray[i] != -1) DeleteGraph(mD_playerArray[i]);
+	}
 }
 
 
@@ -296,7 +300,7 @@ void Character::Draw()
 	}
 	else
 	{
-		DrawGraph(m_playerX, m_playerY, mD_playerDrawArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
+		DrawGraph(m_playerX, m_playerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 	}
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", m_playerX);

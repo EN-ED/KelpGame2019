@@ -5,7 +5,7 @@ class Character
 {
 private:
 	const int m_playerDrawNum = 20;
-	int mD_playerDrawArray[20];
+	int mD_playerArray[20];
 
 	const int m_playerDrawAnimSpeed = 6;
 	int m_playerDrawAnimCount;
