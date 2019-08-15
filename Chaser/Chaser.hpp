@@ -10,6 +10,11 @@ private:
 	int mD_underGround;
 	int mD_player;
 
+	int mD_screen;
+	int m_zoom;
+
+	int m_chaserX;
+
 	int m_scrollX;
 	int m_playerX;
 
