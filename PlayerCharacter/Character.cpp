@@ -3,6 +3,7 @@
 #include "InputKey.hpp"
 #include <random>
 #include <cmath>
+#include <string>
 
 constexpr float PI_MATHF = 3.14159265359f;
 
@@ -112,12 +113,14 @@ void Character::SpeedProcess()
 	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedMaxWaitCount == 0)
 	{
 		m_isSpeedUp = 1;
+		m_playerDrawAnimCount = 78;
 	}
 
 
 	// 最大まで加速中
 	if (m_isSpeedUp == 1)
 	{
+		m_playerDrawAnimCount = 78;
 		// 加速カウントを進める
 		m_speedUpCount += 0.1f;
 
@@ -220,7 +223,13 @@ void Character::PlayerJump()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Character::Character()
 {
-	mD_playerDraw = LoadGraph("media\\player.png");
+	for (int i = 0; i != m_playerDrawNum; ++i)
+	{
+		std::string str = "media\\anim_blink\\" + std::to_string(i) + ".png";
+		mD_playerDrawArray[i] = LoadGraph(str.c_str());
+	}
+	m_playerDrawAnimCount = 0;
+
 	mD_playerDamageDraw = LoadGraph("media\\player.png");
 	GraphFilter(mD_playerDamageDraw, DX_GRAPH_FILTER_HSB, 1, 0, 90, -60);
 
@@ -263,7 +272,6 @@ Character::Character()
 Character::~Character()
 {
 	if (mD_playerDamageDraw != -1) DeleteGraph(mD_playerDamageDraw);
-	if (mD_playerDraw != -1) DeleteGraph(mD_playerDraw);
 }
 
 
@@ -288,7 +296,7 @@ void Character::Draw()
 	}
 	else
 	{
-		DrawGraph(m_playerX, m_playerY, mD_playerDraw, true);
+		DrawGraph(m_playerX, m_playerY, mD_playerDrawArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 	}
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", m_playerX);
@@ -299,6 +307,9 @@ void Character::Draw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::Process()
 {
+	if (++m_playerDrawAnimCount >= m_playerDrawAnimSpeed * m_playerDrawNum) m_playerDrawAnimCount = 0;
+
+
 	SpeedProcess();
 
 
