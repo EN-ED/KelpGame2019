@@ -4,8 +4,13 @@
 class Character
 {
 private:
-	int mD_playerDraw;						// プレイヤー画像
-	const int m_playerSize = 196;			// プレイヤーの画像サイズ
+	const int m_playerDrawNum = 20;
+	int mD_playerArray[20];
+
+	const int m_playerDrawAnimSpeed = 6;
+	int m_playerDrawAnimCount;
+
+	const int m_playerSize = 192;			// プレイヤーの画像サイズ
 
 	const int m_mostMaxY = 1080 - 128;		// プレイヤーの最大最底辺位置
 	const int m_defaultX = 284;				// プレイヤーの基準X座標
@@ -48,6 +53,8 @@ private:
 	int m_playerX;		// プレイヤーのX座標
 	int m_playerY;		// プレイヤーのY座標
 
+	int mD_blurPlayer;
+
 	void SpeedProcess();
 	/// --------------------------------------------------------
 
@@ -72,17 +79,6 @@ private:
 
 	void PlayerJump();
 	/// --------------------------------------------------------
-
-
-
-	/// 関係ないもの
-	int m_backGroundColorRed;			// 背景色赤
-	int m_backGroundColorGreen;			// 背景色緑
-	int m_backGroundColorBlue;			// 背景色青
-
-	int m_backGroundSwitch;
-	bool m_isBackGroundChange;
-
 
 
 

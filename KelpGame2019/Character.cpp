@@ -3,9 +3,9 @@
 #include "InputKey.hpp"
 #include <random>
 #include <cmath>
+#include <string>
 
 constexpr float PI_MATHF = 3.14159265359f;
-
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -220,9 +220,12 @@ void Character::PlayerJump()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Character::Character()
 {
-	mD_playerDraw = LoadGraph("media\\player.png");
-	mD_playerDamageDraw = LoadGraph("media\\player.png");
-	GraphFilter(mD_playerDamageDraw, DX_GRAPH_FILTER_HSB, 1, 0, 90, -60);
+	for (int i = 0; i != m_playerDrawNum; ++i)
+	{
+		std::string str = "media\\anim_blink\\" + std::to_string(i) + ".png";
+		mD_playerArray[i] = LoadGraph(str.c_str());
+	}
+	m_playerDrawAnimCount = 0;
 
 	m_damageCount = 0;
 	m_isDamageHit = false;
@@ -242,19 +245,6 @@ Character::Character()
 	m_isLongJump = false;
 	m_jumpPower = m_jumpMinPower;
 	m_gravityPower = 0;
-
-
-
-	/// 関係ないもの
-	m_backGroundColorRed = 10;
-	m_backGroundColorGreen = 10;
-	m_backGroundColorBlue = 10;
-
-	std::random_device rnd;     // 非決定的な乱数生成器を生成
-	std::mt19937 mt(rnd());     //  メルセンヌ・ツイスタの32ビット版、引数は初期シード値
-	std::uniform_int_distribution<> rand(0, 5);        // [0, 9] 範囲の一様乱数
-	m_backGroundSwitch = rand(mt);
-	m_isBackGroundChange = false;
 }
 
 
@@ -263,7 +253,10 @@ Character::Character()
 Character::~Character()
 {
 	if (mD_playerDamageDraw != -1) DeleteGraph(mD_playerDamageDraw);
-	if (mD_playerDraw != -1) DeleteGraph(mD_playerDraw);
+	for (int i = 0; i != m_playerDrawNum; ++i)
+	{
+		if (mD_playerArray[i] != -1) DeleteGraph(mD_playerArray[i]);
+	}
 }
 
 
@@ -282,7 +275,7 @@ void Character::Draw()
 	}
 	else
 	{
-		DrawGraph(m_playerX, m_playerY, mD_playerDraw, true);
+		DrawGraph(m_playerX, m_playerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 	}
 }
 
@@ -291,6 +284,9 @@ void Character::Draw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::Process()
 {
+	if (++m_playerDrawAnimCount >= m_playerDrawAnimSpeed * m_playerDrawNum) m_playerDrawAnimCount = 0;
+
+
 	SpeedProcess();
 
 
@@ -304,77 +300,6 @@ void Character::Process()
 
 
 	m_playerY = m_playerUnderY - m_playerSize;
-
-
-
-	/// 関係ないもの
-	if (m_isBackGroundChange)
-	{
-		std::random_device rnd;     // 非決定的な乱数生成器を生成
-		std::mt19937 mt(rnd());     //  メルセンヌ・ツイスタの32ビット版、引数は初期シード値
-		std::uniform_int_distribution<> rand(0, 5);        // [0, 9] 範囲の一様乱数
-		m_backGroundSwitch = rand(mt);
-		m_isBackGroundChange = false;
-	}
-	else
-	{
-		switch (m_backGroundSwitch)
-		{
-		case 0:
-			if (m_backGroundColorRed > 180)
-			{
-				m_isBackGroundChange = true;
-			}
-			m_backGroundColorRed += 1;
-			break;
-
-		case 1:
-			if (m_backGroundColorGreen > 180)
-			{
-				m_isBackGroundChange = true;
-			}
-			m_backGroundColorGreen += 1;
-			break;
-
-		case 2:
-			if (m_backGroundColorBlue > 180)
-			{
-				m_isBackGroundChange = true;
-			}
-			m_backGroundColorBlue += 1;
-			break;
-
-		case 3:
-			if (m_backGroundColorRed < 10)
-			{
-				m_isBackGroundChange = true;
-			}
-			m_backGroundColorRed -= 1;
-			break;
-
-		case 4:
-			if (m_backGroundColorGreen < 10)
-			{
-				m_isBackGroundChange = true;
-			}
-			m_backGroundColorGreen -= 1;
-			break;
-
-		case 5:
-			if (m_backGroundColorBlue < 10)
-			{
-				m_isBackGroundChange = true;
-			}
-			m_backGroundColorBlue -= 1;
-			break;
-
-		default:
-			m_backGroundColorRed = 0;
-			m_backGroundColorGreen = 0;
-			m_backGroundColorBlue = 0;
-			break;
-		}
-	}
 }
 
 
