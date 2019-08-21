@@ -10,6 +10,8 @@ private:
 	BackGround* mp_backGround;
 	Character* mp_character;
 
+	bool m_isFirstSpeedUp;
+
 
 public:
 	Game();

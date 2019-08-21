@@ -112,12 +112,15 @@ void Character::SpeedProcess()
 	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedMaxWaitCount == 0)
 	{
 		m_isSpeedUp = 1;
+		m_playerDrawAnimCount = 78;
 	}
 
 
 	// 最大まで加速中
 	if (m_isSpeedUp == 1)
 	{
+		m_playerDrawAnimCount = 78;
+
 		// 加速カウントを進める
 		m_speedUpCount += 0.1f;
 
@@ -237,8 +240,10 @@ Character::Character()
 	m_speedMaxWaitCount = 0;
 
 	m_playerUnderY = m_mostMaxY;
-	m_playerY = m_playerUnderY - m_playerSize;
 	m_playerX = m_defaultX;
+	m_playerY = m_playerUnderY - m_playerSize;
+	m_prePlayerX = m_playerX;
+	m_prePlayerY = m_playerY;
 
 	m_isGroundFlag = true;
 	m_isJumpFlag = false;
@@ -282,8 +287,20 @@ void Character::Draw()
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Character::BlurDraw()
+{
+	DrawGraph(m_prePlayerX, m_prePlayerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::Process()
 {
+	m_prePlayerX = m_playerX;
+	m_prePlayerY = m_playerY;
+
+
 	if (++m_playerDrawAnimCount >= m_playerDrawAnimSpeed * m_playerDrawNum) m_playerDrawAnimCount = 0;
 
 

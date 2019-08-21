@@ -15,6 +15,12 @@ private:
 	const int m_mostMaxY = 1080 - 128;		// プレイヤーの最大最底辺位置
 	const int m_defaultX = 284;				// プレイヤーの基準X座標
 
+	int m_playerX;		// プレイヤーのX座標
+	int m_playerY;		// プレイヤーのY座標
+
+	int m_prePlayerX;
+	int m_prePlayerY;
+
 
 	void PositionProcess();
 
@@ -50,11 +56,6 @@ private:
 
 	const int m_speedMaxWaitMaxCount = 40;		// 加速最大値の時に持続する時間の最大(2で割り切れないと少しずれる
 
-	int m_playerX;		// プレイヤーのX座標
-	int m_playerY;		// プレイヤーのY座標
-
-	int mD_blurPlayer;
-
 	void SpeedProcess();
 	/// --------------------------------------------------------
 
@@ -89,6 +90,8 @@ public:
 
 	// 描画
 	void Draw();
+
+	void BlurDraw();
 
 	// プロセス
 	void Process();

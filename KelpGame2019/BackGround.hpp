@@ -10,7 +10,6 @@ private:
 	int m_speed;
 
 	bool m_isSpeedUp;
-	bool m_isFirstSpeedUp;
 
 
 public:
