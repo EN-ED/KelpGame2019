@@ -31,8 +31,6 @@ private:
 
 	const int m_damageMaxCount = 16;		// ダメージを受けた演出のカウントの最大
 
-	int mD_playerDamageDraw;				// ダメージ演出用の画像
-
 	bool m_isDamageHit;						// ダメージを受けたかどうか
 
 	void DamageProcess();
@@ -98,6 +96,8 @@ public:
 
 
 	const bool GetIsSpeedUp() const;
+
+	const float& GetSpeed() const;
 
 	void SetIsDamageHit(bool& t_isDamageHit);
 };

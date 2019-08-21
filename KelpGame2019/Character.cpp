@@ -223,6 +223,7 @@ void Character::PlayerJump()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Character::Character()
 {
+	ZeroMemory(mD_playerArray, sizeof(mD_playerArray));
 	for (int i = 0; i != m_playerDrawNum; ++i)
 	{
 		std::string str = "media\\anim_blink\\" + std::to_string(i) + ".png";
@@ -257,7 +258,6 @@ Character::Character()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Character::~Character()
 {
-	if (mD_playerDamageDraw != -1) DeleteGraph(mD_playerDamageDraw);
 	for (int i = 0; i != m_playerDrawNum; ++i)
 	{
 		if (mD_playerArray[i] != -1) DeleteGraph(mD_playerArray[i]);
@@ -274,14 +274,14 @@ void Character::Draw()
 
 
 	// ƒvƒŒƒCƒ„[
-	if (m_damageCount >= m_damageMaxCount / 2)
+	/*if (m_damageCount >= m_damageMaxCount / 2)
 	{
 		DrawGraph(m_playerX, m_playerY, mD_playerDamageDraw, true);
 	}
 	else
-	{
+	{*/
 		DrawGraph(m_playerX, m_playerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
-	}
+	/*}*/
 }
 
 
@@ -332,6 +332,14 @@ const bool Character::GetIsSpeedUp() const
 	{
 		return true;
 	}
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+const float& Character::GetSpeed() const
+{
+	return m_nowSpeed;
 }
 
 
