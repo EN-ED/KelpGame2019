@@ -6,6 +6,11 @@
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+BlurScreen g_blurScreen;
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Game::Game()
 {
 	mp_backGround = nullptr;
@@ -16,7 +21,7 @@ Game::Game()
 
 	m_endFlag = false;
 
-	BlurScreen::Init(200, 6, -2, 0, 0);
+	g_blurScreen.Init(200, 6, -2, 0, 0);
 
 	m_isFirstSpeedUp = false;
 }
@@ -29,7 +34,8 @@ Game::~Game()
 	if (mp_character != nullptr) delete mp_character;
 	if (mp_backGround != nullptr) delete mp_backGround;
 
-	BlurScreen::Release();
+	g_blurScreen.Release();
+	g_blurScreen.~BlurScreen();
 }
 
 
@@ -41,21 +47,21 @@ void Game::Draw()
 	{
 		if (m_isFirstSpeedUp)
 		{
-			BlurScreen::PreRenderBlurScreen();
+			g_blurScreen.PreRenderBlurScreen();
 			mp_backGround->Draw();
 			mp_character->BlurDraw();
-			BlurScreen::PostRenderBlurScreen();
+			g_blurScreen.PostRenderBlurScreen();
 
 			mp_character->Draw();
 		}
 		else
 		{
 			m_isFirstSpeedUp = true;
-			BlurScreen::ReplayInit();
-			BlurScreen::PreRenderBlurScreen();
+			g_blurScreen.ReplayInit();
+			g_blurScreen.PreRenderBlurScreen();
 			mp_backGround->Draw();
 			mp_character->BlurDraw();
-			BlurScreen::PostRenderBlurScreen();
+			g_blurScreen.PostRenderBlurScreen();
 
 			mp_character->Draw();
 		}

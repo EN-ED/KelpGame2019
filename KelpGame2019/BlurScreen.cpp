@@ -4,22 +4,6 @@
 
 
 /// ------------------------------------------------------------------------------------------------------------
-
-int BlurScreen::m_screen[2];
-int BlurScreen::m_current;
-int BlurScreen::m_alpha;
-int BlurScreen::m_screenWidth;
-int BlurScreen::m_screenHeight;
-int BlurScreen::m_offsetX1;
-int BlurScreen::m_offsetX2;
-int BlurScreen::m_offsetY1;
-int BlurScreen::offsetY2;
-
-int BlurScreen::m_notBlendDraw;
-
-
-
-/// ------------------------------------------------------------------------------------------------------------
 void BlurScreen::Init(int t_alpha, int t_offsetX1, int t_offsetY1, int t_offsetX2, int t_offsetY2)
 {
 	m_screenWidth = 1920;

@@ -98,5 +98,7 @@ public:
 
 
 	const bool GetIsSpeedUp() const;
+
+	void SetIsDamageHit(bool& t_isDamageHit);
 };
 

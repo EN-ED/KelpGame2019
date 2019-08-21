@@ -57,13 +57,13 @@ void Manager::SceneChange()
 Manager::Manager()
 {
 	// ‰Šú‰»
-	BASICPARAM::e_preScene = ESceneNumber::LOGO;
-	BASICPARAM::e_nowScene = ESceneNumber::LOGO;
+	BASICPARAM::e_preScene = ESceneNumber::GAME;
+	BASICPARAM::e_nowScene = ESceneNumber::GAME;
 
 
 	// ƒƒ‚ƒŠ‚Ì‰Šú‰»
 	p_baseMove = nullptr;
-	p_baseMove = new Logo();
+	p_baseMove = new Game();
 }
 
 

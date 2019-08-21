@@ -333,3 +333,11 @@ const bool Character::GetIsSpeedUp() const
 		return true;
 	}
 }
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Character::SetIsDamageHit(bool& t_isDamageHit)
+{
+	m_isDamageHit = t_isDamageHit;
+}
