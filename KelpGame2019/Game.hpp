@@ -2,6 +2,7 @@
 #include "BaseScene.hpp"
 #include "BackGround.hpp"
 #include "Character.hpp"
+#include "Chaser.hpp"
 
 
 class Game : public BaseScene
@@ -9,6 +10,7 @@ class Game : public BaseScene
 private:
 	BackGround* mp_backGround;
 	Character* mp_character;
+	Chaser* mp_chaser;
 
 	bool m_isFirstSpeedUp;
 

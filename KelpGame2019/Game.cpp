@@ -19,6 +19,9 @@ Game::Game()
 	mp_character = nullptr;
 	mp_character = new Character();
 
+	mp_chaser = nullptr;
+	mp_chaser = new Chaser();
+
 	m_endFlag = false;
 
 	g_blurScreen.Init(200, 6, -2, 0, 0);
@@ -31,6 +34,7 @@ Game::Game()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Game::~Game()
 {
+	if (mp_chaser != nullptr) delete mp_chaser;
 	if (mp_character != nullptr) delete mp_character;
 	if (mp_backGround != nullptr) delete mp_backGround;
 
@@ -50,6 +54,7 @@ void Game::Draw()
 			g_blurScreen.PreRenderBlurScreen();
 			mp_backGround->Draw();
 			mp_character->BlurDraw();
+			mp_chaser->Draw();
 			g_blurScreen.PostRenderBlurScreen();
 
 			mp_character->Draw();
@@ -61,6 +66,7 @@ void Game::Draw()
 			g_blurScreen.PreRenderBlurScreen();
 			mp_backGround->Draw();
 			mp_character->BlurDraw();
+			mp_chaser->Draw();
 			g_blurScreen.PostRenderBlurScreen();
 
 			mp_character->Draw();
@@ -69,9 +75,8 @@ void Game::Draw()
 	else
 	{
 		mp_backGround->Draw();
-
-
 		mp_character->Draw();
+		mp_chaser->Draw();
 	}
 }
 
@@ -84,6 +89,9 @@ void Game::Process()
 
 
 	mp_character->Process();
+
+
+	mp_chaser->Process();
 
 
 	mp_backGround->SetSpeed(mp_character->GetSpeed());
