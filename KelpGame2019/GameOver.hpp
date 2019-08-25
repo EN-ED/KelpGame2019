@@ -7,7 +7,7 @@ class GameOver : public BaseScene
 private:
 	/// ‰æ‘œ
 
-	int mD_movieDraw;		// “®‰æ‚Ì‰æ‘œ
+	int mD_backGround;		// “®‰æ‚Ì‰æ‘œ
 
 public:
 	GameOver();
