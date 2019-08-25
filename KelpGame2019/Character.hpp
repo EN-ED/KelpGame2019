@@ -43,6 +43,11 @@ private:
 
 	float m_nowSpeed;							// 現在のスピード
 
+	int m_nowSpeedThirdDigit;		// 現在の速度の三桁目の数字
+	int m_nowSpeedSecondDigit;		// 現在の速度の二桁目の数字
+	int m_nowSpeedFirstDigit;		// 現在の速度の二桁目の数字
+	int m_nowSpeedDecimalPoint;		// 現在の速度の小数点の数字
+
 	float m_addSpeed;							// 加算するスピード値
 
 	const float m_jumpDownSpeed = -1.25f;		// ジャンプ中に減少する数値

@@ -239,6 +239,10 @@ Character::Character()
 	m_isSpeedUp = 0;
 	m_speedUpCount = 0;
 	m_speedMaxWaitCount = 0;
+	m_nowSpeedThirdDigit = 0;
+	m_nowSpeedSecondDigit = 0;
+	m_nowSpeedFirstDigit = 0;
+	m_nowSpeedDecimalPoint = 0;
 
 	m_playerUnderY = m_mostMaxY;
 	m_playerX = m_defaultX;
@@ -270,18 +274,26 @@ Character::~Character()
 void Character::Draw()
 {
 	// 速度
-	DrawFormatString(199, 131, GetColor(255, 255, 255), "%f", m_nowSpeed);
-
-
-	// プレイヤー
-	/*if (m_damageCount >= m_damageMaxCount / 2)
+	if (m_nowSpeedThirdDigit != 0)
 	{
-		DrawGraph(m_playerX, m_playerY, mD_playerDamageDraw, true);
+		DrawFormatString(199, 131, GetColor(255, 255, 255), "%d%d%d.%d", m_nowSpeedThirdDigit, m_nowSpeedSecondDigit, m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
+	}
+	else if (m_nowSpeedSecondDigit != 0)
+	{
+		DrawFormatString(199, 131, GetColor(255, 255, 255), "%d%d.%d", m_nowSpeedSecondDigit, m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
+	}
+	else if (m_nowSpeedFirstDigit != 0)
+	{
+		DrawFormatString(199, 131, GetColor(255, 255, 255), "%d.%d", m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
 	}
 	else
-	{*/
-		DrawGraph(m_playerX, m_playerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
-	/*}*/
+	{
+		DrawFormatString(199, 131, GetColor(255, 255, 255), "0.%d", m_nowSpeedDecimalPoint);
+	}
+	
+
+	// プレイヤー
+	DrawGraph(m_playerX, m_playerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 }
 
 
@@ -317,6 +329,36 @@ void Character::Process()
 
 
 	m_playerY = m_playerUnderY - m_playerSize;
+
+	int temp = static_cast<int>(m_nowSpeed * 10);
+	if (temp > 1000)
+	{
+		m_nowSpeedThirdDigit = temp / 1000;
+		m_nowSpeedSecondDigit = temp / 100 - (m_nowSpeedThirdDigit * 10);
+		m_nowSpeedFirstDigit = temp / 10 - (m_nowSpeedThirdDigit * 100) - (m_nowSpeedSecondDigit * 10);
+		m_nowSpeedDecimalPoint = temp - (m_nowSpeedThirdDigit * 1000) - (m_nowSpeedSecondDigit * 100) - (m_nowSpeedFirstDigit * 10);
+	}
+	else if (temp > 100)
+	{
+		m_nowSpeedThirdDigit = 0;
+		m_nowSpeedSecondDigit = temp / 100;
+		m_nowSpeedFirstDigit = temp / 10 - (m_nowSpeedSecondDigit * 10);
+		m_nowSpeedDecimalPoint = temp - (m_nowSpeedSecondDigit * 100) - (m_nowSpeedFirstDigit * 10);
+	}
+	else if (temp > 10)
+	{
+		m_nowSpeedThirdDigit = 0;
+		m_nowSpeedSecondDigit = 0;
+		m_nowSpeedFirstDigit = temp / 10;
+		m_nowSpeedDecimalPoint = temp - (m_nowSpeedFirstDigit * 10);
+	}
+	else
+	{
+		m_nowSpeedThirdDigit = 0;
+		m_nowSpeedSecondDigit = 0;
+		m_nowSpeedFirstDigit = 0;
+		m_nowSpeedDecimalPoint = temp;
+	}
 }
 
 
