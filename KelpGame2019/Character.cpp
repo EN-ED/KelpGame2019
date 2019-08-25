@@ -109,7 +109,7 @@ void Character::SpeedProcess()
 
 
 	// Zキーを押され、加速ができるようになっていたら
-	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedMaxWaitCount == 0)
+	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedMaxWaitCount == 0 && !m_isJumpFlag)
 	{
 		m_isSpeedUp = 1;
 		m_playerDrawAnimCount = 78;
@@ -188,7 +188,7 @@ void Character::PlayerJump()
 	}
 
 	// 地面にいてジャンプボタン押したら
-	if (m_isGroundFlag && KeyData::Get(KEY_INPUT_SPACE) == 1)
+	if (m_isGroundFlag && KeyData::Get(KEY_INPUT_SPACE) == 1 && m_isSpeedUp == 0)
 	{
 		m_isJumpFlag = true;
 		m_isLongJump = true;

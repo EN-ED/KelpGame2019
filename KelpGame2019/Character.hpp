@@ -77,7 +77,7 @@ private:
 
 	int m_gravityPower;	// 重力
 
-	const int m_jumpMaxPower = 40;		// ジャンプ力の最大値
+	const int m_jumpMaxPower = 60;		// ジャンプ力の最大値
 
 	const int m_jumpMinPower = 10;		// ジャンプ力の最小値
 
