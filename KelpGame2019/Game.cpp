@@ -86,5 +86,5 @@ void Game::Process()
 	mp_character->Process();
 
 
-	mp_backGround->SetIsSpeedUp(mp_character->GetIsSpeedUp());
+	mp_backGround->SetSpeed(mp_character->GetSpeed());
 }

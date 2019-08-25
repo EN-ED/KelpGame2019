@@ -12,9 +12,7 @@ BackGround::BackGround()
 
 	m_areaX = 0;
 
-	m_speed = 10;
-
-	m_isSpeedUp = false;
+	m_speed = 0;
 }
 
 
@@ -43,24 +41,6 @@ void BackGround::Draw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void BackGround::Process()
 {
-	if (m_isSpeedUp)
-	{
-		if (m_speed < 70)
-		{
-			m_speed += 4;
-		}
-	}
-	else
-	{
-		if (m_speed < 10)
-		{
-			m_speed++;
-		}
-		else if (m_speed > 10)
-		{
-			m_speed -= 2;
-		}
-	}
 	m_areaX += m_speed;
 	if (m_areaX > 1920) m_areaX = 0;
 }
@@ -68,7 +48,7 @@ void BackGround::Process()
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-void BackGround::SetIsSpeedUp(const bool& t_isSpeedUp)
+void BackGround::SetSpeed(const float& t_speed)
 {
-	m_isSpeedUp = t_isSpeedUp;
+	m_speed = static_cast<int>(t_speed);
 }
