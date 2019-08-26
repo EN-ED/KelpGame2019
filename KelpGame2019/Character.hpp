@@ -104,6 +104,8 @@ public:
 
 	const float& GetSpeed() const;
 
+	const int GetFromDefaultAreaX() const;
+
 	void SetIsDamageHit(bool& t_isDamageHit);
 };
 

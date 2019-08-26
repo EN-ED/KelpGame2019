@@ -387,6 +387,14 @@ const float& Character::GetSpeed() const
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+const int Character::GetFromDefaultAreaX() const
+{
+	return m_defaultX - m_playerX;
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::SetIsDamageHit(bool& t_isDamageHit)
 {
 	m_isDamageHit = t_isDamageHit;
