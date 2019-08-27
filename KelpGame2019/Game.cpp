@@ -56,7 +56,7 @@ void Game::Draw()
 			mp_character->BlurDraw();
 			g_blurScreen.PostRenderBlurScreen();
 
-			/*mp_chaser->Draw();*/
+			mp_chaser->Draw();
 			mp_character->Draw();
 		}
 		else
@@ -68,7 +68,7 @@ void Game::Draw()
 			mp_character->BlurDraw();
 			g_blurScreen.PostRenderBlurScreen();
 
-			/*mp_chaser->Draw();*/
+			mp_chaser->Draw();
 			mp_character->Draw();
 		}
 	}
@@ -76,7 +76,7 @@ void Game::Draw()
 	{
 		mp_backGround->Draw();
 		mp_character->Draw();
-		/*mp_chaser->Draw();*/
+		mp_chaser->Draw();
 	}
 }
 
@@ -91,8 +91,8 @@ void Game::Process()
 	mp_character->Process();
 
 
-	/*mp_chaser->Process();
-	mp_chaser->SetPlayerFromDefaultAreaX(mp_character->GetFromDefaultAreaX());*/
+	mp_chaser->Process();
+	mp_chaser->SetPlayerFromDefaultAreaX(mp_character->GetFromDefaultAreaX());
 
 
 	mp_backGround->SetSpeed(mp_character->GetSpeed());

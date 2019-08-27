@@ -36,6 +36,8 @@ Chaser::~Chaser()
 void Chaser::Draw()
 {
 	DrawGraph(m_chaserX, 1080 - 128 - 512, mD_chaserArray[static_cast<int>(m_chaserSpeedCount / m_chasrArraySpeed)], true);
+
+	printfDx("%d\n", m_chaserX);
 }
 
 
@@ -49,14 +51,14 @@ void Chaser::Process()
 	// 石鹸君が初期位置
 	if (m_playerFromDefaultAreaX == 0)
 	{
-		if (m_chaserX > m_chaserDefaultX)
+		/*if (m_chaserX > m_chaserDefaultX)
 		{
 			m_chaserX--;
 		}
 		else if (m_chaserX < m_chaserDefaultX)
 		{
 			m_chaserX++;
-		}
+		}*/
 	}
 	// 石鹸君が離れていく
 	else if (m_playerFromDefaultAreaX < 0)
@@ -66,7 +68,7 @@ void Chaser::Process()
 	// 石鹸君が近づいていく
 	else
 	{
-		m_chaserX += 2;
+		m_chaserX++;
 	}
 }
 

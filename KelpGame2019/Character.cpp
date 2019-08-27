@@ -149,7 +149,7 @@ void Character::SpeedProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::SpeedUpProcess()
 {
-	// Zキーを押され、加速ができるようになっていたら
+	// Zキーを押されたら
 	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedUpChargeCount == m_speedUpChargeMax && !m_isJumpFlag && !m_isDamageHit)
 	{
 		m_isNowSpeedUp = true;
@@ -287,10 +287,13 @@ void Character::PlayerJump()
 Character::Character()
 {
 	ZeroMemory(mD_playerArray, sizeof(mD_playerArray));
+	ZeroMemory(mD_playerArraySpeed, sizeof(mD_playerArraySpeed));
 	for (int i = 0; i != m_playerDrawNum; ++i)
 	{
 		std::string str = "media\\anim_blink\\" + std::to_string(i) + ".png";
 		mD_playerArray[i] = LoadGraph(str.c_str());
+		mD_playerArraySpeed[i] = LoadGraph(str.c_str());
+		GraphFilter(mD_playerArraySpeed[i], DX_GRAPH_FILTER_LEVEL, 60, 210, 120, 0, 255);
 	}
 	m_playerDrawAnimCount = 0;
 
@@ -331,6 +334,7 @@ Character::~Character()
 	for (int i = 0; i != m_playerDrawNum; ++i)
 	{
 		if (mD_playerArray[i] != -1) DeleteGraph(mD_playerArray[i]);
+		if (mD_playerArraySpeed[i] != -1) DeleteGraph(mD_playerArraySpeed[i]);
 	}
 }
 
@@ -356,35 +360,41 @@ void Character::Draw()
 	{
 		DrawFormatString(199, 131, GetColor(255, 255, 255), "0.%d", m_nowSpeedDecimalPoint);
 	}
-
-	DrawFormatString(199, 151, GetColor(255, 255, 255), "%d", m_playerX);
 	
 
 	// プレイヤー
 	DrawGraph(m_playerX, m_playerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
+	DrawRectGraph(m_playerX, m_playerY, 0, 0, static_cast<int>(m_playerSize * static_cast<float>(m_speedUpChargeCount) / m_speedUpChargeMax), m_playerSize, mD_playerArraySpeed[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], TRUE, FALSE);
 
 
-	/*switch (m_nowState)
+	switch (m_nowState)
 	{
 	case ESTATE::normal:
-		printfDx("normal\n");
+		if (m_speedUpChargeCount == m_speedUpChargeMax && !m_isJumpFlag && !m_isDamageHit)
+		{
+			DrawFormatString(980, 200, GetColor(0, 255, 255), "通常の加速できる石鹸君");
+		}
+		else
+		{
+			DrawFormatString(980, 200, GetColor(255, 255, 255), "通常の石鹸君");
+		}
 		break;
 	case ESTATE::damageHit:
-		printfDx("damageHit\n");
+		DrawFormatString(980, 200, GetColor(255, 0, 0), "ダメージ中の石鹸君");
 		break;
 	case ESTATE::speedDown:
-		printfDx("speedDown\n");
+		DrawFormatString(980, 200, GetColor(255, 255, 0), "急加速から戻り中の石鹸君");
 		break;
 	case ESTATE::speedMAX:
-		printfDx("speedMAX\n");
+		DrawFormatString(980, 200, GetColor(255, 255, 0), "急加速最大の石鹸君");
 		break;
 	case ESTATE::speedUp:
-		printfDx("speedUp\n");
+		DrawFormatString(980, 200, GetColor(255, 255, 0), "急加速中の石鹸君");
 		break;
 	default:
 		break;
-	}*/
-	printfDx("%d\n", m_speedUpChargeCount);
+	}
+	//printfDx("%d\n", static_cast<int>(m_playerSize * static_cast<float>(m_speedUpChargeCount) / m_speedUpChargeMax));
 }
 
 
