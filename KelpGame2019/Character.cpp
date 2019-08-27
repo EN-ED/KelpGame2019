@@ -112,14 +112,14 @@ void Character::SpeedProcess()
 	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedMaxWaitCount == 0 && !m_isJumpFlag)
 	{
 		m_isSpeedUp = 1;
-		m_playerDrawAnimCount = 78;
+		m_playerDrawAnimCount = m_runFirstPlayerAnim;
 	}
 
 
 	// 最大まで加速中
 	if (m_isSpeedUp == 1)
 	{
-		m_playerDrawAnimCount = 78;
+		m_playerDrawAnimCount = m_runFirstPlayerAnim;
 
 		// 加速カウントを進める
 		m_speedUpCount += 0.1f;
@@ -173,7 +173,7 @@ void Character::PlayerJump()
 	// 地面に触れてない(浮いてる
 	if (!m_isGroundFlag)
 	{
-		m_gravityPower += 2;
+		m_gravityPower += m_jumpGravityEnergy;
 		m_playerUnderY += m_gravityPower;
 
 		// 地面に埋まったら
@@ -194,6 +194,7 @@ void Character::PlayerJump()
 		m_isLongJump = true;
 		m_isGroundFlag = false;
 		m_jumpPower = m_jumpMinPower;
+		m_playerDrawAnimCount = m_jumpFirstPlayerAnim;
 	}
 
 	// ジャンプ動作していたら
@@ -209,7 +210,7 @@ void Character::PlayerJump()
 		// 長押ししていたら
 		if (m_isLongJump && KeyData::Get(KEY_INPUT_SPACE) > 1 && m_jumpPower <= m_jumpMaxPower)
 		{
-			m_jumpPower += 5;
+			m_jumpPower += m_jumpAddPower;
 		}
 
 

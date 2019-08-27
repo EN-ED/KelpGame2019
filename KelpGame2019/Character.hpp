@@ -59,6 +59,8 @@ private:
 
 	const int m_speedMaxWaitMaxCount = 40;		// 加速最大値の時に持続する時間の最大(2で割り切れないと少しずれる
 
+	const int m_runFirstPlayerAnim = m_playerDrawAnimSpeed * 13;	// 急加速したときの石鹸君のフレームコマ
+
 	void SpeedProcess();
 	/// --------------------------------------------------------
 
@@ -77,9 +79,15 @@ private:
 
 	int m_gravityPower;	// 重力
 
-	const int m_jumpMaxPower = 60;		// ジャンプ力の最大値
+	const int m_jumpMaxPower = 120;		// ジャンプ力の最大値
 
-	const int m_jumpMinPower = 10;		// ジャンプ力の最小値
+	const int m_jumpMinPower = 24;		// ジャンプ力の最小値
+
+	const int m_jumpAddPower = 16;		// ジャンプ中の上昇値
+
+	const int m_jumpGravityEnergy = 8;	// ジャンプ中の減少値
+
+	const int m_jumpFirstPlayerAnim = m_playerDrawAnimSpeed * 8;	// ジャンプしたときの石鹸君のフレームコマ
 
 	void PlayerJump();
 	/// --------------------------------------------------------
