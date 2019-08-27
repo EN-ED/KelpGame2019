@@ -11,8 +11,7 @@ constexpr float PI_MATHF = 3.14159265359f;
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::PositionProcess()
 {
-	// 最大まで加速中
-	if (m_isSpeedUp == 1)
+	if (m_nowState == ESTATE::speedUp)
 	{
 		// 加速カウントが足りていなかったら
 		if (m_speedUpCount < 1.0)
@@ -20,8 +19,7 @@ void Character::PositionProcess()
 			m_playerX += static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
 		}
 	}
-	// 加速最大時だったら
-	else if (m_isSpeedUp == 2)
+	else if (m_nowState == ESTATE::speedMAX)
 	{
 		// 加速最大中カウントが上限半分以上だったら(軽く左に戻っている中
 		if (m_speedMaxWaitCount > m_speedMaxWaitMaxCount / 2 && m_speedMaxWaitCount <= m_speedMaxWaitMaxCount)
@@ -34,7 +32,7 @@ void Character::PositionProcess()
 			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 8.0f);
 		}
 	}
-	else
+	else if (m_nowState == ESTATE::speedDown)
 	{
 		// 加速から戻す
 		if (m_speedUpCount > 0.1f)
@@ -42,6 +40,24 @@ void Character::PositionProcess()
 			m_playerX -= static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
 		}
 	}
+	else if (m_nowState == ESTATE::damageHit)
+	{
+		m_playerX -= 2;
+	}
+	else if(m_nowState ==ESTATE::normal)
+	{
+		if (m_playerX < m_defaultX)
+		{
+			m_playerX++;
+		}
+		else if (m_playerX > m_defaultX)
+		{
+			m_playerX--;
+		}
+	}
+
+
+	m_playerY = m_playerUnderY - m_playerSize;
 }
 
 
@@ -49,14 +65,24 @@ void Character::PositionProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::DamageProcess()
 {
+	if (KeyData::Get(KEY_INPUT_D) == 1 && !m_isNowSpeedUp && m_nowState != ESTATE::speedDown)
+	{
+		if (m_isDamageHit != true) m_isDamageHit = true;
+		m_nowState = ESTATE::damageHit;
+		m_speedUpChargeCount = -(m_speedUpChargeMax + m_speedUpChargeMax / 2);
+	}
+
+
 	// ダメージを受けたら
 	if (m_isDamageHit)
 	{
+		m_speedUpChargeCount = -(m_speedUpChargeMax + m_speedUpChargeMax / 2);
 		// ダメージカウントが最大になったら
-		if (++m_damageCount > m_damageMaxCount)
+		if (++m_damageCount > m_damageMaxCount && m_isGroundFlag)
 		{
 			m_damageCount = 0;
 			m_isDamageHit = false;
+			m_nowState = ESTATE::normal;
 		}
 	}
 }
@@ -67,17 +93,24 @@ void Character::DamageProcess()
 void Character::SpeedProcess()
 {
 	// 加速中時
-	if (m_isSpeedUp == 1)
+	if (m_nowState == ESTATE::speedUp)
 	{
 		m_nowSpeed += m_addSpeed;		// 速度を加算していく
 	}
 	// 最大加速時
-	else if (m_isSpeedUp == 2)
+	else if (m_nowState == ESTATE::speedMAX)
 	{
 
 	}
 	// 通常時
-	else
+	else if(m_nowState == ESTATE::speedDown)
+	{
+		if (m_nowSpeed > m_playerMaxSpeed + 0.5f)
+		{
+			m_nowSpeed -= m_addSpeed;		// 速度を減少していく
+		}
+	}
+	else if(m_nowState == ESTATE::normal)
 	{
 		// 最大加速より小さかったら
 		if (m_nowSpeed < m_playerMaxSpeed - 0.5f)
@@ -102,22 +135,30 @@ void Character::SpeedProcess()
 
 
 	// 地面に触れてない(浮いてる
-	if (!m_isGroundFlag)
+	if (m_isDamageHit)
 	{
-		m_nowSpeed += m_jumpDownSpeed;
+		if (m_nowSpeed > m_playerMaxSpeed / 2)
+		{
+			m_nowSpeed += m_jumpDownSpeed;
+		}
 	}
+}
 
 
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Character::SpeedUpProcess()
+{
 	// Zキーを押され、加速ができるようになっていたら
-	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedMaxWaitCount == 0 && !m_isJumpFlag)
+	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedUpChargeCount == m_speedUpChargeMax && !m_isJumpFlag && !m_isDamageHit)
 	{
-		m_isSpeedUp = 1;
+		m_isNowSpeedUp = true;
+		m_nowState = ESTATE::speedUp;
 		m_playerDrawAnimCount = m_runFirstPlayerAnim;
 	}
 
 
-	// 最大まで加速中
-	if (m_isSpeedUp == 1)
+	if (m_nowState == ESTATE::speedUp)
 	{
 		m_playerDrawAnimCount = m_runFirstPlayerAnim;
 
@@ -133,27 +174,21 @@ void Character::SpeedProcess()
 		// 加速カントがたまったら
 		else
 		{
-			// 加速最大中とする
-			m_isSpeedUp = 2;
+			m_nowState = ESTATE::speedMAX;
 		}
 	}
-	// 加速最大時だったら
-	else if (m_isSpeedUp == 2)
+	else if (m_nowState == ESTATE::speedMAX)
 	{
 		// 加速最大中カウントが上限半分以上だったら(軽く左に戻っている中
 		if (++m_speedMaxWaitCount > m_speedMaxWaitMaxCount)
 		{
-			// 通常時に戻る
-			m_isSpeedUp = 0;
+			m_nowState = ESTATE::speedDown;
+			m_isNowSpeedUp = false;
 		}
 	}
-	else
+	else if (m_nowState == ESTATE::speedDown)
 	{
-		// 加速が出来るまでカウントを減らす
-		if (m_speedMaxWaitCount > 0)
-		{
-			m_speedMaxWaitCount--;
-		}
+		if (m_speedMaxWaitCount != 0) m_speedMaxWaitCount = 0;
 
 
 		// 加速から戻す
@@ -161,6 +196,10 @@ void Character::SpeedProcess()
 		{
 			m_speedUpCount -= 0.1f;
 			m_addSpeed -= std::sinf(PI_MATHF * m_speedUpCount) * 1.5f;
+		}
+		else
+		{
+			m_nowState = ESTATE::normal;
 		}
 	}
 }
@@ -170,52 +209,75 @@ void Character::SpeedProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::PlayerJump()
 {
-	// 地面に触れてない(浮いてる
-	if (!m_isGroundFlag)
+	if (!m_isDamageHit && !m_isFlyDamageHit)
 	{
-		m_gravityPower += m_jumpGravityEnergy;
-		m_playerUnderY += m_gravityPower;
-
-		// 地面に埋まったら
-		if (m_playerUnderY > m_mostMaxY)
+		// 地面に触れてない(浮いてる
+		if (!m_isGroundFlag)
 		{
-			m_playerUnderY = m_mostMaxY;
-			m_gravityPower = 0;
+			m_gravityPower += m_jumpGravityEnergy;
+			m_playerUnderY += m_gravityPower;
+
+			// 地面に埋まったら
+			if (m_playerUnderY > m_mostMaxY)
+			{
+				m_playerUnderY = m_mostMaxY;
+				m_gravityPower = 0;
+				m_jumpPower = m_jumpMinPower;
+				m_isGroundFlag = true;
+				m_isJumpFlag = false;
+			}
+		}
+
+		// ジャンプボタン押したら
+		if (m_isGroundFlag && KeyData::Get(KEY_INPUT_SPACE) == 1 && !m_isNowSpeedUp)
+		{
+			m_isJumpFlag = true;
+			m_isLongJump = true;
+			m_isGroundFlag = false;
 			m_jumpPower = m_jumpMinPower;
-			m_isGroundFlag = true;
-			m_isJumpFlag = false;
+			m_playerDrawAnimCount = m_jumpFirstPlayerAnim;
+		}
+
+		// ジャンプ動作していたら
+		if (m_isJumpFlag)
+		{
+			// ジャンプボタンを離したら
+			if (KeyData::Get(KEY_INPUT_SPACE) == -1)
+			{
+				m_isLongJump = false;
+			}
+
+
+			// 長押ししていたら
+			if (m_isLongJump && KeyData::Get(KEY_INPUT_SPACE) > 1 && m_jumpPower <= m_jumpMaxPower)
+			{
+				m_jumpPower += m_jumpAddPower;
+			}
+
+
+			// 上に上げる
+			m_playerUnderY -= m_jumpPower;
 		}
 	}
-
-	// 地面にいてジャンプボタン押したら
-	if (m_isGroundFlag && KeyData::Get(KEY_INPUT_SPACE) == 1 && m_isSpeedUp == 0)
+	else
 	{
-		m_isJumpFlag = true;
-		m_isLongJump = true;
-		m_isGroundFlag = false;
-		m_jumpPower = m_jumpMinPower;
-		m_playerDrawAnimCount = m_jumpFirstPlayerAnim;
-	}
-
-	// ジャンプ動作していたら
-	if (m_isJumpFlag)
-	{
-		// ジャンプボタンを話したら
-		if (KeyData::Get(KEY_INPUT_SPACE) == -1)
+		// 地面に触れてない(浮いてる
+		if (!m_isGroundFlag)
 		{
-			m_isLongJump = false;
+			if (!m_isFlyDamageHit) m_isFlyDamageHit = true;
+			m_playerUnderY += 16;
+
+			// 地面に埋まったら
+			if (m_playerUnderY > m_mostMaxY)
+			{
+				m_isFlyDamageHit = false;
+				m_playerUnderY = m_mostMaxY;
+				m_gravityPower = 0;
+				m_jumpPower = m_jumpMinPower;
+				m_isGroundFlag = true;
+				m_isJumpFlag = false;
+			}
 		}
-
-
-		// 長押ししていたら
-		if (m_isLongJump && KeyData::Get(KEY_INPUT_SPACE) > 1 && m_jumpPower <= m_jumpMaxPower)
-		{
-			m_jumpPower += m_jumpAddPower;
-		}
-
-
-		// 上に上げる
-		m_playerUnderY -= m_jumpPower;
 	}
 }
 
@@ -235,15 +297,17 @@ Character::Character()
 	m_damageCount = 0;
 	m_isDamageHit = false;
 
+	m_isNowSpeedUp = false;
 	m_nowSpeed = 0.0f;
 	m_addSpeed = 1.0f;
-	m_isSpeedUp = 0;
+	m_nowState = ESTATE::normal;
 	m_speedUpCount = 0;
 	m_speedMaxWaitCount = 0;
 	m_nowSpeedThirdDigit = 0;
 	m_nowSpeedSecondDigit = 0;
 	m_nowSpeedFirstDigit = 0;
 	m_nowSpeedDecimalPoint = 0;
+	m_speedUpChargeCount = 0;
 
 	m_playerUnderY = m_mostMaxY;
 	m_playerX = m_defaultX;
@@ -256,6 +320,7 @@ Character::Character()
 	m_isLongJump = false;
 	m_jumpPower = m_jumpMinPower;
 	m_gravityPower = 0;
+	m_isFlyDamageHit = false;
 }
 
 
@@ -291,10 +356,35 @@ void Character::Draw()
 	{
 		DrawFormatString(199, 131, GetColor(255, 255, 255), "0.%d", m_nowSpeedDecimalPoint);
 	}
+
+	DrawFormatString(199, 151, GetColor(255, 255, 255), "%d", m_playerX);
 	
 
 	// プレイヤー
 	DrawGraph(m_playerX, m_playerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
+
+
+	/*switch (m_nowState)
+	{
+	case ESTATE::normal:
+		printfDx("normal\n");
+		break;
+	case ESTATE::damageHit:
+		printfDx("damageHit\n");
+		break;
+	case ESTATE::speedDown:
+		printfDx("speedDown\n");
+		break;
+	case ESTATE::speedMAX:
+		printfDx("speedMAX\n");
+		break;
+	case ESTATE::speedUp:
+		printfDx("speedUp\n");
+		break;
+	default:
+		break;
+	}*/
+	printfDx("%d\n", m_speedUpChargeCount);
 }
 
 
@@ -320,6 +410,9 @@ void Character::Process()
 	SpeedProcess();
 
 
+	SpeedUpProcess();
+
+
 	PlayerJump();
 
 
@@ -329,7 +422,14 @@ void Character::Process()
 	PositionProcess();
 
 
-	m_playerY = m_playerUnderY - m_playerSize;
+	if (m_isNowSpeedUp)
+	{
+		if (m_speedUpChargeCount != 0) m_speedUpChargeCount = 0;
+	}
+	else
+	{
+		if (m_speedUpChargeCount < m_speedUpChargeMax) m_speedUpChargeCount++;
+	}
 
 	int temp = static_cast<int>(m_nowSpeed * 10);
 	if (temp > 1000)
@@ -365,16 +465,9 @@ void Character::Process()
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const bool Character::GetIsSpeedUp() const
+const bool& Character::GetIsSpeedUp() const
 {
-	if (m_isSpeedUp == 0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return m_isNowSpeedUp;
 }
 
 

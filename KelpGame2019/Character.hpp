@@ -21,6 +21,9 @@ private:
 	int m_prePlayerX;
 	int m_prePlayerY;
 
+	enum class ESTATE{normal, speedUp, speedMAX, speedDown, damageHit};
+	ESTATE m_nowState;				// 現在の状態
+
 
 	void PositionProcess();
 
@@ -29,7 +32,7 @@ private:
 
 	int m_damageCount;						// ダメージを受けた演出のカウント
 
-	const int m_damageMaxCount = 16;		// ダメージを受けた演出のカウントの最大
+	const int m_damageMaxCount = 30;		// ダメージを受けた演出のカウントの最大
 
 	bool m_isDamageHit;						// ダメージを受けたかどうか
 
@@ -38,6 +41,8 @@ private:
 
 
 	/// スピード関連-------------------------------------------
+
+	bool m_isNowSpeedUp;
 
 	const int m_playerMaxSpeed = 70;			// プレイヤーの最大速度
 
@@ -52,7 +57,6 @@ private:
 
 	const float m_jumpDownSpeed = -1.25f;		// ジャンプ中に減少する数値
 
-	int m_isSpeedUp;				// 加速するかどうか
 	float m_speedUpCount;				// 加速が完了するまでの時間
 
 	int m_speedMaxWaitCount;		// 加速最大値の時に持続する時間
@@ -61,7 +65,13 @@ private:
 
 	const int m_runFirstPlayerAnim = m_playerDrawAnimSpeed * 13;	// 急加速したときの石鹸君のフレームコマ
 
+	int m_speedUpChargeCount;
+
+	const int m_speedUpChargeMax = 60;
+
 	void SpeedProcess();
+
+	void SpeedUpProcess();
 	/// --------------------------------------------------------
 
 
@@ -89,6 +99,8 @@ private:
 
 	const int m_jumpFirstPlayerAnim = m_playerDrawAnimSpeed * 8;	// ジャンプしたときの石鹸君のフレームコマ
 
+	bool m_isFlyDamageHit;
+
 	void PlayerJump();
 	/// --------------------------------------------------------
 
@@ -108,7 +120,7 @@ public:
 	void Process();
 
 
-	const bool GetIsSpeedUp() const;
+	const bool& GetIsSpeedUp() const;
 
 	const float& GetSpeed() const;
 
