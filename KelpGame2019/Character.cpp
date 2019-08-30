@@ -293,8 +293,12 @@ Character::Character()
 	}
 	m_playerDrawAnimCount = 0;
 
+	m_frameCount = 0;
+
 	m_damageCount = 0;
 	m_isDamageHit = false;
+
+	m_smallSpeed = 0;
 
 	m_isNowSpeedUp = false;
 	m_nowSpeed = 70.0f;
@@ -357,13 +361,12 @@ void Character::Draw()
 		DrawFormatString(199, 131, GetColor(255, 255, 255), "0.%d", m_nowSpeedDecimalPoint);
 	}
 
-	DrawFormatString(250, 131, GetColor(255, 255, 255), "%dïb", m_speedUpChargeCount / 60);
+	DrawFormatString(250, 131, GetColor(255, 255, 255), "ã}â¡ë¨:%dïb", m_speedUpChargeCount / 60);
 	
 
 	// ÉvÉåÉCÉÑÅ[
-	DrawGraph(m_playerX, m_playerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
-	DrawRectGraph(m_playerX, m_playerY, 0, 0, static_cast<int>(m_playerSize * static_cast<float>(m_speedUpChargeCount) / m_speedUpChargeMax), m_playerSize, mD_playerArraySpeed[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], TRUE, FALSE);
-
+	DrawRotaGraph(m_playerX, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
+		, static_cast<double>(1.0f - m_smallSpeed), 0, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 
 	switch (m_nowState)
 	{
@@ -400,7 +403,11 @@ void Character::Draw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::BlurDraw()
 {
-	DrawGraph(m_prePlayerX, m_prePlayerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
+	// DrawGraph(m_prePlayerX, m_prePlayerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
+	/*DrawExtendGraph(m_playerX, m_playerY
+		, m_playerX + m_playerSize - m_smallSpeed, m_playerY + m_playerSize - m_smallSpeed
+		, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);*/
+	DrawRotaGraph(m_playerX, m_playerY, m_smallSpeed, 0, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 }
 
 
@@ -413,6 +420,13 @@ void Character::Process()
 
 
 	if (++m_playerDrawAnimCount >= m_playerDrawAnimSpeed * m_playerDrawNum) m_playerDrawAnimCount = 0;
+
+
+	if (++m_frameCount > 30)
+	{
+		m_smallSpeed += 0.005f;
+		m_frameCount = 0;
+	}
 
 
 	SpeedProcess();

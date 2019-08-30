@@ -38,9 +38,6 @@ Chaser::~Chaser()
 void Chaser::Draw()
 {
 	DrawGraph(m_chaserX, 1080 - 128 - 512, mD_chaserArray[static_cast<int>(m_chaserSpeedCount / m_chasrArraySpeed)], true);
-
-
-	printfDx("%d\n", m_chaserXAddValue);
 }
 
 

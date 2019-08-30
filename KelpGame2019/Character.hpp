@@ -25,8 +25,17 @@ private:
 	enum class ESTATE{normal, speedUp, speedMAX, speedDown, damageHit};
 	ESTATE m_nowState;				// 現在の状態
 
+	int m_frameCount;
+
 
 	void PositionProcess();
+
+
+	/// 縮小----------------------------------------------------
+
+	float m_smallSpeed;
+
+	/// --------------------------------------------------------
 
 
 	/// ダメージ関連--------------------------------------------
