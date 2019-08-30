@@ -356,6 +356,8 @@ void Character::Draw()
 	{
 		DrawFormatString(199, 131, GetColor(255, 255, 255), "0.%d", m_nowSpeedDecimalPoint);
 	}
+
+	DrawFormatString(250, 131, GetColor(255, 255, 255), "%dïb", m_speedUpChargeCount / 60);
 	
 
 	// ÉvÉåÉCÉÑÅ[

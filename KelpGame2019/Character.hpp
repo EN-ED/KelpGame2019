@@ -70,7 +70,7 @@ private:
 
 	int m_speedUpChargeCount;
 
-	const int m_speedUpChargeMax = 60;
+	const int m_speedUpChargeMax = 420;
 
 	void SpeedProcess();
 
