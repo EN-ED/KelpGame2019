@@ -70,6 +70,7 @@ void Character::DamageProcess()
 		m_isDamageHit = true;
 		m_nowState = ESTATE::damageHit;
 		m_preDamageMAXSpeed = m_nowSpeed * 0.7f;
+		m_smallSpeed += 0.05;
 	}
 
 
@@ -403,11 +404,8 @@ void Character::Draw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::BlurDraw()
 {
-	// DrawGraph(m_prePlayerX, m_prePlayerY, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
-	/*DrawExtendGraph(m_playerX, m_playerY
-		, m_playerX + m_playerSize - m_smallSpeed, m_playerY + m_playerSize - m_smallSpeed
-		, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);*/
-	DrawRotaGraph(m_playerX, m_playerY, m_smallSpeed, 0, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
+	DrawRotaGraph(m_playerX, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
+		, static_cast<double>(1.0f - m_smallSpeed), 0, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 }
 
 
