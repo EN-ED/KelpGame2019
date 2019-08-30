@@ -13,7 +13,7 @@ private:
 	int m_chaserX;
 	const int m_chaserDefaultX = 256 - 512;
 
-	int m_playerFromDefaultAreaX;
+	int m_chaserXAddValue;
 
 
 public:
@@ -26,6 +26,6 @@ public:
 	void Process();
 
 
-	void SetPlayerFromDefaultAreaX(const int& t_playerAreaX);
+	void SetPlyayerSpeed(const float& t_playerSpeed, const float& t_defaultMAXSpeed);
 };
 

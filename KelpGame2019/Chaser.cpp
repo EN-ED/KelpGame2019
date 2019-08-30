@@ -17,6 +17,8 @@ Chaser::Chaser()
 	m_chasrArraySpeed = 2;
 
 	m_chaserX = m_chaserDefaultX;
+
+	m_chaserXAddValue = 0;
 }
 
 
@@ -37,7 +39,8 @@ void Chaser::Draw()
 {
 	DrawGraph(m_chaserX, 1080 - 128 - 512, mD_chaserArray[static_cast<int>(m_chaserSpeedCount / m_chasrArraySpeed)], true);
 
-	printfDx("%d\n", m_chaserX);
+
+	printfDx("%d\n", m_chaserXAddValue);
 }
 
 
@@ -45,37 +48,24 @@ void Chaser::Draw()
 /// ------------------------------------------------------------------------------------------------------------
 void Chaser::Process()
 {
+	// アニメーション
 	if (++m_chaserSpeedCount >= m_chasrArraySpeed * m_chaserArrayNum) m_chaserSpeedCount = 0;
 
 
-	// 石鹸君が初期位置
-	if (m_playerFromDefaultAreaX == 0)
-	{
-		/*if (m_chaserX > m_chaserDefaultX)
-		{
-			m_chaserX--;
-		}
-		else if (m_chaserX < m_chaserDefaultX)
-		{
-			m_chaserX++;
-		}*/
-	}
-	// 石鹸君が離れていく
-	else if (m_playerFromDefaultAreaX < 0)
-	{
-		m_chaserX -= 2;
-	}
-	// 石鹸君が近づいていく
-	else
-	{
-		m_chaserX++;
-	}
+	m_chaserX -= m_chaserXAddValue;
 }
 
 
 
 /// ------------------------------------------------------------------------------------------------------------
-void Chaser::SetPlayerFromDefaultAreaX(const int& t_playerAreaX)
+void Chaser::SetPlyayerSpeed(const float& t_playerSpeed, const float& t_defaultMAXSpeed)
 {
-	m_playerFromDefaultAreaX = t_playerAreaX;
+	if (t_playerSpeed > t_defaultMAXSpeed)
+	{
+		m_chaserXAddValue = static_cast<int>((t_playerSpeed - t_defaultMAXSpeed * 0.9) / 8/*この数値は見た目気分*/);
+	}
+	else
+	{
+		m_chaserXAddValue = static_cast<int>((t_playerSpeed - t_defaultMAXSpeed * 0.9) / 4/*この数値は見た目気分*/);
+	}
 }

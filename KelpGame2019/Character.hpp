@@ -49,7 +49,7 @@ private:
 
 	bool m_isNowSpeedUp;
 
-	const int m_playerMaxSpeed = 70;			// プレイヤーの最大速度
+	const float m_playerMaxSpeed = 70;			// プレイヤーの最大速度
 
 	float m_nowSpeed;							// 現在のスピード
 
@@ -127,7 +127,7 @@ public:
 
 	const float& GetSpeed() const;
 
-	const int GetFromDefaultAreaX() const;
+	const float& GetDefaultMAXSpeed() const;
 
 	void SetIsDamageHit(bool& t_isDamageHit);
 };

@@ -92,7 +92,9 @@ void Game::Process()
 
 
 	mp_chaser->Process();
-	mp_chaser->SetPlayerFromDefaultAreaX(mp_character->GetFromDefaultAreaX());
+
+
+	mp_chaser->SetPlyayerSpeed(mp_character->GetSpeed(), mp_character->GetDefaultMAXSpeed());
 
 
 	mp_backGround->SetSpeed(mp_character->GetSpeed());

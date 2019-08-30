@@ -65,9 +65,9 @@ void Character::PositionProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::DamageProcess()
 {
-	if (KeyData::Get(KEY_INPUT_D) == 1 && !m_isNowSpeedUp && m_nowState != ESTATE::speedDown)
+	if (KeyData::Get(KEY_INPUT_D) == 1 && !m_isNowSpeedUp && m_nowState != ESTATE::speedDown && !m_isDamageHit)
 	{
-		if (m_isDamageHit != true) m_isDamageHit = true;
+		m_isDamageHit = true;
 		m_nowState = ESTATE::damageHit;
 		m_preDamageMAXSpeed = m_nowSpeed * 0.7f;
 	}
@@ -125,9 +125,9 @@ void Character::SpeedProcess()
 		else
 		{
 			// “¯‚¶‚É‚³‚¹‚é
-			if (m_nowSpeed != static_cast<float>(m_playerMaxSpeed))
+			if (m_nowSpeed != m_playerMaxSpeed)
 			{
-				m_nowSpeed = static_cast<float>(m_playerMaxSpeed);
+				m_nowSpeed = m_playerMaxSpeed;
 			}
 		}
 	}
@@ -297,7 +297,7 @@ Character::Character()
 	m_isDamageHit = false;
 
 	m_isNowSpeedUp = false;
-	m_nowSpeed = 0.0f;
+	m_nowSpeed = 70.0f;
 	m_addSpeed = 1.0f;
 	m_nowState = ESTATE::normal;
 	m_speedUpCount = 0;
@@ -489,9 +489,9 @@ const float& Character::GetSpeed() const
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const int Character::GetFromDefaultAreaX() const
+const float& Character::GetDefaultMAXSpeed() const
 {
-	return m_defaultX - m_playerX;
+	return m_playerMaxSpeed;
 }
 
 
