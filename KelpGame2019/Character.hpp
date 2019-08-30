@@ -37,6 +37,10 @@ private:
 
 	bool m_isDamageHit;						// ダメージを受けたかどうか
 
+	float m_preDamageSpeed;
+
+	const float m_damageDownSpeed = -1.25f;
+
 	void DamageProcess();
 	/// --------------------------------------------------------
 
@@ -55,8 +59,6 @@ private:
 	int m_nowSpeedDecimalPoint;		// 現在の速度の小数点の数字
 
 	float m_addSpeed;							// 加算するスピード値
-
-	const float m_jumpDownSpeed = -1.25f;		// ジャンプ中に減少する数値
 
 	float m_speedUpCount;				// 加速が完了するまでの時間
 

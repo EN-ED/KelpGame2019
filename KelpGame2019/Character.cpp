@@ -69,14 +69,13 @@ void Character::DamageProcess()
 	{
 		if (m_isDamageHit != true) m_isDamageHit = true;
 		m_nowState = ESTATE::damageHit;
-		m_speedUpChargeCount = -(m_speedUpChargeMax + m_speedUpChargeMax / 2);
+		m_preDamageSpeed = m_nowSpeed;
 	}
 
 
 	// ダメージを受けたら
 	if (m_isDamageHit)
 	{
-		m_speedUpChargeCount = -(m_speedUpChargeMax + m_speedUpChargeMax / 2);
 		// ダメージカウントが最大になったら
 		if (++m_damageCount > m_damageMaxCount && m_isGroundFlag)
 		{
@@ -132,14 +131,11 @@ void Character::SpeedProcess()
 			}
 		}
 	}
-
-
-	// 地面に触れてない(浮いてる
-	if (m_isDamageHit)
+	else if (m_nowState == ESTATE::damageHit)
 	{
-		if (m_nowSpeed > m_playerMaxSpeed / 2)
+		if (m_nowSpeed > m_preDamageSpeed * 0.7)
 		{
-			m_nowSpeed += m_jumpDownSpeed;
+			m_nowSpeed += m_damageDownSpeed;
 		}
 	}
 }
