@@ -37,7 +37,7 @@ private:
 
 	bool m_isDamageHit;						// ƒ_ƒ[ƒW‚ğó‚¯‚½‚©‚Ç‚¤‚©
 
-	float m_preDamageSpeed;
+	float m_preDamageMAXSpeed;
 
 	const float m_damageDownSpeed = -1.25f;
 

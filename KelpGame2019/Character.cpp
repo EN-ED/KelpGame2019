@@ -69,7 +69,7 @@ void Character::DamageProcess()
 	{
 		if (m_isDamageHit != true) m_isDamageHit = true;
 		m_nowState = ESTATE::damageHit;
-		m_preDamageSpeed = m_nowSpeed;
+		m_preDamageMAXSpeed = m_nowSpeed * 0.7f;
 	}
 
 
@@ -133,7 +133,7 @@ void Character::SpeedProcess()
 	}
 	else if (m_nowState == ESTATE::damageHit)
 	{
-		if (m_nowSpeed > m_preDamageSpeed * 0.7)
+		if (m_nowSpeed > m_preDamageMAXSpeed)
 		{
 			m_nowSpeed += m_damageDownSpeed;
 		}
