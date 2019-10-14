@@ -16,7 +16,20 @@ private:
 
 
 public:
-	BlurScreen() {}
+	BlurScreen() 
+	{
+		m_screen[0] = 0;
+		m_screen[1] = 0;
+		m_current = 0;
+		m_alpha = 0;
+		m_screenWidth = 0;
+		m_screenHeight = 0;
+		m_offsetX1 = 0;
+		m_offsetX2 = 0; 
+		m_offsetY1 = 0; 
+		offsetY2 = 0; 
+		m_notBlendDraw = 0;
+	}
 	~BlurScreen() {}
 
 
