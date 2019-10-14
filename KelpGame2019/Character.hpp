@@ -1,4 +1,9 @@
 #pragma once
+#include "DxLib.h"
+#include "InputKey.hpp"
+#include <random>
+#include <cmath>
+#include <string>
 
 
 class Character

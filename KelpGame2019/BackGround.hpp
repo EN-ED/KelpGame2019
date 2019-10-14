@@ -1,4 +1,6 @@
 #pragma once
+#include "DxLib.h"
+#include "InputKey.hpp"
 
 
 class BackGround

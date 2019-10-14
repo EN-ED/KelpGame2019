@@ -1,7 +1,4 @@
 #include "Game.hpp"
-#include "DxLib.h"
-#include "InputKey.hpp"
-#include "BlurScreen.hpp"
 
 
 

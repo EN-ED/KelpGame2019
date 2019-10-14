@@ -3,6 +3,9 @@
 #include "BackGround.hpp"
 #include "Character.hpp"
 #include "Chaser.hpp"
+#include "DxLib.h"
+#include "InputKey.hpp"
+#include "BlurScreen.hpp"
 
 
 class Game : public BaseScene

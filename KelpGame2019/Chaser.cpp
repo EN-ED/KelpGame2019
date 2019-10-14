@@ -1,6 +1,4 @@
 #include "Chaser.hpp"
-#include "DxLib.h"
-#include <string>
 
 
 

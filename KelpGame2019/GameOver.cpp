@@ -1,6 +1,4 @@
 #include "GameOver.hpp"
-#include "DxLib.h"
-#include "InputKey.hpp"
 
 
 

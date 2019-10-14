@@ -1,5 +1,4 @@
 #include "Manager.hpp"
-#include "DxLib.h"
 
 
 

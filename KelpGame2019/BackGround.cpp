@@ -1,6 +1,4 @@
 #include "BackGround.hpp"
-#include "DxLib.h"
-#include "InputKey.hpp"
 
 
 

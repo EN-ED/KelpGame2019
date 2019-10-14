@@ -1,5 +1,7 @@
 #pragma once
 #include "BaseScene.hpp"
+#include "DxLib.h"
+#include "InputKey.hpp"
 
 
 class Title : public BaseScene

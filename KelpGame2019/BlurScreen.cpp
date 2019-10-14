@@ -1,5 +1,4 @@
 #include "BlurScreen.hpp"
-#include "DxLib.h"
 
 
 

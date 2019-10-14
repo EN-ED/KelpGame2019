@@ -1,5 +1,4 @@
 #include "Garbage.hpp"
-#include "DxLib.h"
 
 
 

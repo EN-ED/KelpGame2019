@@ -1,6 +1,4 @@
 #include "Logo.hpp"
-#include "DxLib.h"
-#include "InputKey.hpp"
 
 
 

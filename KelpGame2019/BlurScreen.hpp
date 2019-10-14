@@ -1,6 +1,7 @@
 #pragma once
 #ifndef _BLURSCREEN_HPP
 #define _BLURSCREEN_HPP
+#include "DxLib.h"
 
 
 struct BlurScreen

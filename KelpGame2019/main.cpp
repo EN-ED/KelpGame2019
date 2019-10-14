@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "InputKey.hpp"
 #include "InputController.hpp"
+#include "SoundProcess.hpp"
 
 
 /// --------------------------------------------------------------------------------------------------
@@ -49,6 +50,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	Manager m_manager = Manager();
 
+	SoundProcess::Init();
+
 	
 	// メインループ
 	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen() && !KeyData::IsCheckEnd() && !PadData::IsCheckEnd() && !m_manager.GetEnd())
@@ -62,6 +65,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// 削除
 	m_manager.~Manager();
+	SoundProcess::Release();
 	DxLib_End();		// DXライブラリの後始末
 
 
