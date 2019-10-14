@@ -322,6 +322,15 @@ Character::Character()
 	m_jumpPower = m_jumpMinPower;
 	m_gravityPower = 0;
 	m_isFlyDamageHit = false;
+
+	for (int i = 0; i != 10; ++i)
+	{
+		std::string str = "media\\num\\";
+		str.append(std::to_string(i));
+		str.append(".png");
+		mD_speedNumber[i] = LoadGraph(str.c_str());
+	}
+	mD_speedComma = LoadGraph("media\\num\\comma.png");
 }
 
 
@@ -329,6 +338,11 @@ Character::Character()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Character::~Character()
 {
+	if (mD_speedComma != -1) DeleteGraph(mD_speedComma);
+	for (int i = 0; i != 10; ++i)
+	{
+		if (mD_speedNumber[i] != -1) DeleteGraph(mD_speedNumber[i]);
+	}
 	for (int i = 0; i != m_playerDrawNum; ++i)
 	{
 		if (mD_playerArray[i] != -1) DeleteGraph(mD_playerArray[i]);
@@ -344,19 +358,34 @@ void Character::Draw()
 	// ‘¬“x
 	if (m_nowSpeedThirdDigit != 0)
 	{
-		DrawFormatString(199, 131, GetColor(255, 255, 255), "%d%d%d.%d", m_nowSpeedThirdDigit, m_nowSpeedSecondDigit, m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
+		// DrawFormatString(199, 131, GetColor(255, 255, 255), "%d%d%d.%d", m_nowSpeedThirdDigit, m_nowSpeedSecondDigit, m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
+		DrawGraph(199, 131, mD_speedNumber[m_nowSpeedThirdDigit], true);
+		DrawGraph(199 + 121, 131, mD_speedNumber[m_nowSpeedSecondDigit], true);
+		DrawGraph(199 + 242, 131, mD_speedNumber[m_nowSpeedFirstDigit], true);
+		DrawGraph(199 + 363, 131 + 114, mD_speedComma, true);
+		DrawGraph(199 + 378, 131, mD_speedNumber[m_nowSpeedDecimalPoint], true);
 	}
 	else if (m_nowSpeedSecondDigit != 0)
 	{
-		DrawFormatString(199, 131, GetColor(255, 255, 255), "%d%d.%d", m_nowSpeedSecondDigit, m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
+		// DrawFormatString(199, 131, GetColor(255, 255, 255), "%d%d.%d", m_nowSpeedSecondDigit, m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
+		DrawGraph(199, 131, mD_speedNumber[m_nowSpeedSecondDigit], true);
+		DrawGraph(199 + 121, 131, mD_speedNumber[m_nowSpeedFirstDigit], true);
+		DrawGraph(199 + 242, 131 + 114, mD_speedComma, true);
+		DrawGraph(199 + 257, 131, mD_speedNumber[m_nowSpeedDecimalPoint], true);
 	}
 	else if (m_nowSpeedFirstDigit != 0)
 	{
-		DrawFormatString(199, 131, GetColor(255, 255, 255), "%d.%d", m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
+		// DrawFormatString(199, 131, GetColor(255, 255, 255), "%d.%d", m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
+		DrawGraph(199, 131, mD_speedNumber[m_nowSpeedFirstDigit], true);
+		DrawGraph(199 + 121, 131 + 114, mD_speedComma, true);
+		DrawGraph(199 + 136, 131, mD_speedNumber[m_nowSpeedDecimalPoint], true);
 	}
 	else
 	{
-		DrawFormatString(199, 131, GetColor(255, 255, 255), "0.%d", m_nowSpeedDecimalPoint);
+		// DrawFormatString(199, 131, GetColor(255, 255, 255), "0.%d", m_nowSpeedDecimalPoint);
+		DrawGraph(199, 131, mD_speedNumber[0], true);
+		DrawGraph(199 + 121, 131 + 114, mD_speedComma, true);
+		DrawGraph(199 + 136, 131, mD_speedNumber[m_nowSpeedDecimalPoint], true);
 	}
 
 	DrawFormatString(250, 131, GetColor(255, 255, 255), "‹}‰Á‘¬:%d•b", m_speedUpChargeCount / 60);
@@ -366,7 +395,7 @@ void Character::Draw()
 	DrawRotaGraph(m_playerX, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
 		, 1.0 - static_cast<double>(m_smallSpeed), 0, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 
-	switch (m_nowState)
+	/*switch (m_nowState)
 	{
 	case ESTATE::normal:
 		if (m_speedUpChargeCount == m_speedUpChargeMax && !m_isJumpFlag && !m_isDamageHit)
@@ -392,7 +421,7 @@ void Character::Draw()
 		break;
 	default:
 		break;
-	}
+	}*/
 	//printfDx("%d\n", static_cast<int>(m_playerSize * static_cast<float>(m_speedUpChargeCount) / m_speedUpChargeMax));
 }
 

@@ -6,9 +6,9 @@
 class BackGround
 {
 private:
-	int mD_backGround;
-	int mD_underGround;
-
+	int mD_backGround;			// ”wŒi‰æ‘œ
+	int mD_underGround;			// °‰æ‘œ
+	
 	int m_areaX;
 	int m_speed;
 
