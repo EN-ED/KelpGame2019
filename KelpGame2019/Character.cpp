@@ -65,7 +65,7 @@ void Character::DamageProcess()
 		m_isDamageHit = true;
 		m_nowState = ESTATE::damageHit;
 		m_preDamageMAXSpeed = m_nowSpeed * 0.7f;
-		m_smallSpeed += 0.05;
+		m_smallSpeed += 0.05f;
 	}
 
 
@@ -144,6 +144,7 @@ void Character::SpeedUpProcess()
 	// Zキーを押されたら
 	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedUpChargeCount == m_speedUpChargeMax && !m_isJumpFlag && !m_isDamageHit)
 	{
+		SoundProcess::Play(SoundProcess::E_SE::speedUp);
 		m_isNowSpeedUp = true;
 		m_nowState = ESTATE::speedUp;
 		m_playerDrawAnimCount = m_runFirstPlayerAnim;
@@ -223,6 +224,7 @@ void Character::PlayerJump()
 		// ジャンプボタン押したら
 		if (m_isGroundFlag && KeyData::Get(KEY_INPUT_SPACE) == 1 && !m_isNowSpeedUp)
 		{
+			SoundProcess::Play(SoundProcess::E_SE::jump);
 			m_isJumpFlag = true;
 			m_isLongJump = true;
 			m_isGroundFlag = false;

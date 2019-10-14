@@ -4,6 +4,7 @@
 #include <random>
 #include <cmath>
 #include <string>
+#include "SoundProcess.hpp"
 
 
 class Character
