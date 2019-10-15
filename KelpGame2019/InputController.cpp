@@ -298,9 +298,9 @@ const int PadData::GetStick(const int& t_code, const int& t_padNum)
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const int PadData::GetStickCheck(const int& t_code, const int& t_padNum, const bool& t_leftOrDown)
+const int PadData::GetStickCheck(const int& t_code, const int& t_padNum, const bool& t_leftAndDownIsTrue)
 {
-	if (t_leftOrDown)
+	if (t_leftAndDownIsTrue)
 	{
 		return m_stickCheck[t_padNum][t_code - 2];
 	}

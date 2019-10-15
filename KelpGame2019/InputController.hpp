@@ -60,7 +60,7 @@ public:
 	static const int GetButton(const int& t_code, const int& t_padNum);									// ボタンの入力状態取得
 	static const int GetTrigger(const int& t_code, const int& t_padNum);								// トリガーの取得
 	static const int GetStick(const int& t_code, const int& t_padNum);									// スティックの入力状態取得
-	static const int GetStickCheck(const int& t_code, const int& t_padNum, const bool& t_leftOrDown);	// スティックの押し倒し取得
+	static const int GetStickCheck(const int& t_code, const int& t_padNum, const bool& t_leftAndDownIsTrue);	// スティックの押し倒し取得
 
 
 	static const bool IsCheckEnd();																		// 強制終了

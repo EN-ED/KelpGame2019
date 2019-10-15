@@ -1,7 +1,8 @@
 #pragma once
 #include "BaseScene.hpp"
 #include "DxLib.h"
-#include "InputKey.hpp"
+#include "InputController.hpp"
+#include "SoundProcess.hpp"
 
 
 class Title : public BaseScene
@@ -20,6 +21,10 @@ private:
 	int m_sceneSideDrawX;			// シーン移動時の横移動値（oneとtwoを両方描画する）
 
 	const int m_sceneTwoDefaultSideDrawX = 1920;		// シーン移動時の横最大値
+
+	int mD_select;
+
+	int mD_back;
 
 
 	/// シーン１だけに関する

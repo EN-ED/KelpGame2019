@@ -1,7 +1,6 @@
 #pragma once
 #include "BaseScene.hpp"
 #include "DxLib.h"
-#include "InputKey.hpp"
 #include "InputController.hpp"
 
 

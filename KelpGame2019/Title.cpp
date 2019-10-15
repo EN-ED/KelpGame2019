@@ -32,7 +32,7 @@ void Title::SceneOneProcess()
 	}
 
 
-	if (KeyData::Get(KEY_INPUT_NUMPADENTER) == 1)
+	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
 	{
 		m_sceneChange = Scene::two;
 		m_sceneTwoFontBigCount = 1.0f;
@@ -91,19 +91,19 @@ void Title::SceneTwoProcess()
 	}
 
 
-	if (KeyData::Get(KEY_INPUT_UP) == 1)
+	if (PadData::GetStickCheck(PadStick::LEFT_STICK_Y, 0, false) == 1)
 	{
 		m_cursolArea = TwoCursolArea::start;
 		m_sceneTwoFontBigCount = 1.0f;
 	}
-	else if (KeyData::Get(KEY_INPUT_DOWN) == 1)
+	else if (PadData::GetStickCheck(PadStick::LEFT_STICK_Y, 0, true) == 1)
 	{
 		m_cursolArea = TwoCursolArea::end;
 		m_sceneTwoFontBigCount = 1.0f;
 	}
 
 
-	if (KeyData::Get(KEY_INPUT_NUMPADENTER) == 1)
+	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
 	{
 		if (m_cursolArea == TwoCursolArea::start)
 		{
@@ -111,12 +111,21 @@ void Title::SceneTwoProcess()
 		}
 		else if (m_cursolArea == TwoCursolArea::end)
 		{
-			m_sceneChange = Scene::one;
-			m_sceneOneStartBlendCount = 50;
-
-			m_sceneChangeCount = 0;
+			m_endFlag = true;
 		}
 	}
+
+
+	if (PadData::GetButton(XINPUT_BUTTON_B, 0) == 1)
+	{
+		m_sceneChange = Scene::one;
+		m_sceneOneStartBlendCount = 50;
+
+		m_sceneChangeCount = 0;
+	}
+
+
+	DrawGraph(1720, 720 + 24, mD_back, true);
 }
 
 
@@ -124,13 +133,16 @@ void Title::SceneTwoProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Title::Title()
 {
-	mD_sceneOneStart = LoadGraph("media\\start_sceneOne.png");
+	mD_select = LoadGraph("media\\title\\Aselect.png");
+	mD_back = LoadGraph("media\\title\\BBack.png");
+
+	mD_sceneOneStart = LoadGraph("media\\title\\start_sceneOne.png");
 
 	m_sceneOneStartBlendCount = 50;
 	m_isBlendDownSwitch = false;
 
-	mD_sceneTwoStart = LoadGraph("media\\start_sceneTwo.png");
-	mD_sceneTwoEnd = LoadGraph("media\\end_sceneTwo.png");
+	mD_sceneTwoStart = LoadGraph("media\\title\\start_sceneTwo.png");
+	mD_sceneTwoEnd = LoadGraph("media\\title\\end_sceneTwo.png");
 
 	m_cursolArea = TwoCursolArea::start;
 	m_sceneTwoFontBigCount = 1.0f;
@@ -155,6 +167,8 @@ Title::~Title()
 	if (mD_sceneTwoEnd != -1) DeleteGraph(mD_sceneTwoEnd);
 	if (mD_sceneTwoStart != -1) DeleteGraph(mD_sceneTwoStart);
 	if (mD_sceneOneStart != -1) DeleteGraph(mD_sceneOneStart);
+	if (mD_back != -1) DeleteGraph(mD_back);
+	if (mD_select != -1) DeleteGraph(mD_select);
 }
 
 
@@ -174,6 +188,8 @@ void Title::Draw()
 	{
 		SceneTwoDraw();
 	}
+
+	DrawGraph(1720, 720, mD_select, true);
 }
 
 
