@@ -1,10 +1,10 @@
 #pragma once
 #include "DxLib.h"
-#include "InputKey.hpp"
 #include <random>
 #include <cmath>
 #include <string>
 #include "SoundProcess.hpp"
+#include "InputController.hpp"
 
 
 class Character
@@ -57,6 +57,11 @@ private:
 	const float m_damageDownSpeed = -1.25f;
 
 	void DamageProcess();
+
+	int m_isNowHitDamage;
+
+	int m_hitGarbageID;
+	int m_preHitGarbageID;
 	/// --------------------------------------------------------
 
 
@@ -150,6 +155,12 @@ public:
 
 	const float& GetDefaultMAXSpeed() const;
 
-	void SetIsDamageHit(bool& t_isDamageHit);
+	void HitDamageNow(int t_garbageID);
+
+	const int& GetAreaX() const;
+
+	const int& GetAreaY() const;
+
+	const int GetSize() const;
 };
 

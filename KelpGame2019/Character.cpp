@@ -60,9 +60,12 @@ void Character::PositionProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::DamageProcess()
 {
-	if (KeyData::Get(KEY_INPUT_D) == 1 && !m_isNowSpeedUp && m_nowState != ESTATE::speedDown && !m_isDamageHit)
+	if (m_preHitGarbageID != m_hitGarbageID && m_isNowHitDamage && !m_isNowSpeedUp && m_nowState == ESTATE::normal && !m_isDamageHit)
 	{
+		printfDx("aaaaaaaaaaaaaaa\n");
+		m_preHitGarbageID = m_hitGarbageID;
 		m_isDamageHit = true;
+		m_isNowHitDamage = false;
 		m_nowState = ESTATE::damageHit;
 		m_preDamageMAXSpeed = m_nowSpeed * 0.7f;
 		m_smallSpeed += 0.05f;
@@ -134,6 +137,11 @@ void Character::SpeedProcess()
 			m_nowSpeed += m_damageDownSpeed;
 		}
 	}
+
+	if (m_nowSpeed <= 0.0f)
+	{
+		m_nowSpeed = 0.0f;
+	}
 }
 
 
@@ -142,7 +150,7 @@ void Character::SpeedProcess()
 void Character::SpeedUpProcess()
 {
 	// Zキーを押されたら
-	if (KeyData::Get(KEY_INPUT_Z) == 1 && m_speedUpChargeCount == m_speedUpChargeMax && !m_isJumpFlag && !m_isDamageHit)
+	if (PadData::GetButton(XINPUT_BUTTON_RIGHT_SHOULDER, 0) == 1 && m_speedUpChargeCount == m_speedUpChargeMax && !m_isJumpFlag && !m_isDamageHit)
 	{
 		SoundProcess::Play(SoundProcess::E_SE::speedUp);
 		m_isNowSpeedUp = true;
@@ -222,7 +230,7 @@ void Character::PlayerJump()
 		}
 
 		// ジャンプボタン押したら
-		if (m_isGroundFlag && KeyData::Get(KEY_INPUT_SPACE) == 1 && !m_isNowSpeedUp)
+		if (m_isGroundFlag && PadData::GetButton(XINPUT_BUTTON_A, 0) == 1 && !m_isNowSpeedUp)
 		{
 			SoundProcess::Play(SoundProcess::E_SE::jump);
 			m_isJumpFlag = true;
@@ -236,14 +244,14 @@ void Character::PlayerJump()
 		if (m_isJumpFlag)
 		{
 			// ジャンプボタンを離したら
-			if (KeyData::Get(KEY_INPUT_SPACE) == -1)
+			if (PadData::GetButton(XINPUT_BUTTON_A, 0) == -1)
 			{
 				m_isLongJump = false;
 			}
 
 
 			// 長押ししていたら
-			if (m_isLongJump && KeyData::Get(KEY_INPUT_SPACE) > 1 && m_jumpPower <= m_jumpMaxPower)
+			if (m_isLongJump && PadData::GetButton(XINPUT_BUTTON_A, 0) > 1 && m_jumpPower <= m_jumpMaxPower)
 			{
 				m_jumpPower += m_jumpAddPower;
 			}
@@ -322,6 +330,9 @@ Character::Character()
 	m_jumpPower = m_jumpMinPower;
 	m_gravityPower = 0;
 	m_isFlyDamageHit = false;
+	m_isNowHitDamage = false;
+	m_hitGarbageID = -1;
+	m_preHitGarbageID = m_hitGarbageID;
 
 	for (int i = 0; i != 10; ++i)
 	{
@@ -534,8 +545,29 @@ const float& Character::GetDefaultMAXSpeed() const
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-void Character::SetIsDamageHit(bool& t_isDamageHit)
+void Character::HitDamageNow(int t_garbageID)
 {
-	m_isDamageHit = t_isDamageHit;
+	m_isNowHitDamage = true;
+	m_hitGarbageID = t_garbageID;
+}
+
+
+
+const int& Character::GetAreaX() const
+{
+	return m_playerX;
+}
+
+
+
+const int& Character::GetAreaY() const
+{
+	return m_playerY;
+}
+
+
+
+const int Character::GetSize() const
+{
+	return static_cast<int>(192 * (1.0 - static_cast<double>(m_smallSpeed)));
 }

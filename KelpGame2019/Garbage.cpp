@@ -3,12 +3,30 @@
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-Garbage::Garbage(const int& t_x, const int& t_y)
+Garbage::Garbage(const int& t_x, const int& t_y, EDrawID t_ID)
 {
 	m_x = t_x;
 	m_y = t_y;
 
-	mD_garbage = LoadGraph("media\\garbage.png");
+	mD_garbage = -1;
+	m_ID = t_ID;
+	switch (t_ID)
+	{
+	case EDrawID::doro:
+		mD_garbage = LoadGraph("media\\item\\Doro.png");
+		break;
+		
+	case EDrawID::mizutamari:
+		mD_garbage = LoadGraph("media\\item\\mizutamari.png");
+		break;
+
+	case EDrawID::sekiyu:
+		mD_garbage = LoadGraph("media\\item\\Sekiyu.png");
+		break;
+
+	default:
+		break;
+	}
 }
 
 
@@ -49,4 +67,11 @@ const int& Garbage::GetX() const
 const int& Garbage::GetY() const
 {
 	return m_y;
+}
+
+
+
+const Garbage::EDrawID& Garbage::GetID() const
+{
+	return m_ID;
 }

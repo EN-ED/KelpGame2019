@@ -34,6 +34,7 @@ void Title::SceneOneProcess()
 
 	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
 	{
+		SoundProcess::Play(SoundProcess::E_SE::selectDo);
 		m_sceneChange = Scene::two;
 		m_sceneTwoFontBigCount = 1.0f;
 
@@ -105,6 +106,7 @@ void Title::SceneTwoProcess()
 
 	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
 	{
+		SoundProcess::Play(SoundProcess::E_SE::selectDo);
 		if (m_cursolArea == TwoCursolArea::start)
 		{
 			BASICPARAM::e_nowScene = ESceneNumber::GAME;
@@ -118,6 +120,7 @@ void Title::SceneTwoProcess()
 
 	if (PadData::GetButton(XINPUT_BUTTON_B, 0) == 1)
 	{
+		SoundProcess::Play(SoundProcess::E_SE::selectCancel);
 		m_sceneChange = Scene::one;
 		m_sceneOneStartBlendCount = 50;
 

@@ -48,5 +48,5 @@ void BackGround::Process()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void BackGround::SetSpeed(const float& t_speed)
 {
-	m_speed = static_cast<int>(t_speed);
+	m_speed = static_cast<int>(t_speed * 0.75f);
 }

@@ -6,6 +6,7 @@
 #include "DxLib.h"
 #include "InputKey.hpp"
 #include "BlurScreen.hpp"
+#include "Garbage.hpp"
 
 
 class Game : public BaseScene
@@ -16,6 +17,9 @@ private:
 	Chaser* mp_chaser;
 
 	bool m_isFirstSpeedUp;
+
+	Garbage* mp_garbage[3];
+	const int m_garbageNum = 3;
 
 
 public:
