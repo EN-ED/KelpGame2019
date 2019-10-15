@@ -60,7 +60,7 @@ void Logo::Process()
 	// 現在のロゴのIDが0番目だったら
 	if (m_nowLogoNumber == ELOGONOW::dxlib)
 	{
-		if (KeyData::Get(KEY_INPUT_Z) == 1)
+		if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
 		{
 			m_logoTransTime = 0;				// ロゴ表示時間をリセットする
 			m_nowLogoNumber = ELOGONOW::team;				// ロゴのIDを1番目にする
@@ -75,7 +75,7 @@ void Logo::Process()
 	// 現在のロゴのIDが1番目だったら
 	else if (m_nowLogoNumber == ELOGONOW::team)
 	{
-		if (KeyData::Get(KEY_INPUT_Z) == 1)
+		if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
 		{
 			BASICPARAM::e_nowScene = ESceneNumber::TITLE;					// ロゴのIDを1番目にする
 		}
