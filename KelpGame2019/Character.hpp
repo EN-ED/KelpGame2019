@@ -9,6 +9,10 @@
 
 class Character
 {
+public:
+	enum class EHitGarbageID { doro, mizutamari, sekiyu };
+
+
 private:
 	const int m_playerDrawNum = 20;
 	int mD_playerArray[20];
@@ -56,12 +60,14 @@ private:
 
 	const float m_damageDownSpeed = -1.25f;
 
-	void DamageProcess();
+	void HitGarbageProcess();
 
-	int m_isNowHitDamage;
+	int m_isHitGarbage;
 
 	int m_hitGarbageID;
 	int m_preHitGarbageID;
+
+	EHitGarbageID m_hitGarbageObjectID;
 	/// --------------------------------------------------------
 
 
@@ -155,7 +161,7 @@ public:
 
 	const float& GetDefaultMAXSpeed() const;
 
-	void HitDamageNow(int t_garbageID);
+	void HitGarbageNow(int t_garbageID, EHitGarbageID t_garbageObjectID);
 
 	const int& GetAreaX() const;
 

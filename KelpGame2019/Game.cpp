@@ -28,7 +28,7 @@ Game::Game()
 	for (int i = 0; i != m_garbageNum; ++i)
 	{
 		mp_garbage[i] = nullptr;
-		mp_garbage[i] = new Garbage(1920 * 5 + (i * 256), 1080 - 128 - 256, Garbage::EDrawID::doro);
+		mp_garbage[i] = new Garbage(1920  + (i * 256), 1080 - 128 - 256, static_cast<Garbage::EDrawID>(i));
 	}
 }
 
@@ -143,7 +143,8 @@ void Game::Process()
 			/*ÎŒ²‚Ìã’[ ‚ª áŠQ•¨‚Ì‰º’[ ‚æ‚è¬‚³‚¢*/
 			&& mp_character->GetAreaY()								 <= mp_garbage[i]->GetY() + 256)
 		{
-			mp_character->HitDamageNow(i);
+
+			mp_character->HitGarbageNow(i, static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
 		}
 	}
 }

@@ -58,17 +58,34 @@ void Character::PositionProcess()
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-void Character::DamageProcess()
+void Character::HitGarbageProcess()
 {
-	if (m_preHitGarbageID != m_hitGarbageID && m_isNowHitDamage && !m_isNowSpeedUp && m_nowState == ESTATE::normal && !m_isDamageHit)
+	if (m_preHitGarbageID != m_hitGarbageID && m_isHitGarbage && !m_isNowSpeedUp && m_nowState == ESTATE::normal && !m_isDamageHit)
 	{
 		printfDx("aaaaaaaaaaaaaaa\n");
 		m_preHitGarbageID = m_hitGarbageID;
-		m_isDamageHit = true;
-		m_isNowHitDamage = false;
-		m_nowState = ESTATE::damageHit;
-		m_preDamageMAXSpeed = m_nowSpeed * 0.7f;
-		m_smallSpeed += 0.05f;
+		m_isHitGarbage = false;
+		switch (m_hitGarbageObjectID)
+		{
+		case EHitGarbageID::doro:
+			m_smallSpeed += 0.05f;
+			break;
+
+		case EHitGarbageID::mizutamari:
+			m_isDamageHit = true;
+			m_nowState = ESTATE::damageHit;
+			m_preDamageMAXSpeed = m_nowSpeed * 0.7f;
+			m_smallSpeed += 0.05f;
+			break;
+
+		case EHitGarbageID::sekiyu:
+			m_smallSpeed -= 0.15f;
+			if (m_smallSpeed > 0.0f) m_smallSpeed = 0.0f;
+			break;
+
+		default:
+			break;
+		}
 	}
 
 
@@ -330,7 +347,7 @@ Character::Character()
 	m_jumpPower = m_jumpMinPower;
 	m_gravityPower = 0;
 	m_isFlyDamageHit = false;
-	m_isNowHitDamage = false;
+	m_isHitGarbage = false;
 	m_hitGarbageID = -1;
 	m_preHitGarbageID = m_hitGarbageID;
 
@@ -473,7 +490,7 @@ void Character::Process()
 	PlayerJump();
 
 
-	DamageProcess();
+	HitGarbageProcess();
 
 
 	PositionProcess();
@@ -545,9 +562,10 @@ const float& Character::GetDefaultMAXSpeed() const
 
 
 
-void Character::HitDamageNow(int t_garbageID)
+void Character::HitGarbageNow(int t_garbageID, EHitGarbageID t_garbageObjectID)
 {
-	m_isNowHitDamage = true;
+	m_hitGarbageObjectID = t_garbageObjectID;
+	m_isHitGarbage = true;
 	m_hitGarbageID = t_garbageID;
 }
 
