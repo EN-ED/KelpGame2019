@@ -5,8 +5,9 @@
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Logo::Logo()
 {
-	m_dxlibLogo = LoadGraph("media\\DxLogo.jpg");
-	m_teamLogo = LoadGraph("media\\notmovie.png");
+	mD_dxlibLogo = LoadGraph("media\\logo\\DxLogo.jpg");
+	mD_teamLogo = LoadGraph("media\\logo\\notmovie.png");
+	mD_skip = LoadGraph("media\\logo\\ASkip.png");
 
 	m_nowLogoNumber = ELOGONOW::dxlib;
 	m_logoTransTime = 0;
@@ -19,8 +20,9 @@ Logo::Logo()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Logo::~Logo()
 {
-	if (m_teamLogo != -1) DeleteGraph(m_teamLogo);
-	if (m_dxlibLogo != -1) DeleteGraph(m_dxlibLogo);
+	if (mD_skip != -1) DeleteGraph(mD_skip);
+	if (mD_teamLogo != -1) DeleteGraph(mD_teamLogo);
+	if (mD_dxlibLogo != -1) DeleteGraph(mD_dxlibLogo);
 }
 
 
@@ -43,13 +45,15 @@ void Logo::Draw()
 	// 現在のロゴのIDが0番目だったら
 	if (m_nowLogoNumber == ELOGONOW::dxlib)
 	{
-		DrawGraph(960 - 120/*中心座標 - 横サイズの半分*/, 540 - 120/*中心座標 - 縦サイズの半分*/, m_dxlibLogo, true);		// dxlibのロゴを表示
+		DrawGraph(960 - 120/*中心座標 - 横サイズの半分*/, 540 - 120/*中心座標 - 縦サイズの半分*/, mD_dxlibLogo, true);		// dxlibのロゴを表示
 	}
 	// 現在のロゴのIDが1番目だったら
 	else if (m_nowLogoNumber == ELOGONOW::team)
 	{
-		DrawGraph(960 - 960/*中心座標 - 横サイズの半分*/, 540 - 540/*中心座標 - 縦サイズの半分*/, m_teamLogo, true);		// teamのロゴを表示
+		DrawGraph(960 - 960/*中心座標 - 横サイズの半分*/, 540 - 540/*中心座標 - 縦サイズの半分*/, mD_teamLogo, true);		// teamのロゴを表示
 	}
+
+	DrawGraph(1720, 720, mD_skip, true);
 }
 
 

@@ -9,8 +9,9 @@ class Logo : public BaseScene
 private:
 	/// ‰æ‘œ
 
-	int m_teamLogo;		// “®‰æ‚Ì‰æ‘œ
-	int m_dxlibLogo;		// dxlib‚Ì‰æ‘œ
+	int mD_teamLogo;		// “®‰æ‚Ì‰æ‘œ
+	int mD_dxlibLogo;		// dxlib‚Ì‰æ‘œ
+	int mD_skip;
 
 
 	/// ƒV[ƒ“‘JˆÚ‚ÉŠÖ‚·‚é
