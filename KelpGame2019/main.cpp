@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 
-	SetWindowText("KelpGame2019");					// メインウインドウのウインドウタイトルを変更する
+	SetWindowText("走れ！石鹸くん！");					// メインウインドウのウインドウタイトルを変更する
 	SetBackgroundColor(0, 0, 0);			// 背景色を白に変更
 	ChangeWindowMode(TRUE);						// ウィンドウズモードにさせる
 
@@ -41,6 +41,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);	// 背景描画
 	SetMouseDispFlag(FALSE);		// マウスカーソルを非表示にする
 
+	SoundProcess::Init();
 
 	KeyData::UpDate();
 
@@ -49,8 +50,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	PadData::UpDate();
 	
 	Manager m_manager = Manager();
-
-	SoundProcess::Init();
 
 	
 	// メインループ
@@ -61,6 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 		m_manager.Update();
+		SoundProcess::BGMLoop(true);
 	}
 
 	// 削除

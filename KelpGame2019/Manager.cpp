@@ -19,6 +19,7 @@ void Manager::SceneChange()
 
 		// タイトル
 	case ESceneNumber::TITLE:
+		SoundProcess::Play(SoundProcess::E_BGM::title);
 		delete p_baseMove;
 		p_baseMove = nullptr;
 		SetDrawBright(255, 255, 255);
@@ -29,6 +30,7 @@ void Manager::SceneChange()
 
 		// ゲーム本編
 	case ESceneNumber::GAME:
+		SoundProcess::BGMLoop(false);
 		delete p_baseMove;
 		p_baseMove = nullptr;
 
@@ -56,13 +58,33 @@ void Manager::SceneChange()
 Manager::Manager()
 {
 	// 初期化
-	BASICPARAM::e_preScene = ESceneNumber::GAME;
-	BASICPARAM::e_nowScene = ESceneNumber::GAME;
+	BASICPARAM::e_preScene = ESceneNumber::LOGO;
+	BASICPARAM::e_nowScene = ESceneNumber::LOGO;
 
 
 	// メモリの初期化
 	p_baseMove = nullptr;
-	p_baseMove = new Game();
+	p_baseMove = new Logo();
+
+
+	switch (BASICPARAM::e_nowScene)
+	{
+	case ESceneNumber::LOGO:
+		break;
+
+	case ESceneNumber::TITLE:
+		SoundProcess::Play(SoundProcess::E_BGM::title);
+		break;
+
+	case ESceneNumber::GAME:
+		break;
+
+	case ESceneNumber::GAMEOVER:
+		break;
+
+	default:
+		break;
+	}
 }
 
 
