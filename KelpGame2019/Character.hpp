@@ -32,7 +32,7 @@ private:
 	int m_prePlayerX;
 	int m_prePlayerY;
 
-	enum class ESTATE{normal, speedUp, speedMAX, speedDown, damageHit};
+	enum class ESTATE{normal, speedUp, speedMAX, speedDown, damageHit, heal, doroDamageHit};
 	ESTATE m_nowState;				// åªç›ÇÃèÛë‘
 
 	int m_frameCount;
@@ -68,6 +68,8 @@ private:
 	int m_preHitGarbageID;
 
 	EHitGarbageID m_hitGarbageObjectID;
+
+	bool m_nowHeal;
 	/// --------------------------------------------------------
 
 
@@ -168,5 +170,9 @@ public:
 	const int& GetAreaY() const;
 
 	const int GetSize() const;
+
+	const bool GetNowDamage() const;
+
+	const bool GetNowHeal() const;
 };
 

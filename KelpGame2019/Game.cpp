@@ -124,24 +124,35 @@ void Game::Process()
 
 	for (int i = 0; i != m_garbageNum; ++i)
 	{
+		// 左より遠くに行ったら
 		if (mp_garbage[i]->GetX() + 256 < 0) continue;
+
+		
+		// 石鹸君が加速していたら
 		if (mp_character->GetIsSpeedUp())
 		{
-			mp_garbage[i]->Process(static_cast<int>(mp_character->GetSpeed() * 0.5f));
+			mp_garbage[i]->Process(static_cast<int>(mp_character->GetSpeed()));
 			continue;
 		}
+		// 石鹸君が加速していなかったら
 		else
 		{
-			mp_garbage[i]->Process(static_cast<int>(mp_character->GetSpeed() * 0.25f));
+			mp_garbage[i]->Process(static_cast<int>(mp_character->GetSpeed() * 0.8f));
 		}
-		if (/*石鹸の右端 が 障害物の左端 より大きい*/
-			mp_character->GetAreaX() + mp_character->GetSize()		 >= mp_garbage[i]->GetX()
+
+
+		// 既に石鹸君に対して障害物が当たっているフレーム中だったら
+		if (mp_character->GetNowDamage() || mp_character->GetNowHeal()) continue;
+
+		// 当たり判定
+		if (/*石鹸の右端より1/4減らす が 障害物の左端 より大きい*/
+			mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.75)		 >= mp_garbage[i]->GetX()
 			/*石鹸の左端 が 障害物の左端と障害物の速度 より小さい*/
-			&& mp_character->GetAreaX()								 <= mp_garbage[i]->GetX() + static_cast<int>(mp_character->GetSpeed() * 0.25f)
+			&& mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.25)	 <= mp_garbage[i]->GetX() + 256
 			/*石鹸の下端 が 障害物の上端 より大きい*/
-			&& mp_character->GetAreaY() + mp_character->GetSize()	 >= mp_garbage[i]->GetY()
+			&& mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.75)	 >= mp_garbage[i]->GetY()
 			/*石鹸の上端 が 障害物の下端 より小さい*/
-			&& mp_character->GetAreaY()								 <= mp_garbage[i]->GetY() + 256)
+			&& mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.25)	 <= mp_garbage[i]->GetY() + 256)
 		{
 
 			mp_character->HitGarbageNow(i, static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));

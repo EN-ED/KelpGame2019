@@ -60,18 +60,21 @@ void Character::PositionProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Character::HitGarbageProcess()
 {
-	if (m_preHitGarbageID != m_hitGarbageID && m_isHitGarbage && !m_isNowSpeedUp && m_nowState == ESTATE::normal && !m_isDamageHit)
+	if (m_preHitGarbageID != m_hitGarbageID && m_isHitGarbage && !m_isNowSpeedUp && m_nowState == ESTATE::normal && !m_isDamageHit && !m_nowHeal)
 	{
-		printfDx("aaaaaaaaaaaaaaa\n");
 		m_preHitGarbageID = m_hitGarbageID;
 		m_isHitGarbage = false;
 		switch (m_hitGarbageObjectID)
 		{
 		case EHitGarbageID::doro:
+			printfDx("doroダメージ\n");
+			m_isDamageHit = true;
+			m_nowState = ESTATE::doroDamageHit;
 			m_smallSpeed += 0.05f;
 			break;
 
 		case EHitGarbageID::mizutamari:
+			printfDx("mizutamariダメージ\n");
 			m_isDamageHit = true;
 			m_nowState = ESTATE::damageHit;
 			m_preDamageMAXSpeed = m_nowSpeed * 0.7f;
@@ -79,8 +82,9 @@ void Character::HitGarbageProcess()
 			break;
 
 		case EHitGarbageID::sekiyu:
-			m_smallSpeed -= 0.15f;
-			if (m_smallSpeed > 0.0f) m_smallSpeed = 0.0f;
+			printfDx("sekiyu回復\n");
+			m_nowHeal = true;
+			m_nowState = ESTATE::heal;
 			break;
 
 		default:
@@ -97,6 +101,21 @@ void Character::HitGarbageProcess()
 		{
 			m_damageCount = 0;
 			m_isDamageHit = false;
+			m_nowState = ESTATE::normal;
+		}
+	}
+
+
+	// 灯油に当たったら
+	if (m_nowHeal)
+	{
+		m_smallSpeed -= 0.01f;
+		if (m_smallSpeed < 0.0f) m_smallSpeed = 0.0f;
+		// ダメージカウントが最大になったら
+		if (++m_damageCount > static_cast<int>(m_damageMaxCount * 0.5) && m_isGroundFlag)
+		{
+			m_damageCount = 0;
+			m_nowHeal = false;
 			m_nowState = ESTATE::normal;
 		}
 	}
@@ -350,6 +369,7 @@ Character::Character()
 	m_isHitGarbage = false;
 	m_hitGarbageID = -1;
 	m_preHitGarbageID = m_hitGarbageID;
+	m_nowHeal = false;
 
 	for (int i = 0; i != 10; ++i)
 	{
@@ -588,4 +608,14 @@ const int& Character::GetAreaY() const
 const int Character::GetSize() const
 {
 	return static_cast<int>(192 * (1.0 - static_cast<double>(m_smallSpeed)));
+}
+
+const bool Character::GetNowDamage() const
+{
+	return m_isDamageHit;
+}
+
+const bool Character::GetNowHeal() const
+{
+	return m_nowHeal;
 }
