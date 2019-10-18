@@ -30,7 +30,6 @@ void Manager::SceneChange()
 
 		// ゲーム本編
 	case ESceneNumber::GAME:
-		SoundProcess::BGMLoop(false);
 		delete p_baseMove;
 		p_baseMove = nullptr;
 
@@ -58,13 +57,13 @@ void Manager::SceneChange()
 Manager::Manager()
 {
 	// 初期化
-	BASICPARAM::e_preScene = ESceneNumber::LOGO;
-	BASICPARAM::e_nowScene = ESceneNumber::LOGO;
+	BASICPARAM::e_preScene = ESceneNumber::TITLE;
+	BASICPARAM::e_nowScene = ESceneNumber::TITLE;
 
 
 	// メモリの初期化
 	p_baseMove = nullptr;
-	p_baseMove = new Logo();
+	p_baseMove = new Title();
 
 
 	switch (BASICPARAM::e_nowScene)
@@ -73,7 +72,7 @@ Manager::Manager()
 		break;
 
 	case ESceneNumber::TITLE:
-		SoundProcess::Play(SoundProcess::E_BGM::title);
+		//SoundProcess::Play(SoundProcess::E_BGM::title);
 		break;
 
 	case ESceneNumber::GAME:
@@ -111,10 +110,50 @@ void Manager::Update()
 
 		// ゲームのプロセスに関する
 		p_baseMove->Process();
+
+
+		switch (BASICPARAM::e_nowScene)
+		{
+		case ESceneNumber::LOGO:
+			break;
+
+		case ESceneNumber::TITLE:
+			SoundProcess::BGMLoop(true);
+			break;
+
+		case ESceneNumber::GAME:
+			break;
+
+		case ESceneNumber::GAMEOVER:
+			break;
+
+		default:
+			break;
+		}
 	}
 	// 現在と直前のシーンが異なったら
 	else
 	{
+		switch (BASICPARAM::e_nowScene)
+		{
+		case ESceneNumber::LOGO:
+			break;
+
+		case ESceneNumber::TITLE:
+			break;
+
+		case ESceneNumber::GAME:
+			SoundProcess::BGMLoop(false);
+			break;
+
+		case ESceneNumber::GAMEOVER:
+			break;
+
+		default:
+			break;
+		}
+
+
 		// シーンを変える
 		SceneChange();
 

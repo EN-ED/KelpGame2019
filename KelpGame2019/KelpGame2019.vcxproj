@@ -187,6 +187,9 @@
     <ClInclude Include="SoundProcess.hpp" />
     <ClInclude Include="Title.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="media\logo\icon.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

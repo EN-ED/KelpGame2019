@@ -12,6 +12,16 @@ private:
 	int mD_teamLogo;		// “®‰æ‚Ì‰æ‘œ
 	int mD_dxlibLogo;		// dxlib‚Ì‰æ‘œ
 	int mD_skip;
+	int mD_Re;
+	int mD_Okizari;
+	int mD_Pazuru;
+	int mD_Escape;
+
+	int m_x;
+	int m_y;
+	int m_addX;
+	int m_addY;
+	int m_turnY;
 
 
 	/// ƒV[ƒ“‘JˆÚ‚ÉŠÖ‚·‚é

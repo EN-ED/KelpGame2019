@@ -26,6 +26,14 @@ private:
 
 	int mD_back;
 
+	int mD_TitleLogo;
+
+	int m_x;
+	int m_y;
+	double m_exRate;
+	double m_add;
+	int m_angle;
+
 
 	/// ƒV[ƒ“‚P‚¾‚¯‚ÉŠÖ‚·‚é
 

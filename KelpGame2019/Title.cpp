@@ -31,14 +31,21 @@ void Title::SceneOneProcess()
 		}
 	}
 
+	m_exRate += m_add;
+	if (m_exRate < 0.2 || m_exRate > 0.65) m_add = -m_add;
 
-	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
+
+	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1 && m_sceneChangeCount >= m_sceneChangeMaxCount)
 	{
 		SoundProcess::Play(SoundProcess::E_SE::selectDo);
-		m_sceneChange = Scene::two;
 		m_sceneTwoFontBigCount = 1.0f;
-
 		m_sceneChangeCount = 0;
+		m_x = 960 + 480;
+		m_y = -120;
+		m_exRate = 0.45;
+		m_add = 1;
+		m_angle = 0;
+		m_sceneChange = Scene::two;
 	}
 }
 
@@ -104,7 +111,7 @@ void Title::SceneTwoProcess()
 	}
 
 
-	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
+	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1 && m_sceneChangeCount >= m_sceneChangeMaxCount)
 	{
 		SoundProcess::Play(SoundProcess::E_SE::selectDo);
 		if (m_cursolArea == TwoCursolArea::start)
@@ -118,17 +125,24 @@ void Title::SceneTwoProcess()
 	}
 
 
-	if (PadData::GetButton(XINPUT_BUTTON_B, 0) == 1)
+	if (PadData::GetButton(XINPUT_BUTTON_B, 0) == 1 && m_sceneChangeCount >= m_sceneChangeMaxCount)
 	{
 		SoundProcess::Play(SoundProcess::E_SE::selectCancel);
-		m_sceneChange = Scene::one;
 		m_sceneOneStartBlendCount = 50;
-
 		m_sceneChangeCount = 0;
+		m_x = 960;
+		m_y = -120;
+		m_exRate = 0.65;
+		m_add = -0.01;
+		m_angle = 0;
+		m_sceneChange = Scene::one;
 	}
 
 
 	DrawGraph(1720, 720 + 24, mD_back, true);
+
+	m_angle += m_add;
+	if (m_angle < -12 || m_angle > 12) m_add = -m_add;
 }
 
 
@@ -160,6 +174,14 @@ Title::Title()
 	m_sceneSideDrawX = 0;
 
 	m_endFlag = false;
+
+	mD_TitleLogo = LoadGraph("media\\title\\êŒå≤åNÉçÉS.png");
+
+	m_x = 960;
+	m_y = -120;
+	m_exRate = 0.65;
+	m_add = -0.01;
+	m_angle = 0;
 }
 
 
@@ -182,6 +204,7 @@ void Title::Draw()
 	// îwåi
 	DrawBox(0, 0, 1920, 1080, GetColor(10, m_backGroundColor, 10), true);
 
+	DrawRotaGraph(m_x, m_y + 516, m_exRate, 3.14 / 180 * m_angle, mD_TitleLogo, true);
 
 	if (m_sceneChange == Scene::one)
 	{
