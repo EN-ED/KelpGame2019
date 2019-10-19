@@ -186,7 +186,7 @@ void Character::SpeedProcess()
 void Character::SpeedUpProcess()
 {
 	// Zキーを押されたら
-	if (PadData::GetButton(XINPUT_BUTTON_RIGHT_SHOULDER, 0) == 1 && m_speedUpChargeCount == m_speedUpChargeMax && !m_isJumpFlag && !m_isDamageHit)
+	if (PadData::GetButton(XINPUT_BUTTON_RIGHT_SHOULDER, 0) == 1 && m_speedUpChargeCount == m_speedUpChargeMax && m_nowState == ESTATE::normal)
 	{
 		SoundProcess::Play(SoundProcess::E_SE::speedUp);
 		m_isNowSpeedUp = true;
@@ -388,7 +388,8 @@ Character::Character()
 	}
 	mD_speedComma = LoadGraph("media\\num\\comma.png");
 
-	mD_speedUpTimer = LoadGraph("media\\加速可能まで.png");
+	mD_speedUpDescription = LoadGraph("media\\RBspeedUp.png");
+	mD_jumpDescription = LoadGraph("media\\Ajump.png");
 }
 
 
@@ -396,7 +397,8 @@ Character::Character()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Character::~Character()
 {
-	if (mD_speedUpTimer != -1) DeleteGraph(mD_speedUpTimer);
+	if (mD_jumpDescription != -1) DeleteGraph(mD_jumpDescription);
+	if (mD_speedUpDescription != -1) DeleteGraph(mD_speedUpDescription);
 	if (mD_speedComma != -1) DeleteGraph(mD_speedComma);
 	for (int i = 0; i != 10; ++i)
 	{
@@ -450,10 +452,6 @@ void Character::Draw()
 	}
 
 
-	DrawFormatString(250, 131, GetColor(255, 255, 255), "急加速:%d秒", m_speedUpChargeCount / 60);
-	DrawGraph(284, 1080 - 128, mD_speedUpTimer, true);
-
-
 	// プレイヤー
 	if (m_nowState == ESTATE::damageHit)
 	{
@@ -463,11 +461,14 @@ void Character::Draw()
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 
 			int speedGraph = DerivationGraph(0, 0, static_cast<int>(192 * m_speedUpChargeCount / 420), 192, mD_playerSpeedArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)]);
-			DrawRotaGraph(m_playerX - (96 - static_cast<int>(96 * m_speedUpChargeCount / 420)), m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
+			DrawRotaGraph(
+				m_playerX - static_cast<int>((96 - (96 * m_speedUpChargeCount / 420)) * (1.0 - static_cast<double>(m_smallSpeed)))
+				, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, speedGraph, true);
 
 			int diviGraph = DerivationGraph(0, static_cast<int>(6.4 * m_damageCount), 192, 192 - static_cast<int>(6.4 * m_damageCount), mD_playerMizuArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)]);
-			DrawRotaGraph(m_playerX, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed) + static_cast<int>(3.2 * m_damageCount)
+			DrawRotaGraph(m_playerX
+				, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed) + static_cast<int>((3.2 * m_damageCount) * (1.0 - static_cast<double>(m_smallSpeed)))
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, diviGraph, true);
 		}
 	}
@@ -479,11 +480,14 @@ void Character::Draw()
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 
 			int speedGraph = DerivationGraph(0, 0, static_cast<int>(192 * m_speedUpChargeCount / 420), 192, mD_playerSpeedArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)]);
-			DrawRotaGraph(m_playerX - (96 - static_cast<int>(96 * m_speedUpChargeCount / 420)), m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
+			DrawRotaGraph(
+				m_playerX - static_cast<int>((96 - (96 * m_speedUpChargeCount / 420)) * (1.0 - static_cast<double>(m_smallSpeed)))
+				, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, speedGraph, true);
 
 			int diviGraph = DerivationGraph(0, static_cast<int>(6.4 * m_damageCount), 192, 192 - static_cast<int>(6.4 * m_damageCount), mD_playerDoroArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)]);
-			DrawRotaGraph(m_playerX, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed) + static_cast<int>(3.2 * m_damageCount)
+			DrawRotaGraph(m_playerX
+				, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed) + static_cast<int>((3.2 * m_damageCount) * (1.0 - static_cast<double>(m_smallSpeed)))
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, diviGraph, true);
 		}
 	}
@@ -493,8 +497,17 @@ void Character::Draw()
 			, 1.0 - static_cast<double>(m_smallSpeed), 0, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
 
 		int speedGraph = DerivationGraph(0, 0, static_cast<int>(192 * m_speedUpChargeCount / 420), 192, mD_playerSpeedArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)]);
-		DrawRotaGraph(m_playerX - (96 - static_cast<int>(96 * m_speedUpChargeCount / 420)), m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
+		DrawRotaGraph(
+			m_playerX - static_cast<int>((96 - (96 * m_speedUpChargeCount / 420)) * (1.0 - static_cast<double>(m_smallSpeed)))
+			, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
 			, 1.0 - static_cast<double>(m_smallSpeed), 0, speedGraph, true);
+	}
+
+
+	DrawGraph(300, 1080 - 128, mD_jumpDescription, true);
+	if (m_speedUpChargeCount == m_speedUpChargeMax)
+	{
+		DrawGraph(300 + 360, 1080 - 128, mD_speedUpDescription, true);
 	}
 
 	/*switch (m_nowState)

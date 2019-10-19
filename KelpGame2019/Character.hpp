@@ -107,7 +107,7 @@ private:
 
 	void SpeedUpProcess();
 
-	int mD_speedUpTimer;
+	int mD_speedUpDescription;
 	/// --------------------------------------------------------
 
 
@@ -138,6 +138,8 @@ private:
 	bool m_isFlyDamageHit;
 
 	void PlayerJump();
+
+	int mD_jumpDescription;
 	/// --------------------------------------------------------
 
 	/// ‘¬“x•\Ž¦
