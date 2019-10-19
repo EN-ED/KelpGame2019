@@ -310,7 +310,7 @@ void Title::SceneTwoProcess()
 		SoundProcess::Play(SoundProcess::E_SE::selectDo);
 		if (m_cursolArea == TwoCursolArea::start)
 		{
-			BASICPARAM::e_nowScene = ESceneNumber::GAME;
+			BASICPARAM::e_nowScene = ESceneNumber::TUTORIAL;
 		}
 		else if (m_cursolArea == TwoCursolArea::end)
 		{

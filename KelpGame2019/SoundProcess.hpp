@@ -13,7 +13,7 @@ namespace SoundProcess
 
 	enum class E_BGM
 	{
-		title, main, mainLoop, none
+		title, main, mainLoop, tutorial, none
 	};
 
 

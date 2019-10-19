@@ -19,42 +19,52 @@ void Manager::SceneChange()
 
 		// タイトル
 	case ESceneNumber::TITLE:
+		SoundProcess::Play(SoundProcess::E_BGM::title);
 		delete p_baseMove;
 		p_baseMove = nullptr;
 		SetDrawBright(255, 255, 255);
 
 		p_baseMove = new Title();
-		SoundProcess::Play(SoundProcess::E_BGM::title);
+		break;
+
+
+		// チュートリアル
+	case ESceneNumber::TUTORIAL:
+		SoundProcess::Play(SoundProcess::E_BGM::tutorial);
+		delete p_baseMove;
+		p_baseMove = nullptr;
+
+		p_baseMove = new Tutorial();
 		break;
 
 
 		// ゲーム本編
 	case ESceneNumber::GAME:
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		delete p_baseMove;
 		p_baseMove = nullptr;
 
 		p_baseMove = new Game(1);
-		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		break;
 
 
 		// おまけ１
 	case ESceneNumber::OMAKEONE:
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		delete p_baseMove;
 		p_baseMove = nullptr;
 
 		p_baseMove = new Game(2);
-		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		break;
 
 
 		// ゲーム本編
 	case ESceneNumber::OMAKETWO:
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		delete p_baseMove;
 		p_baseMove = nullptr;
 
 		p_baseMove = new Game(3);
-		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		break;
 
 
@@ -85,6 +95,10 @@ Manager::Manager()
 
 	case ESceneNumber::TITLE:
 		SoundProcess::Play(SoundProcess::E_BGM::title);
+		break;
+
+	case ESceneNumber::TUTORIAL:
+		SoundProcess::Play(SoundProcess::E_BGM::tutorial);
 		break;
 
 	case ESceneNumber::GAME:

@@ -53,6 +53,7 @@ void BackGround::Draw()
 void BackGround::Process()
 {
 	m_areaX += m_speed;
+	if (m_areaX < 0) m_areaX = 1920;
 	if (m_areaX > 1920) m_areaX = 0;
 }
 

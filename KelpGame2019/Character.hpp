@@ -163,6 +163,10 @@ public:
 	// ÉvÉçÉZÉX
 	void Process();
 
+	void FirstDraw(int t_x, int t_y, bool t_turn);
+
+	void FirstProcess();
+
 
 	const bool& GetIsSpeedUp() const;
 

@@ -3,7 +3,7 @@
 
 
 int m_soundSE[9];
-int m_soundBGM[3];
+int m_soundBGM[4];
 float bgmVolume;
 float preVolume;
 SoundProcess::E_BGM preBGM;
@@ -24,6 +24,7 @@ void SoundProcess::Init()
 	m_soundBGM[static_cast<int>(E_BGM::title)]		 = LoadSoundMem("media\\sound\\ÇΩÇ¢Ç∆ÇÈ.wav");
 	m_soundBGM[static_cast<int>(E_BGM::main)]		 = LoadSoundMem("media\\sound\\ÇﬂÇ¢ÇÒ.wav");
 	m_soundBGM[static_cast<int>(E_BGM::mainLoop)]	 = LoadSoundMem("media\\sound\\ÇﬂÇ¢ÇÒÇÈÅ[Ç’Ç≈Ç´ÇÈ.wav");
+	m_soundBGM[static_cast<int>(E_BGM::tutorial)]	 = LoadSoundMem("media\\sound\\íÜìrÉäÉAÉã.wav");
 
 	bgmVolume = 0.0f;
 	preVolume = 0.0f;
@@ -36,7 +37,7 @@ void SoundProcess::Init()
 
 void SoundProcess::Release()
 {
-	for (int i = 0; i != 1; ++i)
+	for (int i = 0; i != 4; ++i)
 	{
 		if (m_soundBGM[i] != -1)
 		{
@@ -45,7 +46,7 @@ void SoundProcess::Release()
 		}
 	}
 
-	for (int i = 0; i != 5; ++i)
+	for (int i = 0; i != 9; ++i)
 	{
 		if (m_soundSE[i] != -1)
 		{
@@ -88,7 +89,7 @@ void SoundProcess::BGMLoop()
 
 
 	if (preBGM == E_BGM::none) return;
-	if ((preVolume -= 51) > 0)
+	if ((preVolume -= 174) > 0)
 	{
 		ChangeVolumeSoundMem(static_cast<int>(preVolume <= 0 ? 0 : preVolume), m_soundBGM[static_cast<int>(preBGM)]);
 	}

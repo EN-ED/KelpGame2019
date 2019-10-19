@@ -53,6 +53,22 @@ void Chaser::Process()
 
 
 /// ------------------------------------------------------------------------------------------------------------
+void Chaser::FirstDraw(int t_x)
+{
+	DrawGraph(t_x, 1080 - 128 - 512, mD_chaserArray[static_cast<int>(m_chaserSpeedCount / m_chasrArraySpeed)], true);
+}
+
+
+
+/// ------------------------------------------------------------------------------------------------------------
+void Chaser::FirstProcess()
+{
+	if (++m_chaserSpeedCount >= m_chasrArraySpeed * m_chaserArrayNum) m_chaserSpeedCount = 0;
+}
+
+
+
+/// ------------------------------------------------------------------------------------------------------------
 void Chaser::SetPlyayerSpeed(const float& t_playerSpeed, const float& t_defaultMAXSpeed)
 {
 	if (t_playerSpeed > t_defaultMAXSpeed)

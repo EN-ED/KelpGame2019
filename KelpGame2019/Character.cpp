@@ -626,6 +626,29 @@ void Character::Process()
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Character::FirstDraw(int t_x, int t_y, bool t_turn)
+{
+	if (t_turn)
+	{
+		DrawTurnGraph(t_x, t_y, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
+	}
+	else
+	{
+		DrawGraph(t_x, t_y, mD_playerArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)], true);
+	}
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Character::FirstProcess()
+{
+	if (++m_playerDrawAnimCount >= m_playerDrawAnimSpeed * m_playerDrawNum) m_playerDrawAnimCount = 0;
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 const bool& Character::GetIsSpeedUp() const
 {
 	return m_isNowSpeedUp;

@@ -4,6 +4,7 @@
 #include "Title.hpp"
 #include "Game.hpp"
 #include "DxLib.h"
+#include "Tutorial.hpp"
 
 
 

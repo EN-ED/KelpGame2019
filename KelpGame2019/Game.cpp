@@ -8,6 +8,98 @@ BlurScreen g_blurScreen;
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Game::FirstDraw()
+{
+	mp_backGround->Draw();
+
+	mp_character->FirstDraw(m_firstCharacterX, 1080 - 128 - 192, m_firstCharacterTurn);
+
+	mp_chaser->FirstDraw(m_firstchaserX);
+
+	if (m_firstFrameCount < 490 && m_firstFrameCount> 450)
+	{
+		DrawGraph(1920 / 2 - 64, 1080 / 2 - 64, m_firstTimer[0], true);
+	}
+	else if (m_firstFrameCount <= 450 && m_firstFrameCount > 390)
+	{
+		DrawGraph(1920 / 2 - 64, 1080 / 2 - 64, m_firstTimer[1], true);
+	}
+	else if (m_firstFrameCount <= 390 && m_firstFrameCount > 330)
+	{
+		DrawGraph(1920 / 2 - 64, 1080 / 2 - 64, m_firstTimer[2], true);
+	}
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Game::FirstProcess()
+{
+	m_firstFrameCount++;
+	if (m_firstFrameCount == 60)
+	{
+		m_firstCharacterTurn = false;
+	}
+	else if (m_firstFrameCount == 120)
+	{
+		m_firstCharacterTurn = true;
+	}
+	else if (m_firstFrameCount >= 180 && m_firstFrameCount < 210)
+	{
+		if (m_firstCharacterX < 1920)
+		{
+			m_firstCharacterX += 100;
+		}
+		m_firstBackGroundX = -100;
+	}
+	else if (m_firstFrameCount > 220 && m_firstFrameCount < 250)
+	{
+		m_firstchaserX += 10;
+		m_firstBackGroundX = 40;
+		m_firstCharacterTurn = false;
+	}
+	else if(m_firstFrameCount > 250 && m_firstFrameCount < 500)
+	{
+		if (m_firstCharacterX > 284)
+		{
+			m_firstCharacterX -= 10;
+		}
+		if (m_firstBackGroundX < 70)
+		{
+			m_firstBackGroundX++;
+		}
+		if (m_firstchaserX < 256 - 512)
+		{
+			m_firstchaserX++;
+		}
+		else
+		{
+			m_firstchaserX--;
+		}
+	}
+	else if(m_firstFrameCount >= 500)
+	{
+		m_nowMove = NowMove::main;
+	}
+
+
+	mp_backGround->Process();
+	mp_backGround->SetSpeed(m_firstBackGroundX);
+
+	mp_chaser->FirstProcess();
+
+	mp_character->FirstProcess();
+
+
+	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
+	{
+		m_nowMove = NowMove::main;
+	}
+}
+
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Game::MainDraw()
 {
 	if (mp_character->GetIsSpeedUp())
@@ -102,13 +194,13 @@ void Game::MainProcess()
 
 		// “–‚½‚è”»’è
 		if (/*ÎŒ²‚Ì‰E’[‚æ‚è1/4Œ¸‚ç‚· ‚ª áŠQ•¨‚Ì¶’[ ‚æ‚è‘å‚«‚¢*/
-			mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.75) >= mp_garbage[i]->GetX()
+			mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.7) >= mp_garbage[i]->GetX()
 			/*ÎŒ²‚Ì¶’[ ‚ª áŠQ•¨‚Ì¶’[‚ÆáŠQ•¨‚Ì‘¬“x ‚æ‚è¬‚³‚¢*/
-			&& mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.25) <= mp_garbage[i]->GetX() + 256
+			&& mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.3) <= mp_garbage[i]->GetX() + 256
 			/*ÎŒ²‚Ì‰º’[ ‚ª áŠQ•¨‚Ìã’[ ‚æ‚è‘å‚«‚¢*/
-			&& mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.75) >= mp_garbage[i]->GetY()
+			&& mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.7) >= mp_garbage[i]->GetY()
 			/*ÎŒ²‚Ìã’[ ‚ª áŠQ•¨‚Ì‰º’[ ‚æ‚è¬‚³‚¢*/
-			&& mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.25) <= mp_garbage[i]->GetY() + 256)
+			&& mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.3) <= mp_garbage[i]->GetY() + 256)
 		{
 
 			mp_character->HitGarbageNow(i, static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
@@ -141,20 +233,6 @@ void Game::GameClearDraw()
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Game::GameClearProcess()
-{
-}
-
-
-
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-void Game::TutorialDraw()
-{
-}
-
-
-
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-void Game::TutorialProcess()
 {
 }
 
@@ -263,7 +341,17 @@ Game::Game(int t_stageCorse)
 		FileLoad("media\\stageCorse\\1000000ver.csv");
 	}
 
-	m_nowMove = NowMove::main;
+	m_nowMove = NowMove::start;
+
+	m_firstCharacterX = 1920 / 2 - 192 / 2;
+	m_firstCharacterTurn = true;
+	m_firstFrameCount = 0;
+	m_firstBackGroundX = 0;
+	m_firstchaserX = -512;
+
+	m_firstTimer[0] = LoadGraph("media\\num\\1.png");
+	m_firstTimer[1] = LoadGraph("media\\num\\2.png");
+	m_firstTimer[2] = LoadGraph("media\\num\\3.png");
 }
 
 
@@ -271,6 +359,9 @@ Game::Game(int t_stageCorse)
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Game::~Game()
 {
+	DeleteGraph(m_firstTimer[0]);
+	DeleteGraph(m_firstTimer[1]);
+	DeleteGraph(m_firstTimer[2]);
 	for (int i = 0; i != mp_garbage.size(); ++i)
 	{
 		if (mp_garbage[i] != nullptr) delete mp_garbage[i];
@@ -291,8 +382,8 @@ void Game::Draw()
 {
 	switch (m_nowMove)
 	{
-	case NowMove::tutorial:
-		TutorialDraw();
+	case NowMove::start:
+		FirstDraw();
 		break;
 
 	case NowMove::main:
@@ -319,8 +410,8 @@ void Game::Process()
 {
 	switch (m_nowMove)
 	{
-	case NowMove::tutorial:
-		TutorialProcess();
+	case NowMove::start:
+		FirstProcess();
 		break;
 
 	case NowMove::main:

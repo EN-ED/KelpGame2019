@@ -26,6 +26,9 @@ private:
 
 	std::vector<Garbage*> mp_garbage;
 
+	void FirstDraw();
+	void FirstProcess();
+
 	void MainDraw();
 	void MainProcess();
 
@@ -35,13 +38,19 @@ private:
 	void GameClearDraw();
 	void GameClearProcess();
 
-	void TutorialDraw();
-	void TutorialProcess();
-
-	enum class NowMove { tutorial, main, gameclear, gameover };
+	enum class NowMove { start, main, gameclear, gameover };
 	NowMove m_nowMove;
 
 	void FileLoad(std::string t_mapStr);
+
+	int m_firstCharacterX;
+	bool m_firstCharacterTurn;
+	int m_firstFrameCount;
+	int m_firstBackGroundX;
+	int m_firstchaserX;
+
+	int m_firstTimer[3];
+
 
 
 public:

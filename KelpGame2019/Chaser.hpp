@@ -27,6 +27,10 @@ public:
 
 	void Process();
 
+	void FirstDraw(int t_x);
+
+	void FirstProcess();
+
 
 	void SetPlyayerSpeed(const float& t_playerSpeed, const float& t_defaultMAXSpeed);
 };
