@@ -65,6 +65,7 @@ void SoundProcess::Play(E_SE number)
 
 void SoundProcess::Play(E_BGM number)
 {
+	if (nowBGM == number) return;
 	if (nowBGM != E_BGM::none)
 	{
 		preBGM = nowBGM;

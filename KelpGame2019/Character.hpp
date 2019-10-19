@@ -185,5 +185,7 @@ public:
 	const bool GetNowDamage() const;
 
 	const bool GetNowHeal() const;
+
+	const float GetSmallSpeed() const;
 };
 

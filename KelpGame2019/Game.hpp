@@ -51,6 +51,22 @@ private:
 
 	int m_firstTimer[3];
 
+	int mD_gameClear;
+	int mD_clearOmake;
+
+	int m_clearFrame;
+
+	int mD_gameOver;
+	int mD_overReset;
+	int mD_overTitle;
+
+	int m_overFrame;
+
+	bool m_overGameReset;
+
+	int m_maxLoad;
+	float m_nowLoad;
+
 
 
 public:

@@ -709,3 +709,8 @@ const bool Character::GetNowHeal() const
 {
 	return m_nowHeal;
 }
+
+const float Character::GetSmallSpeed() const
+{
+	return m_smallSpeed;
+}

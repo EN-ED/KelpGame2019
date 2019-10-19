@@ -80,3 +80,11 @@ void Chaser::SetPlyayerSpeed(const float& t_playerSpeed, const float& t_defaultM
 		m_chaserXAddValue = static_cast<int>((t_playerSpeed - t_defaultMAXSpeed * 0.9) / 4/*‚±‚Ì”’l‚ÍŒ©‚½–Ú‹C•ª*/);
 	}
 }
+
+
+
+/// ------------------------------------------------------------------------------------------------------------
+const int Chaser::GetX()
+{
+	return m_chaserX;
+}

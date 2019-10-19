@@ -148,6 +148,10 @@ void Game::MainDraw()
 		mp_character->Draw();
 		mp_chaser->Draw();
 	}
+
+
+	DrawBox(160, 19, 1920 - 160, 25, GetColor(255, 255, 255), true);
+	DrawCircle(160 + static_cast<int>(1620 * (m_nowLoad / m_maxLoad)), 22, 5, GetColor(0, 0, 0));
 }
 
 
@@ -155,10 +159,21 @@ void Game::MainDraw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Game::MainProcess()
 {
+	if (m_nowLoad >= m_maxLoad)
+	{
+		m_nowMove = NowMove::gameclear;
+	}
+	if (mp_character->GetSize() <= 0 || mp_chaser->GetX() + 512 > mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.3))
+	{
+		m_nowMove = NowMove::gameover;
+	}
+
+
 	mp_backGround->Process();
 
 
 	mp_character->Process();
+	m_nowLoad += mp_character->GetSpeed();
 
 
 	mp_chaser->Process();
@@ -192,18 +207,28 @@ void Game::MainProcess()
 		// 既に石鹸君に対して障害物が当たっているフレーム中だったら
 		if (mp_character->GetNowDamage() || mp_character->GetNowHeal()) continue;
 
+		int xA = mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.25);
+		int xB = xA + static_cast<int>(mp_character->GetSize() * 0.5);
+		int yA = mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.25);
+		int yB = yA + static_cast<int>(mp_character->GetSize() * 0.5);
 		// 当たり判定
-		if (/*石鹸の右端より1/4減らす が 障害物の左端 より大きい*/
-			mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.7) >= mp_garbage[i]->GetX()
-			/*石鹸の左端 が 障害物の左端と障害物の速度 より小さい*/
-			&& mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.3) <= mp_garbage[i]->GetX() + 256
-			/*石鹸の下端 が 障害物の上端 より大きい*/
-			&& mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.7) >= mp_garbage[i]->GetY()
-			/*石鹸の上端 が 障害物の下端 より小さい*/
-			&& mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.3) <= mp_garbage[i]->GetY() + 256)
+		// 右端が障害物の左端に当たってすぎる
+		if (xB >= mp_garbage[i]->GetX())
 		{
+			// 上端が障害物の下端よりも上にいる 左端が障害物の右端よりも左にいる
+			if (yA <= mp_garbage[i]->GetY() + 256 && xA <= mp_garbage[i]->GetX() + 256)
+			{
+				mp_character->HitGarbageNow(i, static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
+			}
 
-			mp_character->HitGarbageNow(i, static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
+			// 下端が障害物の上端に当たって過ぎる 左端が障害物の右端よりも中にいる
+			if (yB >= mp_garbage[i]->GetY() && xA <= mp_garbage[i]->GetX() + 256)
+			{
+				if (yA <= mp_garbage[i]->GetY() + 256)
+				{
+					mp_character->HitGarbageNow(i, static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
+				}
+			}
 		}
 	}
 }
@@ -213,6 +238,35 @@ void Game::MainProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Game::GameOverDraw()
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - static_cast<int>(m_overFrame / 2));
+	mp_backGround->Draw();
+	for (int i = 0; i != mp_garbage.size(); ++i)
+	{
+		if (mp_garbage[i]->GetX() + 256 < 0) continue;
+		mp_garbage[i]->Draw();
+	}
+	mp_character->Draw();
+	mp_chaser->Draw();
+	DrawBox(160, 19, 1920 - 160, 25, GetColor(255, 255, 255), true);
+	DrawCircle(160 + static_cast<int>(1620 * (m_nowLoad / m_maxLoad)), 22, 5, GetColor(0, 0, 0));
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_overFrame);
+	DrawGraph(1920 / 2 - 491 / 2, 1080 / 2 - 132 - 60, mD_gameOver, false);
+
+	if (m_overGameReset)
+	{
+		DrawBox(1920 / 2 - 362 - 60, 1080 / 2, 1920 / 2 - 60, 1080 / 2 + 133, GetColor(0, 255, 0), true);
+	}
+	DrawGraph(1920 / 2 - 362 - 60, 1080 / 2, mD_overReset, true);
+
+	if (!m_overGameReset)
+	{
+		DrawBox(1920 / 2 + 60, 1080 / 2, 1920 / 2 + 60 + 326, 1080 / 2 + 135, GetColor(0, 0, 255), true);
+	}
+	DrawGraph(1920 / 2 + 60, 1080 / 2, mD_overTitle, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 
@@ -220,6 +274,34 @@ void Game::GameOverDraw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Game::GameOverProcess()
 {
+	if (m_overFrame >= 255)
+	{
+		if (PadData::GetStickCheck(PadStick::LEFT_STICK_X, 0, true) == 1)
+		{
+			m_overGameReset = true;
+		}
+
+		if (PadData::GetStickCheck(PadStick::LEFT_STICK_X, 0, false) == 1)
+		{
+			m_overGameReset = false;
+		}
+
+		if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
+		{
+			if (m_overGameReset)
+			{
+				BASICPARAM::e_nowScene = ESceneNumber::GAMERETURN;
+			}
+			else
+			{
+				BASICPARAM::e_nowScene = ESceneNumber::TITLE;
+			}
+		}
+	}
+	else
+	{
+		m_overFrame += 5;
+	}
 }
 
 
@@ -227,6 +309,20 @@ void Game::GameOverProcess()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Game::GameClearDraw()
 {
+	mp_backGround->Draw();
+	mp_character->Draw();
+	DrawBox(160, 19, 1920 - 160, 25, GetColor(255, 255, 255), true);
+	DrawCircle(160 + static_cast<int>(1620 * (m_nowLoad / m_maxLoad)), 22, 5, GetColor(0, 0, 0));
+
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_clearFrame);
+	DrawGraph(1920 / 2 - 1045 / 2, 1080 / 2 - 130, mD_gameClear, false);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_clearFrame);
+	DrawGraph(1920 / 2 - 1700 / 2, 1080 / 2, mD_clearOmake, false);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 
@@ -234,6 +330,26 @@ void Game::GameClearDraw()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void Game::GameClearProcess()
 {
+	if (m_clearFrame < 255)
+	{
+		m_clearFrame++;
+	}
+	else
+	{
+		if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
+		{
+			BASICPARAM::e_nowScene = ESceneNumber::TITLE;
+		}
+	}
+
+
+	mp_backGround->Process();
+
+
+	mp_character->FirstProcess();
+
+
+	mp_backGround->SetSpeed(mp_character->GetSpeed());
 }
 
 
@@ -331,17 +447,20 @@ Game::Game(int t_stageCorse)
 	if (t_stageCorse == 1)
 	{
 		FileLoad("media\\stageCorse\\400000ver.csv");
+		m_maxLoad = 400000;
 	}
 	else if (t_stageCorse == 2)
 	{
 		FileLoad("media\\stageCorse\\200000ver.csv");
+		m_maxLoad = 200000;
 	}
 	else if (t_stageCorse == 3)
 	{
 		FileLoad("media\\stageCorse\\1000000ver.csv");
+		m_maxLoad = 1000000;
 	}
 
-	m_nowMove = NowMove::start;
+	m_nowMove = NowMove::main;
 
 	m_firstCharacterX = 1920 / 2 - 192 / 2;
 	m_firstCharacterTurn = true;
@@ -352,6 +471,27 @@ Game::Game(int t_stageCorse)
 	m_firstTimer[0] = LoadGraph("media\\num\\1.png");
 	m_firstTimer[1] = LoadGraph("media\\num\\2.png");
 	m_firstTimer[2] = LoadGraph("media\\num\\3.png");
+
+	mD_gameClear = LoadGraph("media\\clear\\clear.jpg");
+	if (t_stageCorse == 1)
+	{
+		mD_clearOmake = LoadGraph("media\\clear\\one.jpg");
+	}
+	else if (t_stageCorse == 2)
+	{
+		mD_clearOmake = LoadGraph("media\\clear\\two.jpg");
+	}
+	m_clearFrame = 0;
+
+	mD_gameOver = LoadGraph("media\\over\\sekkennkunnga.jpg");
+	mD_overReset = LoadGraph("media\\over\\reset.png");
+	mD_overTitle = LoadGraph("media\\over\\down.png");
+
+	m_overGameReset = false;
+
+	m_overFrame = 0;
+
+	m_nowLoad = 0;
 }
 
 
@@ -359,6 +499,11 @@ Game::Game(int t_stageCorse)
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Game::~Game()
 {
+	DeleteGraph(mD_gameOver);
+	DeleteGraph(mD_overReset);
+	DeleteGraph(mD_overTitle);
+	DeleteGraph(mD_gameClear);
+	DeleteGraph(mD_clearOmake);
 	DeleteGraph(m_firstTimer[0]);
 	DeleteGraph(m_firstTimer[1]);
 	DeleteGraph(m_firstTimer[2]);

@@ -48,6 +48,18 @@ void Manager::SceneChange()
 		break;
 
 
+		// ÉQÅ[ÉÄñ{ï“Ç‚ÇËíºÇ∑
+	case ESceneNumber::GAMERETURN:
+		BASICPARAM::e_preScene = ESceneNumber::GAME;
+		BASICPARAM::e_nowScene = ESceneNumber::GAME;
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
+		delete p_baseMove;
+		p_baseMove = nullptr;
+
+		p_baseMove = new Game(1);
+		break;
+
+
 		// Ç®Ç‹ÇØÇP
 	case ESceneNumber::OMAKEONE:
 		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
@@ -102,6 +114,10 @@ Manager::Manager()
 		break;
 
 	case ESceneNumber::GAME:
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
+		break;
+
+	case ESceneNumber::GAMERETURN:
 		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		break;
 
