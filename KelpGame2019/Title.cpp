@@ -343,7 +343,7 @@ void Title::SceneTwoProcess()
 		m_y = -120;
 		m_exRate = 0.65;
 		m_add = -0.01;
-		m_angle = 0;
+		m_angle = 0.0;
 		m_sceneChange = Scene::one;
 	}
 

@@ -32,7 +32,7 @@ private:
 	int m_y;
 	double m_exRate;
 	double m_add;
-	int m_angle;
+	double m_angle;
 
 	int mD_backGround;
 	int m_backGroundAngle;

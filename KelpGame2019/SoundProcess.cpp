@@ -71,8 +71,8 @@ void SoundProcess::Play(E_BGM number)
 		preVolume = bgmVolume;
 	}
 	nowBGM = number; 
-	bgmVolume = 0.0f;
-	ChangeVolumeSoundMem(bgmVolume, m_soundBGM[static_cast<int>(nowBGM)]);
+	bgmVolume = 0;
+	ChangeVolumeSoundMem(static_cast<int>(bgmVolume), m_soundBGM[static_cast<int>(nowBGM)]);
 	PlaySoundMem(m_soundBGM[static_cast<int>(nowBGM)], DX_PLAYTYPE_LOOP);
 }
 

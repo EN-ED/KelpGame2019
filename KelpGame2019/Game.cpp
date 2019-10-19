@@ -60,7 +60,7 @@ void Game::FirstProcess()
 	}
 	else if(m_firstFrameCount > 250 && m_firstFrameCount < 500)
 	{
-		if (m_firstCharacterX > 284)
+		if (m_firstCharacterX > 284 - 10)
 		{
 			m_firstCharacterX -= 10;
 		}
@@ -84,7 +84,7 @@ void Game::FirstProcess()
 
 
 	mp_backGround->Process();
-	mp_backGround->SetSpeed(m_firstBackGroundX);
+	mp_backGround->SetSpeed(static_cast<float>(m_firstBackGroundX));
 
 	mp_chaser->FirstProcess();
 

@@ -104,6 +104,7 @@ Tutorial::Tutorial()
 
 	mp_character = new Character();
 	mp_backGround = new BackGround(1);
+	ZeroMemory(mp_garbage, sizeof(mp_garbage));
 	for (int i = 0; i != 4; ++i)
 	{
 		if (i == 0)
@@ -126,6 +127,7 @@ Tutorial::Tutorial()
 
 	m_stopNum = 0;
 	m_blendValue = 255;
+	m_stopFlag = false;
 }
 
 
