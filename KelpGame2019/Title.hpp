@@ -51,7 +51,7 @@ private:
 	int mD_sceneTwoStart;		// 2番目のスタート文字
 	int mD_sceneTwoEnd;			// 2番目の終了文字
 
-	enum class TwoCursolArea { start, end };		// カーソルの位置
+	enum class TwoCursolArea { start, end, omakeOne, omakeTwo };		// カーソルの位置
 
 	TwoCursolArea m_cursolArea;			// カーソルの位置がどこにあるか
 
@@ -61,6 +61,24 @@ private:
 	void SceneTwoDraw();			// シーン２の描画
 	void SceneTwoProcess();			// シーン２のプロセス
 
+
+	/// おまけ１
+	int m_omakeOneCommandNumber;
+	int m_omakeOneAbleFrame;
+	bool m_omakeOneLeft;
+	bool m_omakeOneOpen;
+	int mD_omakeOne;
+
+
+	/// おまけ２
+	int m_omakeTwoCommandNumber;
+	int m_omakeTwoAbleFrame;
+	bool m_omakeTwoLeft;
+	bool m_omakeTwoOpen;
+	int mD_omakeTwo;
+
+	int m_logoBlendValue;
+	bool m_selectCommandLeft;
 
 
 public:
