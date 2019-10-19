@@ -34,6 +34,9 @@ private:
 	double m_add;
 	int m_angle;
 
+	int mD_backGround;
+	int m_backGroundAngle;
+
 
 	/// ƒV[ƒ“‚P‚¾‚¯‚ÉŠÖ‚·‚é
 

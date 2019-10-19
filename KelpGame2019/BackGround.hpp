@@ -14,7 +14,7 @@ private:
 
 
 public:
-	BackGround();
+	BackGround(int t_stageCorse);
 	~BackGround();
 
 

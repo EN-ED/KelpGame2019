@@ -19,12 +19,12 @@ void Manager::SceneChange()
 
 		// タイトル
 	case ESceneNumber::TITLE:
-		SoundProcess::Play(SoundProcess::E_BGM::title);
 		delete p_baseMove;
 		p_baseMove = nullptr;
 		SetDrawBright(255, 255, 255);
 
 		p_baseMove = new Title();
+		SoundProcess::Play(SoundProcess::E_BGM::title);
 		break;
 
 
@@ -33,16 +33,28 @@ void Manager::SceneChange()
 		delete p_baseMove;
 		p_baseMove = nullptr;
 
-		p_baseMove = new Game();
+		p_baseMove = new Game(1);
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		break;
 
 
-		// ゲームオーバー
-	case ESceneNumber::GAMEOVER:
+		// おまけ１
+	case ESceneNumber::OMAKEONE:
 		delete p_baseMove;
 		p_baseMove = nullptr;
 
-		p_baseMove = new GameOver();
+		p_baseMove = new Game(2);
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
+		break;
+
+
+		// ゲーム本編
+	case ESceneNumber::OMAKETWO:
+		delete p_baseMove;
+		p_baseMove = nullptr;
+
+		p_baseMove = new Game(3);
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		break;
 
 
@@ -57,13 +69,13 @@ void Manager::SceneChange()
 Manager::Manager()
 {
 	// 初期化
-	BASICPARAM::e_preScene = ESceneNumber::TITLE;
-	BASICPARAM::e_nowScene = ESceneNumber::TITLE;
+	BASICPARAM::e_preScene = ESceneNumber::LOGO;
+	BASICPARAM::e_nowScene = ESceneNumber::LOGO;
 
 
 	// メモリの初期化
 	p_baseMove = nullptr;
-	p_baseMove = new Title();
+	p_baseMove = new Logo();
 
 
 	switch (BASICPARAM::e_nowScene)
@@ -72,13 +84,19 @@ Manager::Manager()
 		break;
 
 	case ESceneNumber::TITLE:
-		//SoundProcess::Play(SoundProcess::E_BGM::title);
+		SoundProcess::Play(SoundProcess::E_BGM::title);
 		break;
 
 	case ESceneNumber::GAME:
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		break;
 
-	case ESceneNumber::GAMEOVER:
+	case ESceneNumber::OMAKEONE:
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
+		break;
+
+	case ESceneNumber::OMAKETWO:
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		break;
 
 	default:
@@ -112,46 +130,12 @@ void Manager::Update()
 		p_baseMove->Process();
 
 
-		switch (BASICPARAM::e_nowScene)
-		{
-		case ESceneNumber::LOGO:
-			break;
-
-		case ESceneNumber::TITLE:
-			SoundProcess::BGMLoop(true);
-			break;
-
-		case ESceneNumber::GAME:
-			break;
-
-		case ESceneNumber::GAMEOVER:
-			break;
-
-		default:
-			break;
-		}
+		SoundProcess::BGMLoop();
 	}
 	// 現在と直前のシーンが異なったら
 	else
 	{
-		switch (BASICPARAM::e_nowScene)
-		{
-		case ESceneNumber::LOGO:
-			break;
-
-		case ESceneNumber::TITLE:
-			break;
-
-		case ESceneNumber::GAME:
-			SoundProcess::BGMLoop(false);
-			break;
-
-		case ESceneNumber::GAMEOVER:
-			break;
-
-		default:
-			break;
-		}
+		SoundProcess::BGMLoop();
 
 
 		// シーンを変える

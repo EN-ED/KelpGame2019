@@ -7,7 +7,7 @@ void Title::SceneOneDraw()
 {
 	// スタート文字
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_sceneOneStartBlendCount);
-	DrawGraph(m_sceneSideDrawX + 960 - 200, 800 - 24, mD_sceneOneStart, true);
+	DrawGraph(m_sceneSideDrawX + 960 - 256, 800 - 24, mD_sceneOneStart, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
@@ -18,14 +18,14 @@ void Title::SceneOneProcess()
 {
 	if (m_isBlendDownSwitch)
 	{
-		if (m_sceneOneStartBlendCount-- < 50)
+		if (m_sceneOneStartBlendCount-- < 155)
 		{
 			m_isBlendDownSwitch = !m_isBlendDownSwitch;
 		}
 	}
 	else
 	{
-		if (m_sceneOneStartBlendCount++ > 200)
+		if (m_sceneOneStartBlendCount++ > 255)
 		{
 			m_isBlendDownSwitch = !m_isBlendDownSwitch;
 		}
@@ -61,21 +61,21 @@ void Title::SceneTwoDraw()
 
 
 		// 終了文字
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 600 - 24, 1.0, -0.2, mD_sceneTwoEnd, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 
 		if (m_omakeOneOpen)
 		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 			DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 + 600, 400 - 24, 1.0, -0.2, mD_omakeOne, true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 
 		if (m_omakeTwoOpen)
 		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 			DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 + 600, 600 - 24, 1.0, -0.2, mD_omakeTwo, true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
@@ -83,7 +83,7 @@ void Title::SceneTwoDraw()
 	else if (m_cursolArea == TwoCursolArea::end)
 	{
 		// スタート文字
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 400 - 24, 1.0, -0.2, mD_sceneTwoStart, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -94,14 +94,14 @@ void Title::SceneTwoDraw()
 
 		if (m_omakeOneOpen)
 		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 			DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 + 600, 400 - 24, 1.0, -0.2, mD_omakeOne, true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 
 		if (m_omakeTwoOpen)
 		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 			DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 + 600, 600 - 24, 1.0, -0.2, mD_omakeTwo, true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
@@ -109,13 +109,13 @@ void Title::SceneTwoDraw()
 	else if (m_cursolArea == TwoCursolArea::omakeOne)
 	{
 		// スタート文字
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 400 - 24, 1.0, -0.2, mD_sceneTwoStart, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 
 		// 終了文字
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 600 - 24, 1.0, -0.2, mD_sceneTwoEnd, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -124,7 +124,7 @@ void Title::SceneTwoDraw()
 
 		if (m_omakeTwoOpen)
 		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 			DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 + 600, 600 - 24, 1.0, -0.2, mD_omakeTwo, true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
@@ -132,19 +132,19 @@ void Title::SceneTwoDraw()
 	else if (m_cursolArea == TwoCursolArea::omakeTwo)
 	{
 		// スタート文字
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 400 - 24, 1.0, -0.2, mD_sceneTwoStart, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 
 		// 終了文字
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 		DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 - 200, 600 - 24, 1.0, -0.2, mD_sceneTwoEnd, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		if (m_omakeOneOpen)
 		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 175);
 			DrawRotaGraph((m_sceneSideDrawX + m_sceneTwoDefaultSideDrawX) + 560 + 600, 400 - 24, 1.0, -0.2, mD_omakeOne, true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
@@ -337,7 +337,7 @@ void Title::SceneTwoProcess()
 		m_omakeTwoCommandNumber = 0;
 
 		SoundProcess::Play(SoundProcess::E_SE::selectCancel);
-		m_sceneOneStartBlendCount = 50;
+		m_sceneOneStartBlendCount = 155;
 		m_sceneChangeCount = 0;
 		m_x = 960;
 		m_y = -120;
@@ -350,7 +350,6 @@ void Title::SceneTwoProcess()
 
 	if (PadData::GetButton(XINPUT_BUTTON_LEFT_SHOULDER, 0) == 1 && m_sceneChangeCount >= m_sceneChangeMaxCount && !m_omakeOneLeft)
 	{
-		printfDx("おまけ１：LEFT\n");
 		m_omakeOneLeft = true;
 		m_omakeOneAbleFrame = 0;
 
@@ -360,14 +359,12 @@ void Title::SceneTwoProcess()
 
 		if (++m_omakeOneCommandNumber >= 6)
 		{
-			printfDx("おまけ１：OPEN\n");
 			m_omakeOneOpen = true;
 		}
 	}
 
 	if (PadData::GetButton(XINPUT_BUTTON_RIGHT_SHOULDER, 0) == 1 && m_sceneChangeCount >= m_sceneChangeMaxCount && m_omakeOneLeft)
 	{
-		printfDx("おまけ１：RIGHT\n");
 		m_omakeOneLeft = false;
 		m_omakeOneAbleFrame = 0;
 		m_omakeOneCommandNumber++;
@@ -379,7 +376,6 @@ void Title::SceneTwoProcess()
 
 	if (++m_omakeOneAbleFrame > 60)
 	{
-		printfDx("おまけ１：RESET\n");
 		m_omakeOneLeft = true;
 		m_omakeOneAbleFrame = 0;
 		m_omakeOneCommandNumber = 0;
@@ -388,7 +384,6 @@ void Title::SceneTwoProcess()
 
 	if (PadData::GetTrigger(PadStick::LEFT_TRIGGER, 0) == 255 && m_sceneChangeCount >= m_sceneChangeMaxCount && !m_omakeTwoLeft)
 	{
-		printfDx("おまけ２：LEFT\n");
 		m_omakeTwoLeft = true;
 		m_omakeTwoAbleFrame = 0;
 
@@ -398,14 +393,12 @@ void Title::SceneTwoProcess()
 
 		if (++m_omakeTwoCommandNumber >= 6)
 		{
-			printfDx("おまけ２：OPEN\n");
 			m_omakeTwoOpen = true;
 		}
 	}
 
 	if (PadData::GetTrigger(PadStick::RIGHT_TRIGGER, 0) == 255 && m_sceneChangeCount >= m_sceneChangeMaxCount && m_omakeTwoLeft)
 	{
-		printfDx("おまけ２：RIGHT\n");
 		m_omakeTwoLeft = false;
 		m_omakeTwoAbleFrame = 0;
 		m_omakeTwoCommandNumber++;
@@ -417,7 +410,6 @@ void Title::SceneTwoProcess()
 
 	if (++m_omakeTwoAbleFrame > 60)
 	{
-		printfDx("おまけ２：RESET\n");
 		m_omakeTwoLeft = true;
 		m_omakeTwoAbleFrame = 0;
 		m_omakeTwoCommandNumber = 0;
@@ -471,13 +463,13 @@ Title::Title()
 	mD_select = LoadGraph("media\\title\\Aselect.png");
 	mD_back = LoadGraph("media\\title\\BBack.png");
 
-	mD_sceneOneStart = LoadGraph("media\\title\\start_sceneOne.png");
+	mD_sceneOneStart = LoadGraph("media\\title\\start.png");
 
 	m_sceneOneStartBlendCount = 50;
 	m_isBlendDownSwitch = false;
 
-	mD_sceneTwoStart = LoadGraph("media\\title\\start_sceneTwo.png");
-	mD_sceneTwoEnd = LoadGraph("media\\title\\end_sceneTwo.png");
+	mD_sceneTwoStart = LoadGraph("media\\title\\gamestart.png");
+	mD_sceneTwoEnd = LoadGraph("media\\title\\exit.png");
 
 	m_cursolArea = TwoCursolArea::start;
 	m_sceneTwoFontBigCount = 1.0f;
@@ -515,6 +507,9 @@ Title::Title()
 
 	m_logoBlendValue = 255;
 	m_selectCommandLeft = true;
+
+	mD_backGround = LoadGraph("media\\title\\titlebackground.png");
+	m_backGroundAngle = 0;
 }
 
 
@@ -522,6 +517,7 @@ Title::Title()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Title::~Title()
 {
+	if (mD_backGround != -1) DeleteGraph(mD_backGround);
 	if (mD_omakeTwo != -1) DeleteGraph(mD_omakeTwo);
 	if (mD_omakeOne != -1) DeleteGraph(mD_omakeOne);
 	if (mD_TitleLogo != -1) DeleteGraph(mD_TitleLogo);
@@ -538,7 +534,7 @@ Title::~Title()
 void Title::Draw()
 {
 	// 背景
-	DrawBox(0, 0, 1920, 1080, GetColor(10, m_backGroundColor, 10), true);
+	DrawRotaGraph(1920 / 2, 1080 / 2, 1.0, 3.14 / 360 * ++m_backGroundAngle, mD_backGround, false);
 
 
 	if (m_sceneChange == Scene::one)

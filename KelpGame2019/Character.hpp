@@ -16,7 +16,10 @@ public:
 private:
 	const int m_playerDrawNum = 20;
 	int mD_playerArray[20];
-	int mD_playerArraySpeed[20];
+
+	int mD_playerDoroArray[20];
+	int mD_playerMizuArray[20];
+	int mD_playerSpeedArray[20];
 
 	const int m_playerDrawAnimSpeed = 6;
 	int m_playerDrawAnimCount;
@@ -103,6 +106,8 @@ private:
 	void SpeedProcess();
 
 	void SpeedUpProcess();
+
+	int mD_speedUpTimer;
 	/// --------------------------------------------------------
 
 

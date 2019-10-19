@@ -8,12 +8,12 @@ namespace SoundProcess
 {
 	enum class E_SE
 	{
-		jump, speedUp, slip, selectCancel, selectDo, none
+		jump, speedUp, slip, selectCancel, selectDo, gameClear, gameOver, debuff, catchTouyu, none
 	};
 
 	enum class E_BGM
 	{
-		title, none
+		title, main, mainLoop, none
 	};
 
 
@@ -25,7 +25,7 @@ namespace SoundProcess
 
 	void Play(E_BGM number);
 
-	void BGMLoop(bool startTrue);
+	void BGMLoop();
 }
 
 

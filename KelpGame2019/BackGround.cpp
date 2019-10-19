@@ -3,10 +3,23 @@
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-BackGround::BackGround()
+BackGround::BackGround(int t_stageCorse)
 {
-	mD_backGround = LoadGraph("media\\background.png");
-	mD_underGround = LoadGraph("media\\underground.png");
+	if (t_stageCorse == 1)
+	{
+		mD_backGround = LoadGraph("media\\stage1\\stage1_background.png");
+		mD_underGround = LoadGraph("media\\stage1\\stage1_Ground.png");
+	}
+	else if (t_stageCorse == 2)
+	{
+		mD_backGround = LoadGraph("media\\stage2\\Stage2_background.png");
+		mD_underGround = LoadGraph("media\\stage2\\sutage2_Ground.png");
+	}
+	else if (t_stageCorse == 3)
+	{
+		mD_backGround = LoadGraph("media\\stage3\\Stage_backGround.png");
+		mD_underGround = LoadGraph("media\\stage3\\stage3_Ground.png");
+	}
 
 	m_areaX = 0;
 

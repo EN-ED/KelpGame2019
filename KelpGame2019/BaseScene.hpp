@@ -5,7 +5,7 @@
 // ƒV[ƒ“‚Ì“®‚«
 enum class ESceneNumber
 {
-	LOGO, TITLE, GAME, GAMEOVER, OMAKEONE, OMAKETWO, GAMECLEAR
+	LOGO, TITLE, GAME, OMAKEONE, OMAKETWO
 };
 
 
