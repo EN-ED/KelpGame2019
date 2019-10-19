@@ -316,6 +316,14 @@ void Title::SceneTwoProcess()
 		{
 			m_endFlag = true;
 		}
+		else if (m_cursolArea == TwoCursolArea::omakeOne)
+		{
+			BASICPARAM::e_nowScene = ESceneNumber::OMAKEONE;
+		}
+		else if (m_cursolArea == TwoCursolArea::omakeTwo)
+		{
+			BASICPARAM::e_nowScene = ESceneNumber::OMAKETWO;
+		}
 	}
 
 
