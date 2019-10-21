@@ -461,7 +461,7 @@ Game::Game(int t_stageCorse)
 		m_maxLoad = 1000000;
 	}
 
-	m_nowMove = NowMove::main;
+	m_nowMove = NowMove::start;
 
 	m_firstCharacterX = 1920 / 2 - 192 / 2;
 	m_firstCharacterTurn = true;

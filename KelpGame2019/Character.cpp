@@ -619,9 +619,16 @@ void Character::FirstProcess()
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const bool& Character::GetIsSpeedUp() const
+const bool Character::GetIsSpeedUp() const
 {
-	return m_isNowSpeedUp;
+	if (m_nowState == ESTATE::speedUp || m_nowState == ESTATE::speedMAX || m_nowState == ESTATE::speedDown)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 

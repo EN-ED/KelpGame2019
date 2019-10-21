@@ -171,7 +171,7 @@ public:
 	void FirstProcess();
 
 
-	const bool& GetIsSpeedUp() const;
+	const bool GetIsSpeedUp() const;
 
 	const float& GetSpeed() const;
 
