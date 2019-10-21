@@ -64,6 +64,10 @@ void Game::FirstProcess()
 		{
 			m_firstCharacterX -= 10;
 		}
+		else
+		{
+			m_firstCharacterX--;
+		}
 		if (m_firstBackGroundX < 70)
 		{
 			m_firstBackGroundX++;

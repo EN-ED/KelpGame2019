@@ -92,20 +92,25 @@ void SoundProcess::BGMLoop()
 {
 	if (nowBGM != E_BGM::none)
 	{
-		if ((bgmVolume += 12.75) < 255)
+		if (bgmVolume < 255)
 		{
+			bgmVolume += 12.75;
+			ChangeVolumeSoundMem(static_cast<int>(bgmVolume >= 255 ? 255 : bgmVolume), m_soundBGM[static_cast<int>(nowBGM)]);
+		}
+		else if (bgmVolume > 255)
+		{
+			bgmVolume = 255;
 			ChangeVolumeSoundMem(static_cast<int>(bgmVolume >= 255 ? 255 : bgmVolume), m_soundBGM[static_cast<int>(nowBGM)]);
 		}
 	}
 
 
 	if (preBGM == E_BGM::none) return;
-	if ((preVolume -= 174) > 0)
+	preVolume -= 51;
+	ChangeVolumeSoundMem(static_cast<int>(preVolume <= 0 ? 0 : preVolume), m_soundBGM[static_cast<int>(preBGM)]);
+	if (preVolume <= 0)
 	{
-		ChangeVolumeSoundMem(static_cast<int>(preVolume <= 0 ? 0 : preVolume), m_soundBGM[static_cast<int>(preBGM)]);
-	}
-	else
-	{
+		preVolume = 0;
 		StopSoundMem(m_soundBGM[static_cast<int>(preBGM)]);
 	}
 }
