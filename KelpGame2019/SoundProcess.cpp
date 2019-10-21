@@ -2,6 +2,7 @@
 
 
 
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 int m_soundSE[9];
 int m_soundBGM[4];
 float bgmVolume;
@@ -9,6 +10,9 @@ float preVolume;
 SoundProcess::E_BGM preBGM;
 SoundProcess::E_BGM nowBGM;
 
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void SoundProcess::Init()
 {
 	m_soundSE[static_cast<int>(E_SE::jump)]			 = LoadSoundMem("media\\sound\\ƒWƒƒƒ“ƒv.wav");
@@ -35,6 +39,7 @@ void SoundProcess::Init()
 
 
 
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void SoundProcess::Release()
 {
 	for (int i = 0; i != 4; ++i)
@@ -57,13 +62,16 @@ void SoundProcess::Release()
 
 
 
-void SoundProcess::Play(E_SE number)
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void SoundProcess::Play(const E_SE& number)
 {
 	PlaySoundMem(m_soundSE[static_cast<int>(number)], DX_PLAYTYPE_BACK);
 }
 
 
-void SoundProcess::Play(E_BGM number)
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void SoundProcess::Play(const E_BGM& number)
 {
 	if (nowBGM == number) return;
 	if (nowBGM != E_BGM::none)
@@ -78,6 +86,8 @@ void SoundProcess::Play(E_BGM number)
 }
 
 
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 void SoundProcess::BGMLoop()
 {
 	if (nowBGM != E_BGM::none)

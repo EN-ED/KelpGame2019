@@ -111,7 +111,7 @@ void Game::MainDraw()
 			mp_character->BlurDraw();
 			g_blurScreen.PostRenderBlurScreen();
 
-			for (int i = 0; i != mp_garbage.size(); ++i)
+			for (size_t i = 0, n = mp_garbage.size(); i != n; ++i)
 			{
 				if (mp_garbage[i]->GetX() + 256 < 0) continue;
 				mp_garbage[i]->Draw();
@@ -128,7 +128,7 @@ void Game::MainDraw()
 			mp_character->BlurDraw();
 			g_blurScreen.PostRenderBlurScreen();
 
-			for (int i = 0; i != mp_garbage.size(); ++i)
+			for (size_t i = 0, n = mp_garbage.size(); i != n; ++i)
 			{
 				if (mp_garbage[i]->GetX() + 256 < 0) continue;
 				mp_garbage[i]->Draw();
@@ -140,7 +140,7 @@ void Game::MainDraw()
 	else
 	{
 		mp_backGround->Draw();
-		for (int i = 0; i != mp_garbage.size(); ++i)
+		for (size_t i = 0, n = mp_garbage.size(); i != n; ++i)
 		{
 			if (mp_garbage[i]->GetX() + 256 < 0) continue;
 			mp_garbage[i]->Draw();
@@ -185,7 +185,7 @@ void Game::MainProcess()
 	mp_backGround->SetSpeed(mp_character->GetSpeed());
 
 
-	for (int i = 0; i != mp_garbage.size(); ++i)
+	for (size_t i = 0, n = mp_garbage.size(); i != n; ++i)
 	{
 		// 左より遠くに行ったら
 		if (mp_garbage[i]->GetX() + 256 < 0) continue;
@@ -218,7 +218,7 @@ void Game::MainProcess()
 			// 上端が障害物の下端よりも上にいる 左端が障害物の右端よりも左にいる
 			if (yA <= mp_garbage[i]->GetY() + 256 && xA <= mp_garbage[i]->GetX() + 256)
 			{
-				mp_character->HitGarbageNow(i, static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
+				mp_character->HitGarbageNow(static_cast<int>(i), static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
 			}
 
 			// 下端が障害物の上端に当たって過ぎる 左端が障害物の右端よりも中にいる
@@ -226,7 +226,7 @@ void Game::MainProcess()
 			{
 				if (yA <= mp_garbage[i]->GetY() + 256)
 				{
-					mp_character->HitGarbageNow(i, static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
+					mp_character->HitGarbageNow(static_cast<int>(i), static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
 				}
 			}
 		}
@@ -240,7 +240,7 @@ void Game::GameOverDraw()
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - static_cast<int>(m_overFrame / 2));
 	mp_backGround->Draw();
-	for (int i = 0; i != mp_garbage.size(); ++i)
+	for (size_t i = 0, n = mp_garbage.size(); i != n; ++i)
 	{
 		if (mp_garbage[i]->GetX() + 256 < 0) continue;
 		mp_garbage[i]->Draw();
@@ -369,6 +369,7 @@ void Game::FileLoad(std::string t_mapStr)
 	// 仮置き
 	std::string str;
 	int count = 0;
+	int arrayCount = 0;
 
 	while (getline(ifs, str))
 	{
@@ -377,28 +378,27 @@ void Game::FileLoad(std::string t_mapStr)
 		std::istringstream stream(str);
 
 		// メモリ確保
-		mapdata.resize(count + 1);
+		mapdata.resize(++count);
+		arrayCount = count - 1;
 
 		while (getline(stream, token, ','))
 		{
-			mapdata[count].push_back(token);
+			mapdata[arrayCount].push_back(token);
 		}
-		// カウントアップ
-		count++;
 	}
 
 	std::vector<int> m_vChipAreaX;
 	std::vector<int> m_vChipAreaY;
 	std::vector<int> m_vChipID;
 
-	for (int i = 0, n = mapdata.size(); i != n; ++i)
+	for (size_t i = 0, n = mapdata.size(); i != n; ++i)
 	{
 		m_vChipAreaX.push_back(std::stoi(mapdata[i][0].c_str()));
 		m_vChipAreaY.push_back(std::stoi(mapdata[i][1].c_str()));
 		m_vChipID.push_back(std::stoi(mapdata[i][2].c_str()));
 	}
 
-	for (int i = 0, n = m_vChipAreaX.size(); i != n; ++i)
+	for (size_t i = 0, n = m_vChipAreaX.size(); i != n; ++i)
 	{
 		switch (m_vChipID.at(i))
 		{
@@ -444,6 +444,7 @@ Game::Game(int t_stageCorse)
 
 	std::vector<Garbage*>().swap(mp_garbage);
 
+	m_maxLoad = -1;
 	if (t_stageCorse == 1)
 	{
 		FileLoad("media\\stageCorse\\400000ver.csv");
@@ -499,14 +500,14 @@ Game::Game(int t_stageCorse)
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Game::~Game()
 {
-	DeleteGraph(mD_gameOver);
-	DeleteGraph(mD_overReset);
-	DeleteGraph(mD_overTitle);
-	DeleteGraph(mD_gameClear);
-	DeleteGraph(mD_clearOmake);
-	DeleteGraph(m_firstTimer[0]);
-	DeleteGraph(m_firstTimer[1]);
-	DeleteGraph(m_firstTimer[2]);
+	if (mD_gameOver != -1) DeleteGraph(mD_gameOver);
+	if (mD_overReset != -1) DeleteGraph(mD_overReset);
+	if (mD_overTitle != -1) DeleteGraph(mD_overTitle);
+	if (mD_gameClear != -1) DeleteGraph(mD_gameClear);
+	if (mD_clearOmake != -1) DeleteGraph(mD_clearOmake);
+	if (m_firstTimer[0] != -1) DeleteGraph(m_firstTimer[0]);
+	if (m_firstTimer[1] != -1) DeleteGraph(m_firstTimer[1]);
+	if (m_firstTimer[2] != -1) DeleteGraph(m_firstTimer[2]);
 	for (int i = 0; i != mp_garbage.size(); ++i)
 	{
 		if (mp_garbage[i] != nullptr) delete mp_garbage[i];

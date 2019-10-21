@@ -140,8 +140,7 @@ Manager::Manager()
 Manager::~Manager()
 {
 	// シーン本体の削除
-	delete p_baseMove;
-	p_baseMove = nullptr;
+	if (p_baseMove != nullptr) delete p_baseMove;
 }
 
 
@@ -165,11 +164,11 @@ void Manager::Update()
 	// 現在と直前のシーンが異なったら
 	else
 	{
-		SoundProcess::BGMLoop();
-
-
 		// シーンを変える
 		SceneChange();
+
+
+		SoundProcess::BGMLoop();
 
 
 		// 直前のシーンと現在のシーンを同じにする

@@ -7,6 +7,9 @@
 #include "Garbage.hpp"
 
 
+
+/*ゲーム開始前のチュートリアルのシーンの大本
+*/
 class Tutorial : public BaseScene
 {
 private:

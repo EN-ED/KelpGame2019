@@ -94,8 +94,6 @@ void Logo::Draw()
 			break;
 		}
 		DrawRotaGraph(m_x, m_y, 0.25, 0, mD_teamLogo, true);
-		// DrawGraph(960 - 960/*中心座標 - 横サイズの半分*/, 540 - 540/*中心座標 - 縦サイズの半分*/, mD_teamLogo, true);		// teamのロゴを表示
-		// printfDx("%d\t%d\n", m_x, m_y);
 	}
 
 	DrawGraph(1720, 720, mD_skip, true);

@@ -4,7 +4,6 @@
 #include "Character.hpp"
 #include "Chaser.hpp"
 #include "DxLib.h"
-#include "InputKey.hpp"
 #include "BlurScreen.hpp"
 #include "Garbage.hpp"
 
@@ -15,6 +14,10 @@
 #include <iostream>
 
 
+
+/*
+ゲームのシーンの大本
+*/
 class Game : public BaseScene
 {
 private:

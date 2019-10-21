@@ -3,6 +3,9 @@
 
 
 
+/*
+áŠQ•¨‚Ì–{‘Ì
+*/
 class Garbage
 {
 public:
@@ -22,7 +25,7 @@ private:
 
 
 public:
-	Garbage(const int& t_x, const int& t_y, EDrawID t_ID);
+	Garbage(const int& t_x, const int& t_y, const EDrawID& t_ID);
 	~Garbage();
 
 

@@ -4,6 +4,10 @@
 #include "DxLib.h"
 
 
+
+/*
+サウンド全て
+*/
 namespace SoundProcess
 {
 	enum class E_SE
@@ -21,9 +25,9 @@ namespace SoundProcess
 
 	void Release();
 
-	void Play(E_SE number);
+	void Play(const E_SE& number);
 
-	void Play(E_BGM number);
+	void Play(const E_BGM& number);
 
 	void BGMLoop();
 }

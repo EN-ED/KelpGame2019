@@ -84,7 +84,7 @@ void Chaser::SetPlyayerSpeed(const float& t_playerSpeed, const float& t_defaultM
 
 
 /// ------------------------------------------------------------------------------------------------------------
-const int Chaser::GetX()
+const int& Chaser::GetX() const
 {
 	return m_chaserX;
 }

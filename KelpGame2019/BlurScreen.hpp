@@ -4,6 +4,10 @@
 #include "DxLib.h"
 
 
+
+/*
+ƒuƒ‰[ˆ—
+*/
 struct BlurScreen
 {
 private:

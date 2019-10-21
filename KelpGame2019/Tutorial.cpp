@@ -135,18 +135,18 @@ Tutorial::Tutorial()
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Tutorial::~Tutorial()
 {
-	DeleteGraph(mD_skip);
-	DeleteGraph(mD_AJump);
-	DeleteGraph(mD_damage);
-	DeleteGraph(mD_speed);
-	DeleteGraph(mD_touyu);
-	DeleteGraph(mD_start);
+	if (mD_skip != -1) DeleteGraph(mD_skip);
+	if (mD_AJump != -1) DeleteGraph(mD_AJump);
+	if (mD_damage != -1) DeleteGraph(mD_damage);
+	if (mD_speed != -1) DeleteGraph(mD_speed);
+	if (mD_touyu != -1) DeleteGraph(mD_touyu);
+	if (mD_start != -1) DeleteGraph(mD_start);
 
-	delete mp_character;
-	delete mp_backGround;
+	if (mp_character != nullptr) delete mp_character;
+	if (mp_backGround != nullptr) delete mp_backGround;
 	for (int i = 0; i != 4; ++i)
 	{
-		delete mp_garbage[i];
+		if (mp_garbage[i] != nullptr) delete mp_garbage[i];
 	}
 }
 

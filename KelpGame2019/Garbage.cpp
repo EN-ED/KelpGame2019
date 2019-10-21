@@ -3,7 +3,7 @@
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-Garbage::Garbage(const int& t_x, const int& t_y, EDrawID t_ID)
+Garbage::Garbage(const int& t_x, const int& t_y, const EDrawID& t_ID)
 {
 	m_x = t_x;
 	m_y = t_y;

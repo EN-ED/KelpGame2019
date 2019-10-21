@@ -4,11 +4,13 @@
 #include "InputController.hpp"
 
 
+
+/*
+ƒƒS‚ÌƒV[ƒ“‚Ì‘å–{
+*/
 class Logo : public BaseScene
 {
 private:
-	/// ‰æ‘œ
-
 	int mD_teamLogo;		// “®‰æ‚Ì‰æ‘œ
 	int mD_dxlibLogo;		// dxlib‚Ì‰æ‘œ
 	int mD_skip;

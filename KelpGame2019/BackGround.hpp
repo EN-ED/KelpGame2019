@@ -1,8 +1,11 @@
 #pragma once
 #include "DxLib.h"
-#include "InputKey.hpp"
 
 
+
+/*
+ƒQ[ƒ€’†‚Ì”wŒi‚Ì–{‘Ì
+*/
 class BackGround
 {
 private:

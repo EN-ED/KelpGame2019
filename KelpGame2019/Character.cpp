@@ -109,8 +109,7 @@ void Character::HitGarbageProcess()
 	// 灯油に当たったら
 	if (m_nowHeal)
 	{
-		m_smallSpeed -= 0.01f;
-		if (m_smallSpeed < 0.0f) m_smallSpeed = 0.0f;
+		if ((m_smallSpeed -= 0.01f) < 0.0f) m_smallSpeed = 0.0f;
 		// ダメージカウントが最大になったら
 		if (++m_damageCount > static_cast<int>(m_damageMaxCount * 0.5) && m_isGroundFlag)
 		{
@@ -509,35 +508,6 @@ void Character::Draw()
 	{
 		DrawGraph(300 + 360, 1080 - 128, mD_speedUpDescription, true);
 	}
-
-	/*switch (m_nowState)
-	{
-	case ESTATE::normal:
-		if (m_speedUpChargeCount == m_speedUpChargeMax && !m_isJumpFlag && !m_isDamageHit)
-		{
-			DrawFormatString(980, 200, GetColor(0, 255, 255), "通常の加速できる石鹸君");
-		}
-		else
-		{
-			DrawFormatString(980, 200, GetColor(255, 255, 255), "通常の石鹸君");
-		}
-		break;
-	case ESTATE::damageHit:
-		DrawFormatString(980, 200, GetColor(255, 0, 0), "ダメージ中の石鹸君");
-		break;
-	case ESTATE::speedDown:
-		DrawFormatString(980, 200, GetColor(255, 255, 0), "急加速から戻り中の石鹸君");
-		break;
-	case ESTATE::speedMAX:
-		DrawFormatString(980, 200, GetColor(255, 255, 0), "急加速最大の石鹸君");
-		break;
-	case ESTATE::speedUp:
-		DrawFormatString(980, 200, GetColor(255, 255, 0), "急加速中の石鹸君");
-		break;
-	default:
-		break;
-	}*/
-	//printfDx("%d\n", static_cast<int>(m_playerSize * static_cast<float>(m_speedUpChargeCount) / m_speedUpChargeMax));
 }
 
 
@@ -672,7 +642,8 @@ const float& Character::GetDefaultMAXSpeed() const
 
 
 
-void Character::HitGarbageNow(int t_garbageID, EHitGarbageID t_garbageObjectID)
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+void Character::HitGarbageNow(const int& t_garbageID, const EHitGarbageID& t_garbageObjectID)
 {
 	m_hitGarbageObjectID = t_garbageObjectID;
 	m_isHitGarbage = true;
@@ -681,6 +652,7 @@ void Character::HitGarbageNow(int t_garbageID, EHitGarbageID t_garbageObjectID)
 
 
 
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 const int& Character::GetAreaX() const
 {
 	return m_playerX;
@@ -688,6 +660,7 @@ const int& Character::GetAreaX() const
 
 
 
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 const int& Character::GetAreaY() const
 {
 	return m_playerY;
@@ -695,22 +668,32 @@ const int& Character::GetAreaY() const
 
 
 
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 const int Character::GetSize() const
 {
 	return static_cast<int>(192 * (1.0 - static_cast<double>(m_smallSpeed)));
 }
 
-const bool Character::GetNowDamage() const
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+const bool& Character::GetNowDamage() const
 {
 	return m_isDamageHit;
 }
 
-const bool Character::GetNowHeal() const
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+const bool& Character::GetNowHeal() const
 {
 	return m_nowHeal;
 }
 
-const float Character::GetSmallSpeed() const
+
+
+/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+const float& Character::GetSmallSpeed() const
 {
 	return m_smallSpeed;
 }

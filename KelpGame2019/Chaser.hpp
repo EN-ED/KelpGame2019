@@ -4,6 +4,9 @@
 
 
 
+/*
+“X‰º–³‘o‚Ì–{‘Ì
+*/
 class Chaser
 {
 private:
@@ -34,6 +37,6 @@ public:
 
 	void SetPlyayerSpeed(const float& t_playerSpeed, const float& t_defaultMAXSpeed);
 
-	const int GetX();
+	const int& GetX() const;
 };
 

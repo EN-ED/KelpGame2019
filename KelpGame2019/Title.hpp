@@ -5,6 +5,10 @@
 #include "SoundProcess.hpp"
 
 
+
+/*
+タイトルのシーンの大本
+*/
 class Title : public BaseScene
 {
 private:

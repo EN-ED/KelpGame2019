@@ -1,12 +1,15 @@
 #pragma once
 #include "DxLib.h"
-#include <random>
 #include <cmath>
 #include <string>
 #include "SoundProcess.hpp"
 #include "InputController.hpp"
 
 
+
+/*
+êŒå≤Ç≠ÇÒÇÃñ{ëÃ
+*/
 class Character
 {
 public:
@@ -174,7 +177,7 @@ public:
 
 	const float& GetDefaultMAXSpeed() const;
 
-	void HitGarbageNow(int t_garbageID, EHitGarbageID t_garbageObjectID);
+	void HitGarbageNow(const int& t_garbageID, const EHitGarbageID& t_garbageObjectID);
 
 	const int& GetAreaX() const;
 
@@ -182,10 +185,10 @@ public:
 
 	const int GetSize() const;
 
-	const bool GetNowDamage() const;
+	const bool& GetNowDamage() const;
 
-	const bool GetNowHeal() const;
+	const bool& GetNowHeal() const;
 
-	const float GetSmallSpeed() const;
+	const float& GetSmallSpeed() const;
 };
 
