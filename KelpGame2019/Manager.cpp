@@ -70,8 +70,32 @@ void Manager::SceneChange()
 		break;
 
 
+		// ゲーム本編やり直す
+	case ESceneNumber::OMAKEONERETURN:
+		BASICPARAM::e_preScene = ESceneNumber::OMAKEONE;
+		BASICPARAM::e_nowScene = ESceneNumber::OMAKEONE;
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
+		delete p_baseMove;
+		p_baseMove = nullptr;
+
+		p_baseMove = new Game(2);
+		break;
+
+
 		// ゲーム本編
 	case ESceneNumber::OMAKETWO:
+		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
+		delete p_baseMove;
+		p_baseMove = nullptr;
+
+		p_baseMove = new Game(3);
+		break;
+
+
+		// ゲーム本編やり直す
+	case ESceneNumber::OMAKETWORETURN:
+		BASICPARAM::e_preScene = ESceneNumber::OMAKETWO;
+		BASICPARAM::e_nowScene = ESceneNumber::OMAKETWO;
 		SoundProcess::Play(SoundProcess::E_BGM::mainLoop);
 		delete p_baseMove;
 		p_baseMove = nullptr;

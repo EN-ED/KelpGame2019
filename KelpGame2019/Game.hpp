@@ -70,6 +70,8 @@ private:
 	int m_maxLoad;
 	float m_nowLoad;
 
+	int m_nowGameCorse;
+
 
 
 public:

@@ -294,7 +294,18 @@ void Game::GameOverProcess()
 		{
 			if (m_overGameReset)
 			{
-				BASICPARAM::e_nowScene = ESceneNumber::GAMERETURN;
+				if (m_nowGameCorse == 1)
+				{
+					BASICPARAM::e_nowScene = ESceneNumber::GAMERETURN;
+				}
+				else if (m_nowGameCorse == 2)
+				{
+					BASICPARAM::e_nowScene = ESceneNumber::OMAKEONERETURN;
+				}
+				else if (m_nowGameCorse == 3)
+				{
+					BASICPARAM::e_nowScene = ESceneNumber::OMAKETWORETURN;
+				}
 			}
 			else
 			{
@@ -449,20 +460,24 @@ Game::Game(int t_stageCorse)
 	std::vector<Garbage*>().swap(mp_garbage);
 
 	m_maxLoad = -1;
+	m_nowGameCorse = -1;
 	if (t_stageCorse == 1)
 	{
 		FileLoad("media\\stageCorse\\400000ver.csv");
 		m_maxLoad = 400000;
+		m_nowGameCorse = 1;
 	}
 	else if (t_stageCorse == 2)
 	{
 		FileLoad("media\\stageCorse\\200000ver.csv");
 		m_maxLoad = 200000;
+		m_nowGameCorse = 2;
 	}
 	else if (t_stageCorse == 3)
 	{
 		FileLoad("media\\stageCorse\\1000000ver.csv");
 		m_maxLoad = 1000000;
+		m_nowGameCorse = 3;
 	}
 
 	m_nowMove = NowMove::start;

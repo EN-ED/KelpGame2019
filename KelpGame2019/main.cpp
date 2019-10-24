@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 
-	SetWindowText("走れ！石鹸くん！");					// メインウインドウのウインドウタイトルを変更する
+	SetWindowText("滑れ！石鹸くん！");					// メインウインドウのウインドウタイトルを変更する
 	SetBackgroundColor(0, 0, 0);			// 背景色を白に変更
 	ChangeWindowMode(TRUE);						// ウィンドウズモードにさせる
 
