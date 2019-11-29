@@ -11,12 +11,12 @@
 struct BlurScreen
 {
 private:
-	int m_screen[2];
-	int m_current;
-	int m_alpha;
-	int m_screenWidth, m_screenHeight;
-	int m_offsetX1, m_offsetX2, m_offsetY1, offsetY2;
-	int m_notBlendDraw;
+	int m_screen[2];									// 背面に使うスクリーン画像
+	int m_current;										// 2枚のどの画像を使っているか
+	int m_alpha;										// 透過値
+	int m_screenWidth, m_screenHeight;					// スクリーンの各大きさ
+	int m_offsetX1, m_offsetX2, m_offsetY1, offsetY2;	// ブラー処理をする方向
+	int m_notBlendDraw;									// 数フレームだけブラー処理させないためのカウント変数
 
 
 public:
@@ -37,12 +37,19 @@ public:
 	~BlurScreen() {}
 
 
-	void Init(int alpha, int offsetX1, int offsetY1, int offsetX2, int offsetY2);
+	// 初期化
+	void Init(int t_alpha, int t_offsetX1, int t_offsetY1, int t_offsetX2, int t_offsetY2);
+
+	// ブラー処理する直前に一回だけ呼ぶ
 	void ReplayInit();
+
+	// 解放
 	void Release();
 
+	// ブラー処理をする描画の直前に置く
 	void PreRenderBlurScreen();
 
+	// ブラー処理をする描画の後に置く
 	void PostRenderBlurScreen();
 };
 

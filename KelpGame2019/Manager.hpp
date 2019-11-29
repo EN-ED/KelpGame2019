@@ -35,5 +35,5 @@ public:
 	void Update();
 
 	// I—¹‚³‚¹‚é
-	const bool& GetEnd() const { return p_baseMove->GetEnd(); }
+	const bool GetEnd() const { return p_baseMove->GetEnd(); }
 };
