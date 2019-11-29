@@ -11,11 +11,11 @@
 class Logo : public BaseScene
 {
 private:
-	// 画像-----------------------------------
+	/// 画像-----------------------------------
 	int mD_dxlibLogo;		// dxlibの画像
 	int mD_skip;			// スキップ画像
 
-	// チームロゴ関係-------------------------
+	/// チームロゴ関係-------------------------
 	int mD_teamLogo;
 	int mD_Re;				
 	int mD_Okizari;
@@ -23,7 +23,7 @@ private:
 	int mD_Escape;
 
 
-	// ロゴの動き-----------------------------
+	/// ロゴの動き-----------------------------
 	int m_x;
 	int m_y;
 	int m_addX;
@@ -31,7 +31,7 @@ private:
 	int m_turnY;
 
 	
-	// シーンの処理関係-----------------------
+	/// シーンの処理関係-----------------------
 	enum class ELOGONOW { dxlib, team };
 	ELOGONOW m_nowLogoNumber;	// 現在のロゴ
 	int m_logoTransTime;	// ロゴの遷移時間

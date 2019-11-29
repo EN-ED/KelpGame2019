@@ -14,23 +14,29 @@
 class Tutorial : public BaseScene
 {
 private:
+	/// クラスポインタ-----------------------
+	Character* mp_character;
+	BackGround* mp_backGround;
+	Garbage* mp_garbage[4];
+
+
+	/// 画像---------------------------------
 	int mD_skip;
 	int mD_AJump;
 	int mD_damage;
 	int mD_speed;
 	int mD_touyu;
-	int m_blendValue;
 	int mD_start;
 
-	Character* mp_character;
-	BackGround* mp_backGround;
-	Garbage* mp_garbage[4];
 
-	void MainProcess();
-	void StopProcess();
+	/// 処理系-------------------------------
+	int m_blendValue;
 
 	int m_stopNum;
 	bool m_stopFlag;
+
+	void MainProcess();
+	void StopProcess();
 
 
 public:

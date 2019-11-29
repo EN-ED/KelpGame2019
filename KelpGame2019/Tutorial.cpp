@@ -2,7 +2,7 @@
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Tutorial::MainProcess()
 {
 	mp_backGround->Process();
@@ -47,7 +47,7 @@ void Tutorial::MainProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Tutorial::StopProcess()
 {
 	if (m_stopNum == 1)
@@ -92,16 +92,9 @@ void Tutorial::StopProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 Tutorial::Tutorial()
 {
-	mD_skip = LoadGraph("media\\tutorial\\ASkip.jpg");
-	mD_AJump = LoadGraph("media\\tutorial\\ajump.jpg");
-	mD_damage = LoadGraph("media\\tutorial\\damage.jpg");
-	mD_speed = LoadGraph("media\\tutorial\\RB.jpg");
-	mD_touyu = LoadGraph("media\\tutorial\\touyu.jpg");
-	mD_start = LoadGraph("media\\tutorial\\start.jpg");
-
 	mp_character = new Character();
 	mp_backGround = new BackGround(1);
 	ZeroMemory(mp_garbage, sizeof(mp_garbage));
@@ -125,6 +118,13 @@ Tutorial::Tutorial()
 		}
 	}
 
+	mD_skip = LoadGraph("media\\tutorial\\ASkip.jpg");
+	mD_AJump = LoadGraph("media\\tutorial\\ajump.jpg");
+	mD_damage = LoadGraph("media\\tutorial\\damage.jpg");
+	mD_speed = LoadGraph("media\\tutorial\\RB.jpg");
+	mD_touyu = LoadGraph("media\\tutorial\\touyu.jpg");
+	mD_start = LoadGraph("media\\tutorial\\start.jpg");
+
 	m_stopNum = 0;
 	m_blendValue = 255;
 	m_stopFlag = false;
@@ -132,7 +132,7 @@ Tutorial::Tutorial()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 Tutorial::~Tutorial()
 {
 	if (mD_skip != -1) DeleteGraph(mD_skip);
@@ -152,7 +152,7 @@ Tutorial::~Tutorial()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Tutorial::Draw()
 {
 	mp_backGround->Draw();
@@ -213,7 +213,7 @@ void Tutorial::Draw()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Tutorial::Process()
 {
 	if (m_stopFlag)
