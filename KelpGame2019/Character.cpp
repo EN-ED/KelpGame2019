@@ -424,28 +424,43 @@ Character::Character()
 	m_preHitGarbageID = m_hitGarbageID;
 	m_hitGarbageObjectID = EHitGarbageID::none;
 
-	m_isNowSpeedUp = false;
+
+	/// 回復処理系--------------------------------------------
+	m_healCount = 0;
+	m_nowHeal = false;
+
+
+	/// スピード処理系-----------------------------------------
 	m_nowSpeed = 70.0f;
-	m_addSpeed = 1.0f;
-	m_speedUpCount = 0;
-	m_speedMaxWaitCount = 0;
+
 	m_nowSpeedThirdDigit = 0;
 	m_nowSpeedSecondDigit = 0;
 	m_nowSpeedFirstDigit = 0;
 	m_nowSpeedDecimalPoint = 0;
+
+
+	/// スピードの加速処理系------------------------------------
+	m_isNowSpeedUp = false;
+
 	m_speedUpChargeCount = 0;
 
+	m_addSpeed = 1.0f;
+	m_speedUpCount = 0;
+	m_speedMaxWaitCount = 0;
+
+
+	/// ジャンプ処理系------------------------------------------
 	m_playerUnderY = m_mostMaxY;
 
 	m_isGroundFlag = true;
 	m_isJumpFlag = false;
 	m_isLongJump = false;
+
 	m_jumpPower = m_jumpMinPower;
 	m_gravityPower = 0;
-	m_isFlyDamageHit = false;
-	m_nowHeal = false;
 
-	m_healCount = 0;
+	m_isFlyDamageHit = false;
+
 }
 
 
