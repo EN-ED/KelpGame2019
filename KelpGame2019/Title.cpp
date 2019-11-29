@@ -2,7 +2,7 @@
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Title::SceneOneDraw()
 {
 	// ÉXÉ^Å[Égï∂éö
@@ -13,7 +13,7 @@ void Title::SceneOneDraw()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Title::SceneOneProcess()
 {
 	if (m_isBlendDownSwitch)
@@ -51,7 +51,7 @@ void Title::SceneOneProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Title::SceneTwoDraw()
 {
 	if (m_cursolArea == TwoCursolArea::start)
@@ -155,7 +155,7 @@ void Title::SceneTwoDraw()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Title::SceneTwoProcess()
 {
 	if (m_isFontBigDownSwitch)
@@ -457,11 +457,33 @@ void Title::SceneTwoProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 Title::Title()
 {
+	m_endFlag = false;
+
+
 	mD_select = LoadGraph("media\\title\\Aselect.png");
 	mD_back = LoadGraph("media\\title\\BBack.png");
+	mD_TitleLogo = LoadGraph("media\\title\\êŒå≤åNÉçÉS.png");
+
+	mD_backGround = LoadGraph("media\\title\\titlebackground.png");
+
+	m_backGroundAngle = 0;
+
+	m_x = 960;
+	m_y = -120;
+	m_exRate = 0.65;
+	m_add = -0.01;
+	m_angle = 0;
+
+	m_sceneChange = Scene::one;
+
+	m_sceneChangeCount = m_sceneChangeMaxCount;
+
+	m_sceneSideDrawX = 0;
+
+	m_logoBlendValue = 255;
 
 	mD_sceneOneStart = LoadGraph("media\\title\\start.png");
 
@@ -472,49 +494,30 @@ Title::Title()
 	mD_sceneTwoEnd = LoadGraph("media\\title\\exit.png");
 
 	m_cursolArea = TwoCursolArea::start;
+	
 	m_sceneTwoFontBigCount = 1.0f;
 	m_isFontBigDownSwitch = false;
 
-	m_backGroundColor = 10;
+	m_selectCommandLeft = true;
 
-	m_sceneChange = Scene::one;
-
-	m_sceneChangeCount = m_sceneChangeMaxCount;
-
-	m_sceneSideDrawX = 0;
-
-	m_endFlag = false;
-
-	mD_TitleLogo = LoadGraph("media\\title\\êŒå≤åNÉçÉS.png");
-
-	m_x = 960;
-	m_y = -120;
-	m_exRate = 0.65;
-	m_add = -0.01;
-	m_angle = 0;
+	mD_omakeOne = LoadGraph("media\\title\\omakeOne.jpg");
 
 	m_omakeOneCommandNumber = 0;
 	m_omakeOneAbleFrame = 0;
 	m_omakeOneLeft = true;
 	m_omakeOneOpen = false;
-	mD_omakeOne = LoadGraph("media\\title\\omakeOne.jpg");
+
+	mD_omakeTwo = LoadGraph("media\\title\\omakeTwo.jpg");
 
 	m_omakeTwoCommandNumber = 0;
 	m_omakeTwoAbleFrame = 0;
 	m_omakeTwoLeft = true;
 	m_omakeTwoOpen = false;
-	mD_omakeTwo = LoadGraph("media\\title\\omakeTwo.jpg");
-
-	m_logoBlendValue = 255;
-	m_selectCommandLeft = true;
-
-	mD_backGround = LoadGraph("media\\title\\titlebackground.png");
-	m_backGroundAngle = 0;
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 Title::~Title()
 {
 	if (mD_backGround != -1) DeleteGraph(mD_backGround);
@@ -530,7 +533,7 @@ Title::~Title()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Title::Draw()
 {
 	// îwåi
@@ -557,7 +560,7 @@ void Title::Draw()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Title::Process()
 {
 	if (m_sceneChange == Scene::one)
@@ -565,7 +568,6 @@ void Title::Process()
 		SceneOneProcess();
 		if (m_sceneChangeCount++ < m_sceneChangeMaxCount)
 		{
-			m_backGroundColor--;
 			m_sceneSideDrawX += 1920 / m_sceneChangeMaxCount;
 		}
 	}
@@ -574,7 +576,6 @@ void Title::Process()
 		SceneTwoProcess();
 		if (m_sceneChangeCount++ < m_sceneChangeMaxCount)
 		{
-			m_backGroundColor++;
 			m_sceneSideDrawX -= 1920 / m_sceneChangeMaxCount;
 		}
 	}

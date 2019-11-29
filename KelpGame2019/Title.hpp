@@ -12,80 +12,93 @@
 class Title : public BaseScene
 {
 private:
-	int m_backGroundColor;		// 背景色
+	// 画像-------------------------------------------
+	int mD_select;			// 決定ボタンの説明
+	int mD_back;			// 戻るボタンの説明
+	int mD_TitleLogo;		// タイトルロゴ
 
-	enum class Scene { one, two };		// シーン
+	int mD_backGround;		// 背景画像
+
+
+	// 背景画像の処理系-------------------------------
+	int m_backGroundAngle;	// 角度
+
+
+	// タイトルロゴの処理系---------------------------
+	int m_x, m_y;			// 座標
+	double m_exRate;		// 大きさ
+	double m_add;			// 大きさの加算値
+	double m_angle;			// 角度
+
+
+	// シーンの処理系---------------------------------
+		// タイトルのシーン
+	enum class Scene { one, two };
 
 	Scene m_sceneChange;		// 現在のシーン
 
-	int m_sceneChangeCount;		// シーンの移動完了までカウント
-
+	int m_sceneChangeCount;						// シーンの移動完了までカウント
 	const int m_sceneChangeMaxCount = 20;		// シーンの移動終了までのカウント値
 
-	int m_sceneSideDrawX;			// シーン移動時の横移動値（oneとtwoを両方描画する）
-
+	int m_sceneSideDrawX;								// シーン移動時の横移動値（oneとtwoを両方描画する）
 	const int m_sceneTwoDefaultSideDrawX = 1920;		// シーン移動時の横最大値
 
-	int mD_select;
-
-	int mD_back;
-
-	int mD_TitleLogo;
-
-	int m_x;
-	int m_y;
-	double m_exRate;
-	double m_add;
-	double m_angle;
-
-	int mD_backGround;
-	int m_backGroundAngle;
+	int m_logoBlendValue;		// ロゴの透過値
 
 
-	/// シーン１だけに関する
+	// シーン１だけに関する画像-----------------------
+	int mD_sceneOneStart;
 
-	int mD_sceneOneStart;		// 最初のスタート文字
-
-	int m_sceneOneStartBlendCount;		// 最初の文字の透過値
-	bool m_isBlendDownSwitch;			// 文字の透過値を下げるかどうか
-
-	void SceneOneDraw();		// シーン１の描画
-	void SceneOneProcess();		// シーン１のプロセス
+	void SceneOneDraw();
 
 
-	/// シーン２だけに関する
+	// シーン１だけに関する処理-----------------------
+	int m_sceneOneStartBlendCount;		// 開始画像を大きくしたり小さくする数値
+	bool m_isBlendDownSwitch;			// 大きくするのか小さくするのかどうか
 
-	int mD_sceneTwoStart;		// 2番目のスタート文字
-	int mD_sceneTwoEnd;			// 2番目の終了文字
-
-	enum class TwoCursolArea { start, end, omakeOne, omakeTwo };		// カーソルの位置
-
-	TwoCursolArea m_cursolArea;			// カーソルの位置がどこにあるか
-
-	float m_sceneTwoFontBigCount;		// カーソルが当たっている文字のサイズ値
-	bool m_isFontBigDownSwitch;			// 文字のサイズ値を下げるかどうか
-
-	void SceneTwoDraw();			// シーン２の描画
-	void SceneTwoProcess();			// シーン２のプロセス
+	void SceneOneProcess();
 
 
-	/// おまけ１
-	int m_omakeOneCommandNumber;
-	int m_omakeOneAbleFrame;
-	bool m_omakeOneLeft;
-	bool m_omakeOneOpen;
+	// シーン２だけに関する画像-----------------------
+	int mD_sceneTwoStart;
+	int mD_sceneTwoEnd;
+
+	void SceneTwoDraw();
+
+
+	// シーン２だけに関する処理-----------------------
+		// カーソルの位置
+	enum class TwoCursolArea { start, end, omakeOne, omakeTwo };
+	TwoCursolArea m_cursolArea;		// カーソルはどこにいるか
+
+	float m_sceneTwoFontBigCount;	// 選択しているカーソルを大きくしたり小さくする数値
+	bool m_isFontBigDownSwitch;		// 大きくするのか小さくするのかどうか
+
+	bool m_selectCommandLeft;	// 選択カーソルが左にあるかどうか
+
+	void SceneTwoProcess();
+
+
+	// おまけ１に関する画像---------------------------
 	int mD_omakeOne;
 
 
-	/// おまけ２
-	int m_omakeTwoCommandNumber;
-	int m_omakeTwoAbleFrame;
-	bool m_omakeTwoLeft;
-	bool m_omakeTwoOpen;
+	// おまけ１に関する処理---------------------------
+	int m_omakeOneCommandNumber;		// おまけ１を出現するためのコマンドを押している数
+	int m_omakeOneAbleFrame;			// おまけ１を出現させるための次のコマンドまでに押していないフレーム
+	bool m_omakeOneLeft;				// おまけ１を選択しているかどうか
+	bool m_omakeOneOpen;				// おまけ１を出現させたかどうか
+
+
+	// おまけ２に関する画像---------------------------
 	int mD_omakeTwo;
 
-	int m_logoBlendValue;
-	bool m_selectCommandLeft;
+
+	// おまけ２に関する処理---------------------------
+	int m_omakeTwoCommandNumber;		// おまけ２を出現するためのコマンドを押している数
+	int m_omakeTwoAbleFrame;			// おまけ２を出現させるための次のコマンドまでに押していないフレーム
+	bool m_omakeTwoLeft;				// おまけ２を選択しているかどうか
+	bool m_omakeTwoOpen;				// おまけ２を出現させたかどうか
 
 
 public:
