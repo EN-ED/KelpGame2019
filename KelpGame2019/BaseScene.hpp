@@ -1,13 +1,22 @@
 #pragma once
 
 
-
 // シーンの動き
 enum class ESceneNumber
 {
-	LOGO, TITLE, GAME, OMAKEONE, OMAKETWO, TUTORIAL, GAMERETURN, OMAKEONERETURN, OMAKETWORETURN
-};
+	LOGO,
+	TITLE,
 
+	GAME,
+	OMAKEONE,
+	OMAKETWO,
+
+	TUTORIAL,
+
+	GAMERETURN,
+	OMAKEONERETURN,
+	OMAKETWORETURN
+};
 
 
 // 全体で必要な変数
@@ -42,5 +51,5 @@ public:
 
 
 	// 強制的に終了させる
-	const bool& GetEnd() const { return m_endFlag; }
+	const bool GetEnd() const { return m_endFlag; }
 };
