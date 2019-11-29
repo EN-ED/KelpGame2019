@@ -2,12 +2,12 @@
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 BlurScreen g_blurScreen;
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::FirstDraw()
 {
 	mp_backGround->Draw();
@@ -18,23 +18,24 @@ void Game::FirstDraw()
 
 	if (m_firstFrameCount < 490 && m_firstFrameCount> 450)
 	{
-		DrawGraph(1920 / 2 - 64, 1080 / 2 - 64, m_firstTimer[0], true);
+		DrawGraph(1920 / 2 - 64, 1080 / 2 - 64, mD_firstTimer[0], true);
 	}
 	else if (m_firstFrameCount <= 450 && m_firstFrameCount > 390)
 	{
-		DrawGraph(1920 / 2 - 64, 1080 / 2 - 64, m_firstTimer[1], true);
+		DrawGraph(1920 / 2 - 64, 1080 / 2 - 64, mD_firstTimer[1], true);
 	}
 	else if (m_firstFrameCount <= 390 && m_firstFrameCount > 330)
 	{
-		DrawGraph(1920 / 2 - 64, 1080 / 2 - 64, m_firstTimer[2], true);
+		DrawGraph(1920 / 2 - 64, 1080 / 2 - 64, mD_firstTimer[2], true);
 	}
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::FirstProcess()
 {
+	// フレームカウントで動きを調整
 	m_firstFrameCount++;
 	if (m_firstFrameCount == 60)
 	{
@@ -95,6 +96,7 @@ void Game::FirstProcess()
 	mp_character->FirstProcess();
 
 
+	// スキップボタンが押されたら
 	if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
 	{
 		m_nowMove = NowMove::main;
@@ -103,11 +105,13 @@ void Game::FirstProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::MainDraw()
 {
+	// 加速している
 	if (mp_character->GetIsSpeedUp())
 	{
+		// 加速している
 		if (m_isFirstSpeedUp)
 		{
 			g_blurScreen.PreRenderBlurScreen();
@@ -123,6 +127,7 @@ void Game::MainDraw()
 			mp_chaser->Draw();
 			mp_character->Draw();
 		}
+		// 加速し始めた瞬間
 		else
 		{
 			m_isFirstSpeedUp = true;
@@ -141,6 +146,7 @@ void Game::MainDraw()
 			mp_character->Draw();
 		}
 	}
+	// 加速していない
 	else
 	{
 		mp_backGround->Draw();
@@ -154,38 +160,37 @@ void Game::MainDraw()
 	}
 
 
+	// ゴールまでの長さと現在地
 	DrawBox(160, 19, 1920 - 160, 25, GetColor(255, 255, 255), true);
 	DrawCircle(160 + static_cast<int>(1620 * (m_nowLoad / m_maxLoad)), 22, 5, GetColor(0, 0, 0));
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::MainProcess()
 {
+	// ゴールにたどり着いた
 	if (m_nowLoad >= m_maxLoad)
 	{
 		m_nowMove = NowMove::gameclear;
 	}
+
+
+	// ゴールにたどり着いてないときに力尽きた
 	if (mp_character->GetSize() <= 0 || mp_chaser->GetX() + 512 > mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.3))
 	{
 		m_nowMove = NowMove::gameover;
 	}
 
 
-	mp_backGround->Process();
-
-
 	mp_character->Process();
 	m_nowLoad += mp_character->GetSpeed();
 
-
 	mp_chaser->Process();
-
-
 	mp_chaser->SetPlyayerSpeed(mp_character->GetSpeed(), mp_character->GetDefaultMAXSpeed());
 
-
+	mp_backGround->Process();
 	mp_backGround->SetSpeed(mp_character->GetSpeed());
 
 
@@ -211,11 +216,13 @@ void Game::MainProcess()
 		// 既に石鹸君に対して障害物が当たっているフレーム中だったら
 		if (mp_character->GetNowDamage() || mp_character->GetNowHeal()) continue;
 
+
+		// 当たり判定
+		// 画像より小さめに当たり判定を取る
 		int xA = mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.25);
 		int xB = xA + static_cast<int>(mp_character->GetSize() * 0.5);
 		int yA = mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.25);
 		int yB = yA + static_cast<int>(mp_character->GetSize() * 0.5);
-		// 当たり判定
 		// 右端が障害物の左端に当たってすぎる
 		if (xB >= mp_garbage[i]->GetX())
 		{
@@ -239,9 +246,10 @@ void Game::MainProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::GameOverDraw()
 {
+	// ゲーム画面を薄く表示させる
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - static_cast<int>(m_overFrame / 2));
 	mp_backGround->Draw();
 	for (size_t i = 0, n = mp_garbage.size(); i != n; ++i)
@@ -256,6 +264,7 @@ void Game::GameOverDraw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 
+	// 選択のUIを表示
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_overFrame);
 	DrawGraph(1920 / 2 - 491 / 2, 1080 / 2 - 132 - 60, mD_gameOver, false);
 
@@ -275,23 +284,28 @@ void Game::GameOverDraw()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::GameOverProcess()
 {
+	// UI等が完全に描画されたら
 	if (m_overFrame >= 255)
 	{
+		// 左にスティックを倒したら
 		if (PadData::GetStickCheck(PadStick::LEFT_STICK_X, 0, true) == 1)
 		{
 			m_overGameReset = true;
 		}
 
+		// 右にスティックを倒したら
 		if (PadData::GetStickCheck(PadStick::LEFT_STICK_X, 0, false) == 1)
 		{
 			m_overGameReset = false;
 		}
 
+		// 決定ボタンが押されたら
 		if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
 		{
+			// やり直しが選択されたら
 			if (m_overGameReset)
 			{
 				if (m_nowGameCorse == 1)
@@ -307,12 +321,14 @@ void Game::GameOverProcess()
 					BASICPARAM::e_nowScene = ESceneNumber::OMAKETWORETURN;
 				}
 			}
+			// タイトルへ戻るが選択されたら
 			else
 			{
 				BASICPARAM::e_nowScene = ESceneNumber::TITLE;
 			}
 		}
 	}
+	// フレームをカウントさせる
 	else
 	{
 		m_overFrame += 5;
@@ -321,19 +337,20 @@ void Game::GameOverProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::GameClearDraw()
 {
+	// ゲーム画面を表示
 	mp_backGround->Draw();
 	mp_character->Draw();
 	DrawBox(160, 19, 1920 - 160, 25, GetColor(255, 255, 255), true);
 	DrawCircle(160 + static_cast<int>(1620 * (m_nowLoad / m_maxLoad)), 22, 5, GetColor(0, 0, 0));
 
 
+	// UI等を表示
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_clearFrame);
 	DrawGraph(1920 / 2 - 1045 / 2, 1080 / 2 - 130, mD_gameClear, false);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_clearFrame);
 	DrawGraph(1920 / 2 - 1700 / 2, 1080 / 2, mD_clearOmake, false);
@@ -342,34 +359,33 @@ void Game::GameClearDraw()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::GameClearProcess()
 {
+	// フレームをカウントさせる
 	if (m_clearFrame < 255)
 	{
 		m_clearFrame++;
 	}
+	// UI等が表示されたら
 	else
 	{
+		// 決定ボタンが押されたら
 		if (PadData::GetButton(XINPUT_BUTTON_A, 0) == 1)
 		{
 			BASICPARAM::e_nowScene = ESceneNumber::TITLE;
 		}
 	}
 
-
-	mp_backGround->Process();
-
-
 	mp_character->FirstProcess();
 
-
+	mp_backGround->Process();
 	mp_backGround->SetSpeed(mp_character->GetSpeed());
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::FileLoad(std::string t_mapStr)
 {
 	std::ifstream ifs;
@@ -379,6 +395,7 @@ void Game::FileLoad(std::string t_mapStr)
 	if (ifs.fail())
 	{
 		std::cerr << "LoadError" << std::endl;
+		return;
 	}
 
 	// 仮置き
@@ -438,9 +455,13 @@ void Game::FileLoad(std::string t_mapStr)
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 Game::Game(int t_stageCorse)
 {
+	m_endFlag = false;
+	g_blurScreen.Init(200, 6, -2, 0, 0);
+
+
 	mp_backGround = nullptr;
 	mp_backGround = new BackGround(t_stageCorse);
 
@@ -450,15 +471,7 @@ Game::Game(int t_stageCorse)
 	mp_chaser = nullptr;
 	mp_chaser = new Chaser();
 
-	m_endFlag = false;
-
-	g_blurScreen.Init(200, 6, -2, 0, 0);
-
-	m_isFirstSpeedUp = false;
-
-
 	std::vector<Garbage*>().swap(mp_garbage);
-
 	m_maxLoad = -1;
 	m_nowGameCorse = -1;
 	if (t_stageCorse == 1)
@@ -480,17 +493,32 @@ Game::Game(int t_stageCorse)
 		m_nowGameCorse = 3;
 	}
 
+	m_isFirstSpeedUp = false;
+
 	m_nowMove = NowMove::start;
+
+	m_firstFrameCount = 0;
 
 	m_firstCharacterX = 1920 / 2 - 192 / 2;
 	m_firstCharacterTurn = true;
-	m_firstFrameCount = 0;
+
 	m_firstBackGroundX = 0;
+
 	m_firstchaserX = -512;
 
-	m_firstTimer[0] = LoadGraph("media\\num\\1.png");
-	m_firstTimer[1] = LoadGraph("media\\num\\2.png");
-	m_firstTimer[2] = LoadGraph("media\\num\\3.png");
+	mD_firstTimer[0] = LoadGraph("media\\num\\1.png");
+	mD_firstTimer[1] = LoadGraph("media\\num\\2.png");
+	mD_firstTimer[2] = LoadGraph("media\\num\\3.png");
+
+	m_nowLoad = 0;
+
+	mD_gameOver = LoadGraph("media\\over\\sekkennkunnga.jpg");
+	mD_overReset = LoadGraph("media\\over\\reset.png");
+	mD_overTitle = LoadGraph("media\\over\\down.png");
+
+	m_overFrame = 0;
+
+	m_overGameReset = false;
 
 	mD_gameClear = LoadGraph("media\\clear\\clear.jpg");
 	if (t_stageCorse == 1)
@@ -501,22 +529,13 @@ Game::Game(int t_stageCorse)
 	{
 		mD_clearOmake = LoadGraph("media\\clear\\two.jpg");
 	}
+
 	m_clearFrame = 0;
-
-	mD_gameOver = LoadGraph("media\\over\\sekkennkunnga.jpg");
-	mD_overReset = LoadGraph("media\\over\\reset.png");
-	mD_overTitle = LoadGraph("media\\over\\down.png");
-
-	m_overGameReset = false;
-
-	m_overFrame = 0;
-
-	m_nowLoad = 0;
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 Game::~Game()
 {
 	if (mD_gameOver != -1) DeleteGraph(mD_gameOver);
@@ -524,9 +543,9 @@ Game::~Game()
 	if (mD_overTitle != -1) DeleteGraph(mD_overTitle);
 	if (mD_gameClear != -1) DeleteGraph(mD_gameClear);
 	if (mD_clearOmake != -1) DeleteGraph(mD_clearOmake);
-	if (m_firstTimer[0] != -1) DeleteGraph(m_firstTimer[0]);
-	if (m_firstTimer[1] != -1) DeleteGraph(m_firstTimer[1]);
-	if (m_firstTimer[2] != -1) DeleteGraph(m_firstTimer[2]);
+	if (mD_firstTimer[0] != -1) DeleteGraph(mD_firstTimer[0]);
+	if (mD_firstTimer[1] != -1) DeleteGraph(mD_firstTimer[1]);
+	if (mD_firstTimer[2] != -1) DeleteGraph(mD_firstTimer[2]);
 	for (int i = 0; i != mp_garbage.size(); ++i)
 	{
 		if (mp_garbage[i] != nullptr) delete mp_garbage[i];
@@ -542,7 +561,7 @@ Game::~Game()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::Draw()
 {
 	switch (m_nowMove)
@@ -570,7 +589,7 @@ void Game::Draw()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Game::Process()
 {
 	switch (m_nowMove)
