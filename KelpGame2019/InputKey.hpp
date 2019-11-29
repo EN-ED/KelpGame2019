@@ -17,7 +17,7 @@ public:
 	static void UpDate();			// キー入力の状態更新
 
 
-	static const int Get(const int& t_keyCode);		// キー入力状態取得
+	static const int Get(const int t_keyCode);		// キー入力状態取得
 	static const bool IsCheckEnd();					// 強制終了
 };
 
