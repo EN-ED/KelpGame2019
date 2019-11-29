@@ -12,6 +12,8 @@ private:
 	int mD_backGround;			// 背景画像
 	int mD_underGround;			// 床画像
 	
+
+	/// 処理系---------------------------------
 	int m_areaX;				// スクロールでの座標
 	int m_speed;				// スクロールの速度
 

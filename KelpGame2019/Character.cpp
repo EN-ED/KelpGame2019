@@ -1,44 +1,48 @@
 #include "Character.hpp"
 
-constexpr float PI_MATHF = 3.14159265359f;
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::PositionProcess()
 {
+	// 加速中だったら
 	if (m_nowState == ESTATE::speedUp)
 	{
 		// 加速カウントが足りていなかったら
 		if (m_speedUpCount < 1.0)
 		{
-			m_playerX += static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
+			m_playerX += static_cast<int>(std::sinf(M_PI * m_speedUpCount) * 120.0f);
 		}
 	}
+	// 加速最大時だったら
 	else if (m_nowState == ESTATE::speedMAX)
 	{
 		// 加速最大中カウントが上限半分以上だったら(軽く左に戻っている中
 		if (m_speedMaxWaitCount > m_speedMaxWaitMaxCount / 2 && m_speedMaxWaitCount <= m_speedMaxWaitMaxCount)
 		{
-			m_playerX -= static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 8.0f);
+			m_playerX -= static_cast<int>(std::sinf(M_PI / 5.0f) * 8.0f);
 		}
 		// 加速最大中カウントが上限半分以下だったら(軽く右に進んでいる中
 		else if (m_speedMaxWaitCount < /* [<]なのはSpeedProcessに合わせるため */ m_speedMaxWaitMaxCount / 2)
 		{
-			m_playerX += static_cast<int>(std::sinf(PI_MATHF / 5.0f) * 8.0f);
+			m_playerX += static_cast<int>(std::sinf(M_PI / 5.0f) * 8.0f);
 		}
 	}
+	// 加速からの減速だったら
 	else if (m_nowState == ESTATE::speedDown)
 	{
-		// 加速から戻す
+		// 通常時に戻す
 		if (m_speedUpCount > 0.1f)
 		{
-			m_playerX -= static_cast<int>(std::sinf(PI_MATHF * m_speedUpCount) * 120.0f);
+			m_playerX -= static_cast<int>(std::sinf(M_PI * m_speedUpCount) * 120.0f);
 		}
 	}
+	// ダメージ中だったら
 	else if (m_nowState == ESTATE::damageHit)
 	{
 		m_playerX -= 2;
 	}
+	// 通常時だったら
 	else if(m_nowState ==ESTATE::normal)
 	{
 		if (m_playerX < m_defaultX)
@@ -57,34 +61,45 @@ void Character::PositionProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::HitGarbageProcess()
 {
+	// 同じ障害物IDでなく、障害物に当たっていて、加速中ではなく、通常時で、ダメージ中でなく、回復中でなかったら
 	if (m_preHitGarbageID != m_hitGarbageID && m_isHitGarbage && !m_isNowSpeedUp && m_nowState == ESTATE::normal && !m_isDamageHit && !m_nowHeal)
 	{
 		m_preHitGarbageID = m_hitGarbageID;
+
 		m_isHitGarbage = false;
+
+
+		// 障害物により処理別
 		switch (m_hitGarbageObjectID)
 		{
 		case EHitGarbageID::doro:
+
 			SoundProcess::Play(SoundProcess::E_SE::debuff);
 			m_isDamageHit = true;
+			m_smallSpeed += m_damageSmallValue;
 			m_nowState = ESTATE::doroDamageHit;
-			m_smallSpeed += 0.05f;
+
 			break;
 
 		case EHitGarbageID::mizutamari:
+
 			SoundProcess::Play(SoundProcess::E_SE::slip);
 			m_isDamageHit = true;
-			m_nowState = ESTATE::damageHit;
+			m_smallSpeed += m_damageSmallValue;
 			m_preDamageMAXSpeed = m_nowSpeed * 0.7f;
-			m_smallSpeed += 0.05f;
+			m_nowState = ESTATE::damageHit;
+
 			break;
 
 		case EHitGarbageID::sekiyu:
+
 			SoundProcess::Play(SoundProcess::E_SE::catchTouyu);
 			m_nowHeal = true;
 			m_nowState = ESTATE::heal;
+
 			break;
 
 		default:
@@ -93,10 +108,10 @@ void Character::HitGarbageProcess()
 	}
 
 
-	// ダメージを受けたら
+	// ダメージを受けていたら
 	if (m_isDamageHit)
 	{
-		// ダメージカウントが最大になったら
+		// ダメージカウントが最大になっていて、浮いていなかったら
 		if (++m_damageCount > m_damageMaxCount && m_isGroundFlag)
 		{
 			m_damageCount = 0;
@@ -106,14 +121,16 @@ void Character::HitGarbageProcess()
 	}
 
 
-	// 灯油に当たったら
+	// 回復していたら
 	if (m_nowHeal)
 	{
+		// 大きくさせる
 		if ((m_smallSpeed -= 0.01f) < 0.0f) m_smallSpeed = 0.0f;
-		// ダメージカウントが最大になったら
-		if (++m_damageCount > static_cast<int>(m_damageMaxCount * 0.5) && m_isGroundFlag)
+
+		// ダメージカウントが最大になっていて、浮いていなかったら
+		if (++m_healCount > m_healMaxCount && m_isGroundFlag)
 		{
-			m_damageCount = 0;
+			m_healCount = 0;
 			m_nowHeal = false;
 			m_nowState = ESTATE::normal;
 		}
@@ -122,38 +139,36 @@ void Character::HitGarbageProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::SpeedProcess()
 {
 	// 加速中時
 	if (m_nowState == ESTATE::speedUp)
 	{
-		m_nowSpeed += m_addSpeed;		// 速度を加算していく
+		m_nowSpeed += m_addSpeed;
 	}
 	// 最大加速時
-	else if (m_nowState == ESTATE::speedMAX)
-	{
-
-	}
+	else if (m_nowState == ESTATE::speedMAX) {}
 	// 通常時
 	else if(m_nowState == ESTATE::speedDown)
 	{
 		if (m_nowSpeed > m_playerMaxSpeed + 0.5f)
 		{
-			m_nowSpeed -= m_addSpeed;		// 速度を減少していく
+			m_nowSpeed -= m_addSpeed;
 		}
 	}
+	// 通常時
 	else if(m_nowState == ESTATE::normal)
 	{
 		// 最大加速より小さかったら
 		if (m_nowSpeed < m_playerMaxSpeed - 0.5f)
 		{
-			m_nowSpeed += m_addSpeed;		// 速度を加算していく
+			m_nowSpeed += m_addSpeed;
 		}
 		// 最大加速より大きかったら
 		else if (m_nowSpeed > m_playerMaxSpeed + 0.5f)
 		{
-			m_nowSpeed -= m_addSpeed;		// 速度を減少していく
+			m_nowSpeed -= m_addSpeed;
 		}
 		// 浮動小数点的に間にいたら
 		else
@@ -165,6 +180,7 @@ void Character::SpeedProcess()
 			}
 		}
 	}
+	// ダメージ時
 	else if (m_nowState == ESTATE::damageHit)
 	{
 		if (m_nowSpeed > m_preDamageMAXSpeed)
@@ -172,6 +188,7 @@ void Character::SpeedProcess()
 			m_nowSpeed += m_damageDownSpeed;
 		}
 	}
+
 
 	if (m_nowSpeed <= 0.0f)
 	{
@@ -181,10 +198,10 @@ void Character::SpeedProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::SpeedUpProcess()
 {
-	// Zキーを押されたら
+	// 加速キーが押され、加速チャージがされていて、通常時だったら
 	if (PadData::GetButton(XINPUT_BUTTON_RIGHT_SHOULDER, 0) == 1 && m_speedUpChargeCount == m_speedUpChargeMax && m_nowState == ESTATE::normal)
 	{
 		SoundProcess::Play(SoundProcess::E_SE::speedUp);
@@ -194,18 +211,18 @@ void Character::SpeedUpProcess()
 	}
 
 
+	// 加速時だったら
 	if (m_nowState == ESTATE::speedUp)
 	{
 		m_playerDrawAnimCount = m_runFirstPlayerAnim;
 
-		// 加速カウントを進める
 		m_speedUpCount += 0.1f;
 
 
 		// 加速カウントが足りていなかったら
-		if (m_speedUpCount < 1.0)
+		if (m_speedUpCount < m_speedUpCountTime)
 		{
-			m_addSpeed += std::sinf(PI_MATHF * m_speedUpCount) * 1.5f;
+			m_addSpeed += std::sinf(M_PI * m_speedUpCount) * 1.5f;
 		}
 		// 加速カントがたまったら
 		else
@@ -213,6 +230,7 @@ void Character::SpeedUpProcess()
 			m_nowState = ESTATE::speedMAX;
 		}
 	}
+	// 最大加速時だったら
 	else if (m_nowState == ESTATE::speedMAX)
 	{
 		// 加速最大中カウントが上限半分以上だったら(軽く左に戻っている中
@@ -222,29 +240,44 @@ void Character::SpeedUpProcess()
 			m_isNowSpeedUp = false;
 		}
 	}
+	// 加速時の減速時だったら
 	else if (m_nowState == ESTATE::speedDown)
 	{
 		if (m_speedMaxWaitCount != 0) m_speedMaxWaitCount = 0;
 
+		m_speedUpCount -= 0.1f;
 
 		// 加速から戻す
-		if (m_speedUpCount > 0.1f)
+		if (m_speedUpCount > 0.0f)
 		{
-			m_speedUpCount -= 0.1f;
-			m_addSpeed -= std::sinf(PI_MATHF * m_speedUpCount) * 1.5f;
+			m_addSpeed -= std::sinf(M_PI * m_speedUpCount) * 1.5f;
 		}
+		// 加速から戻ったら
 		else
 		{
 			m_nowState = ESTATE::normal;
 		}
 	}
+
+
+	// 加速したら
+	if (m_isNowSpeedUp)
+	{
+		if (m_speedUpChargeCount != 0) m_speedUpChargeCount = 0;
+	}
+	// 加速していなかったら
+	else
+	{
+		if (m_speedUpChargeCount < m_speedUpChargeMax) m_speedUpChargeCount++;
+	}
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::PlayerJump()
 {
+	// 地上でも空中でもダメージを受けていなかったら
 	if (!m_isDamageHit && !m_isFlyDamageHit)
 	{
 		// 地面に触れてない(浮いてる
@@ -264,7 +297,7 @@ void Character::PlayerJump()
 			}
 		}
 
-		// ジャンプボタン押したら
+		// ジャンプボタン押していて、加速中じゃなかったら
 		if (m_isGroundFlag && PadData::GetButton(XINPUT_BUTTON_A, 0) == 1 && !m_isNowSpeedUp)
 		{
 			SoundProcess::Play(SoundProcess::E_SE::jump);
@@ -285,17 +318,18 @@ void Character::PlayerJump()
 			}
 
 
-			// 長押ししていたら
+			// ジャンプボタンを長押ししていて、ジャンプの上限まで行っていなかったら
 			if (m_isLongJump && PadData::GetButton(XINPUT_BUTTON_A, 0) > 1 && m_jumpPower <= m_jumpMaxPower)
 			{
 				m_jumpPower += m_jumpAddPower;
 			}
 
 
-			// 上に上げる
+			// 上げる
 			m_playerUnderY -= m_jumpPower;
 		}
 	}
+	// 地上または空中でダメージを受けたら
 	else
 	{
 		// 地面に触れてない(浮いてる
@@ -320,63 +354,33 @@ void Character::PlayerJump()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 Character::Character()
 {
+	/// 画像------------------------------------------------
 	ZeroMemory(mD_playerArray, sizeof(mD_playerArray));
-	int doroDrawHandle = LoadGraph("media\\grad\\Doro.jpg");
-	int mizuDrawHandle = LoadGraph("media\\grad\\mizutamari.jpg");
+	ZeroMemory(mD_playerDirtArray, sizeof(mD_playerDirtArray));
+	ZeroMemory(mD_playerWaterArray, sizeof(mD_playerWaterArray));
+	ZeroMemory(mD_playerSpeedArray, sizeof(mD_playerSpeedArray));
+	int dirtDrawHandle = LoadGraph("media\\grad\\Doro.jpg");
+	int waterDrawHandle = LoadGraph("media\\grad\\mizutamari.jpg");
 	for (int i = 0; i != m_playerDrawNum; ++i)
 	{
 		std::string str = "media\\anim_blink\\" + std::to_string(i) + ".png";
 		mD_playerArray[i] = LoadGraph(str.c_str());
-		mD_playerDoroArray[i] = LoadGraph(str.c_str());
-		GraphFilter(mD_playerDoroArray[i], DX_GRAPH_FILTER_GRADIENT_MAP, doroDrawHandle, FALSE);
-		mD_playerMizuArray[i] = LoadGraph(str.c_str());
-		GraphFilter(mD_playerMizuArray[i], DX_GRAPH_FILTER_GRADIENT_MAP, mizuDrawHandle, FALSE);
+		mD_playerDirtArray[i] = LoadGraph(str.c_str());
+		GraphFilter(mD_playerDirtArray[i], DX_GRAPH_FILTER_GRADIENT_MAP, dirtDrawHandle, FALSE);
+		mD_playerWaterArray[i] = LoadGraph(str.c_str());
+		GraphFilter(mD_playerWaterArray[i], DX_GRAPH_FILTER_GRADIENT_MAP, waterDrawHandle, FALSE);
 		mD_playerSpeedArray[i] = LoadGraph(str.c_str());
 		GraphFilter(mD_playerSpeedArray[i], DX_GRAPH_FILTER_LEVEL, 60, 210, 180, 120, 255);
 	}
-	DeleteGraph(doroDrawHandle);
-	DeleteGraph(mizuDrawHandle);
+	DeleteGraph(dirtDrawHandle);
+	DeleteGraph(waterDrawHandle);
 
-	m_playerDrawAnimCount = 0;
+	mD_speedUpDescription = LoadGraph("media\\RBspeedUp.png");
 
-	m_frameCount = 0;
-
-	m_damageCount = 0;
-	m_isDamageHit = false;
-
-	m_smallSpeed = 0;
-
-	m_isNowSpeedUp = false;
-	m_nowSpeed = 70.0f;
-	m_addSpeed = 1.0f;
-	m_nowState = ESTATE::normal;
-	m_speedUpCount = 0;
-	m_speedMaxWaitCount = 0;
-	m_nowSpeedThirdDigit = 0;
-	m_nowSpeedSecondDigit = 0;
-	m_nowSpeedFirstDigit = 0;
-	m_nowSpeedDecimalPoint = 0;
-	m_speedUpChargeCount = 0;
-
-	m_playerUnderY = m_mostMaxY;
-	m_playerX = m_defaultX;
-	m_playerY = m_playerUnderY - m_playerSize;
-	m_prePlayerX = m_playerX;
-	m_prePlayerY = m_playerY;
-
-	m_isGroundFlag = true;
-	m_isJumpFlag = false;
-	m_isLongJump = false;
-	m_jumpPower = m_jumpMinPower;
-	m_gravityPower = 0;
-	m_isFlyDamageHit = false;
-	m_isHitGarbage = false;
-	m_hitGarbageID = -1;
-	m_preHitGarbageID = m_hitGarbageID;
-	m_nowHeal = false;
+	mD_jumpDescription = LoadGraph("media\\Ajump.png");
 
 	for (int i = 0; i != 10; ++i)
 	{
@@ -387,13 +391,66 @@ Character::Character()
 	}
 	mD_speedComma = LoadGraph("media\\num\\comma.png");
 
-	mD_speedUpDescription = LoadGraph("media\\RBspeedUp.png");
-	mD_jumpDescription = LoadGraph("media\\Ajump.png");
+
+	/// 画像の処理系----------------------------------------
+	m_playerDrawAnimCount = 0;
+
+
+	/// 座標の処理系----------------------------------------
+	m_playerX = m_defaultX;
+	m_playerY = m_playerUnderY - m_playerSize;
+	m_prePlayerX = m_playerX;
+	m_prePlayerY = m_playerY;
+
+	m_nowState = ESTATE::normal;
+
+
+	/// 自然縮小処理系-----------------------------------------
+	m_smallCount = 0;
+
+	m_smallSpeed = 0;
+
+
+	/// ダメージ処理系------------------------------------------
+	m_damageCount = 0;
+	m_isDamageHit = false;
+
+	m_preDamageMAXSpeed = 0.0f;
+
+
+	/// 障害物処理系-------------------------------------------
+	m_isHitGarbage = false;
+	m_hitGarbageID = -1;
+	m_preHitGarbageID = m_hitGarbageID;
+	m_hitGarbageObjectID = EHitGarbageID::none;
+
+	m_isNowSpeedUp = false;
+	m_nowSpeed = 70.0f;
+	m_addSpeed = 1.0f;
+	m_speedUpCount = 0;
+	m_speedMaxWaitCount = 0;
+	m_nowSpeedThirdDigit = 0;
+	m_nowSpeedSecondDigit = 0;
+	m_nowSpeedFirstDigit = 0;
+	m_nowSpeedDecimalPoint = 0;
+	m_speedUpChargeCount = 0;
+
+	m_playerUnderY = m_mostMaxY;
+
+	m_isGroundFlag = true;
+	m_isJumpFlag = false;
+	m_isLongJump = false;
+	m_jumpPower = m_jumpMinPower;
+	m_gravityPower = 0;
+	m_isFlyDamageHit = false;
+	m_nowHeal = false;
+
+	m_healCount = 0;
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 Character::~Character()
 {
 	if (mD_jumpDescription != -1) DeleteGraph(mD_jumpDescription);
@@ -406,21 +463,20 @@ Character::~Character()
 	for (int i = 0; i != m_playerDrawNum; ++i)
 	{
 		if (mD_playerArray[i] != -1) DeleteGraph(mD_playerArray[i]);
-		if (mD_playerDoroArray[i] != -1) DeleteGraph(mD_playerDoroArray[i]);
-		if (mD_playerMizuArray[i] != -1) DeleteGraph(mD_playerMizuArray[i]);
+		if (mD_playerDirtArray[i] != -1) DeleteGraph(mD_playerDirtArray[i]);
+		if (mD_playerWaterArray[i] != -1) DeleteGraph(mD_playerWaterArray[i]);
 		if (mD_playerSpeedArray[i] != -1) DeleteGraph(mD_playerSpeedArray[i]);
 	}
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::Draw()
 {
-	// 速度
+	/// 速度--------------------------------------------------------------------
 	if (m_nowSpeedThirdDigit != 0)
 	{
-		// DrawFormatString(199, 131, GetColor(255, 255, 255), "%d%d%d.%d", m_nowSpeedThirdDigit, m_nowSpeedSecondDigit, m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
 		DrawGraph(199, 131, mD_speedNumber[m_nowSpeedThirdDigit], true);
 		DrawGraph(199 + 121, 131, mD_speedNumber[m_nowSpeedSecondDigit], true);
 		DrawGraph(199 + 242, 131, mD_speedNumber[m_nowSpeedFirstDigit], true);
@@ -429,7 +485,6 @@ void Character::Draw()
 	}
 	else if (m_nowSpeedSecondDigit != 0)
 	{
-		// DrawFormatString(199, 131, GetColor(255, 255, 255), "%d%d.%d", m_nowSpeedSecondDigit, m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
 		DrawGraph(199, 131, mD_speedNumber[m_nowSpeedSecondDigit], true);
 		DrawGraph(199 + 121, 131, mD_speedNumber[m_nowSpeedFirstDigit], true);
 		DrawGraph(199 + 242, 131 + 114, mD_speedComma, true);
@@ -437,21 +492,19 @@ void Character::Draw()
 	}
 	else if (m_nowSpeedFirstDigit != 0)
 	{
-		// DrawFormatString(199, 131, GetColor(255, 255, 255), "%d.%d", m_nowSpeedFirstDigit, m_nowSpeedDecimalPoint);
 		DrawGraph(199, 131, mD_speedNumber[m_nowSpeedFirstDigit], true);
 		DrawGraph(199 + 121, 131 + 114, mD_speedComma, true);
 		DrawGraph(199 + 136, 131, mD_speedNumber[m_nowSpeedDecimalPoint], true);
 	}
 	else
 	{
-		// DrawFormatString(199, 131, GetColor(255, 255, 255), "0.%d", m_nowSpeedDecimalPoint);
 		DrawGraph(199, 131, mD_speedNumber[0], true);
 		DrawGraph(199 + 121, 131 + 114, mD_speedComma, true);
 		DrawGraph(199 + 136, 131, mD_speedNumber[m_nowSpeedDecimalPoint], true);
 	}
 
 
-	// プレイヤー
+	/// プレイヤー---------------------------------------------------------------
 	if (m_nowState == ESTATE::damageHit)
 	{
 		if (m_damageCount % 5 != 0)
@@ -465,7 +518,7 @@ void Character::Draw()
 				, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, speedGraph, true);
 
-			int diviGraph = DerivationGraph(0, static_cast<int>(6.4 * m_damageCount), 192, 192 - static_cast<int>(6.4 * m_damageCount), mD_playerMizuArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)]);
+			int diviGraph = DerivationGraph(0, static_cast<int>(6.4 * m_damageCount), 192, 192 - static_cast<int>(6.4 * m_damageCount), mD_playerWaterArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)]);
 			DrawRotaGraph(m_playerX
 				, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed) + static_cast<int>((3.2 * m_damageCount) * (1.0 - static_cast<double>(m_smallSpeed)))
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, diviGraph, true);
@@ -484,7 +537,7 @@ void Character::Draw()
 				, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, speedGraph, true);
 
-			int diviGraph = DerivationGraph(0, static_cast<int>(6.4 * m_damageCount), 192, 192 - static_cast<int>(6.4 * m_damageCount), mD_playerDoroArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)]);
+			int diviGraph = DerivationGraph(0, static_cast<int>(6.4 * m_damageCount), 192, 192 - static_cast<int>(6.4 * m_damageCount), mD_playerDirtArray[static_cast<int>(m_playerDrawAnimCount / m_playerDrawAnimSpeed)]);
 			DrawRotaGraph(m_playerX
 				, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed) + static_cast<int>((3.2 * m_damageCount) * (1.0 - static_cast<double>(m_smallSpeed)))
 				, 1.0 - static_cast<double>(m_smallSpeed), 0, diviGraph, true);
@@ -503,6 +556,7 @@ void Character::Draw()
 	}
 
 
+	/// UI-------------------------------------------------------------
 	DrawGraph(300, 1080 - 128, mD_jumpDescription, true);
 	if (m_speedUpChargeCount == m_speedUpChargeMax)
 	{
@@ -512,7 +566,7 @@ void Character::Draw()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::BlurDraw()
 {
 	DrawRotaGraph(m_playerX, m_playerY + static_cast<int>(m_playerSize * 0.5) + static_cast<int>(m_playerSize * 0.5 * m_smallSpeed)
@@ -521,47 +575,38 @@ void Character::BlurDraw()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::Process()
 {
+	/// 座標------------------------------------------
 	m_prePlayerX = m_playerX;
 	m_prePlayerY = m_playerY;
 
 
+	/// アニメーションコマ----------------------------
 	if (++m_playerDrawAnimCount >= m_playerDrawAnimSpeed * m_playerDrawNum) m_playerDrawAnimCount = 0;
 
 
-	if (++m_frameCount > 30)
+	/// 縮小------------------------------------------
+	if (++m_smallCount > m_smallCountTime)
 	{
-		m_smallSpeed += 0.005f;
-		m_frameCount = 0;
+		m_smallSpeed += m_smallValue;
+		m_smallCount = 0;
 	}
 
 
 	SpeedProcess();
 
-
 	SpeedUpProcess();
-
 
 	PlayerJump();
 
-
 	HitGarbageProcess();
-
 
 	PositionProcess();
 
 
-	if (m_isNowSpeedUp)
-	{
-		if (m_speedUpChargeCount != 0) m_speedUpChargeCount = 0;
-	}
-	else
-	{
-		if (m_speedUpChargeCount < m_speedUpChargeMax) m_speedUpChargeCount++;
-	}
-
+	/// 速度を描画するための-----------------------------
 	int temp = static_cast<int>(m_nowSpeed * 10);
 	if (temp > 1000)
 	{
@@ -595,7 +640,7 @@ void Character::Process()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::FirstDraw(int t_x, int t_y, bool t_turn)
 {
 	if (t_turn)
@@ -610,7 +655,7 @@ void Character::FirstDraw(int t_x, int t_y, bool t_turn)
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 void Character::FirstProcess()
 {
 	if (++m_playerDrawAnimCount >= m_playerDrawAnimSpeed * m_playerDrawNum) m_playerDrawAnimCount = 0;
@@ -618,7 +663,7 @@ void Character::FirstProcess()
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 const bool Character::GetIsSpeedUp() const
 {
 	if (m_nowState == ESTATE::speedUp || m_nowState == ESTATE::speedMAX || m_nowState == ESTATE::speedDown)
@@ -633,24 +678,24 @@ const bool Character::GetIsSpeedUp() const
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const float& Character::GetSpeed() const
+/// ---------------------------------------------------------------------------------------
+const float Character::GetSpeed() const
 {
 	return m_nowSpeed;
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const float& Character::GetDefaultMAXSpeed() const
+/// ---------------------------------------------------------------------------------------
+const float Character::GetDefaultMAXSpeed() const
 {
 	return m_playerMaxSpeed;
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-void Character::HitGarbageNow(const int& t_garbageID, const EHitGarbageID& t_garbageObjectID)
+/// ---------------------------------------------------------------------------------------
+void Character::HitGarbageNow(const int t_garbageID, const EHitGarbageID t_garbageObjectID)
 {
 	m_hitGarbageObjectID = t_garbageObjectID;
 	m_isHitGarbage = true;
@@ -659,23 +704,23 @@ void Character::HitGarbageNow(const int& t_garbageID, const EHitGarbageID& t_gar
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const int& Character::GetAreaX() const
+/// ---------------------------------------------------------------------------------------
+const int Character::GetAreaX() const
 {
 	return m_playerX;
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const int& Character::GetAreaY() const
+/// ---------------------------------------------------------------------------------------
+const int Character::GetAreaY() const
 {
 	return m_playerY;
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+/// ---------------------------------------------------------------------------------------
 const int Character::GetSize() const
 {
 	return static_cast<int>(192 * (1.0 - static_cast<double>(m_smallSpeed)));
@@ -683,24 +728,24 @@ const int Character::GetSize() const
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const bool& Character::GetNowDamage() const
+/// ---------------------------------------------------------------------------------------
+const bool Character::GetNowDamage() const
 {
 	return m_isDamageHit;
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const bool& Character::GetNowHeal() const
+/// ---------------------------------------------------------------------------------------
+const bool Character::GetNowHeal() const
 {
 	return m_nowHeal;
 }
 
 
 
-/// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-const float& Character::GetSmallSpeed() const
+/// ---------------------------------------------------------------------------------------
+const float Character::GetSmallSpeed() const
 {
 	return m_smallSpeed;
 }
