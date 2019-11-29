@@ -14,20 +14,14 @@
 class Manager
 {
 private:
-	/// シーンに関する-------------------------------------------
-
-	// シーンの基底クラス
-	BaseScene* p_baseMove;
+	BaseScene* p_baseMove;	// シーンの基底クラス
 
 	// シーンを切り替える
 	void SceneChange();
 
 
 public:
-	// コンストラクタ
 	Manager();
-
-	// デストラクタ
 	~Manager();
 
 

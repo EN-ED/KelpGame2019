@@ -25,9 +25,9 @@ namespace SoundProcess
 
 	void Release();
 
-	void Play(const E_SE& number);
+	void Play(const E_SE number);
 
-	void Play(const E_BGM& number);
+	void Play(const E_BGM number);
 
 	void BGMLoop();
 }
