@@ -57,26 +57,26 @@ public:
 	static void UpDate();		// ゲームパッドの入力の状態更新
 
 
-	static const int GetButton(const int& t_code, const int& t_padNum);									// ボタンの入力状態取得
-	static const int GetTrigger(const int& t_code, const int& t_padNum);								// トリガーの取得
-	static const int GetStick(const int& t_code, const int& t_padNum);									// スティックの入力状態取得
-	static const int GetStickCheck(const int& t_code, const int& t_padNum, const bool& t_leftAndDownIsTrue);	// スティックの押し倒し取得
+	static const int GetButton(const int t_code, const int t_padNum);									// ボタンの入力状態取得
+	static const int GetTrigger(const int t_code, const int t_padNum);								// トリガーの取得
+	static const int GetStick(const int t_code, const int t_padNum);									// スティックの入力状態取得
+	static const int GetStickCheck(const int t_code, const int t_padNum, const bool t_leftAndDownIsTrue);	// スティックの押し倒し取得
 
 
 	static const bool IsCheckEnd();																		// 強制終了
 	static const char GetPadNum();																		// 接続されてるゲームパッドの数
 
 
-	static inline void SetDedZone(const short& t_stickLX_MAX, const short& t_stickLX_MIN, const short& t_stickLY_MAX, const short& t_stickLY_MIN
-		, const short& t_stickRX_MAX, const short& t_stickRX_MIN, const short& t_stickRY_MAX, const short& t_stickRY_MIN);					// デッドゾーンの設定
+	static inline void SetDedZone(const short t_stickLX_MAX, const short t_stickLX_MIN, const short t_stickLY_MAX, const short t_stickLY_MIN
+		, const short t_stickRX_MAX, const short t_stickRX_MIN, const short t_stickRY_MAX, const short t_stickRY_MIN);					// デッドゾーンの設定
 	static inline void SetPadNum();																		// 接続されてるゲームパッドを取得する
 };
 
 
 
 /// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-inline void PadData::SetDedZone(const short& t_stickLX_MAX, const short& t_stickLX_MIN, const short& t_stickLY_MAX, const short& t_stickLY_MIN
-	, const short& t_stickRX_MAX, const short& t_stickRX_MIN, const short& t_stickRY_MAX, const short& t_stickRY_MIN)
+inline void PadData::SetDedZone(const short t_stickLX_MAX, const short t_stickLX_MIN, const short t_stickLY_MAX, const short t_stickLY_MIN
+	, const short t_stickRX_MAX, const short t_stickRX_MIN, const short t_stickRY_MAX, const short t_stickRY_MIN)
 {
 	stickLX_DeadZoneMAX = t_stickLX_MAX;
 	stickLX_DeadZoneMIN = t_stickLX_MIN;

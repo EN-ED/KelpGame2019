@@ -9,32 +9,36 @@
 class Garbage
 {
 public:
+	// áŠQ•¨‚Ìí—Ş
 	enum class EDrawID { doro, mizutamari, sekiyu };
 
 
-
 private:
-	int m_x;
-	int m_y;
-
+	/// ‰æ‘œ-----------------------------
 	int mD_garbage;
 
+
+	// ˆ—Œn----------------------------
+	int m_x;
+	int m_y;
 
 	EDrawID m_ID;
 
 
-
 public:
-	Garbage(const int& t_x, const int& t_y, const EDrawID& t_ID);
+	Garbage(const int t_x, const int t_y, const EDrawID t_ID);
 	~Garbage();
 
 
+	// •`‰æ
 	void Draw();
 
-	void Process(const int& t_speed);
+	// ˆ—
+	void Process(const int t_speed);
 
-	const int& GetX() const;
-	const int& GetY() const;
-	const EDrawID& GetID() const;
+
+	const int GetX() const;
+	const int GetY() const;
+	const EDrawID GetID() const;
 };
 
