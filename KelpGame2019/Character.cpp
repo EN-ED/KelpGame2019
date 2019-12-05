@@ -736,9 +736,9 @@ const int Character::GetAreaY() const
 
 
 /// ---------------------------------------------------------------------------------------
-const int Character::GetSize() const
+const float Character::GetSize() const
 {
-	return static_cast<int>(192 * (1.0 - static_cast<double>(m_smallSpeed)));
+	return 192 * (1.0f - m_smallSpeed);
 }
 
 

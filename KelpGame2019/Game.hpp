@@ -58,6 +58,14 @@ private:
 	void MainDraw();
 	void MainProcess();
 
+		// 当たり判定処理
+	struct SBox
+	{
+		float left, top, right, bottom;
+	};
+	bool CheckColl(const SBox t_boxA, const SBox t_boxB);
+
+
 	int mD_firstTimer[3];				// ゲーム開始直前の３カウント画像
 
 	int m_maxLoad;						// ゴールまでの長さ

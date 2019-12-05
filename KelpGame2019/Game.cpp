@@ -219,29 +219,39 @@ void Game::MainProcess()
 
 		// 当たり判定
 		// 画像より小さめに当たり判定を取る
-		int xA = mp_character->GetAreaX() + static_cast<int>(mp_character->GetSize() * 0.25);
-		int xB = xA + static_cast<int>(mp_character->GetSize() * 0.5);
-		int yA = mp_character->GetAreaY() + static_cast<int>(mp_character->GetSize() * 0.25);
-		int yB = yA + static_cast<int>(mp_character->GetSize() * 0.5);
-		// 右端が障害物の左端に当たってすぎる
-		if (xB >= mp_garbage[i]->GetX())
-		{
-			// 上端が障害物の下端よりも上にいる 左端が障害物の右端よりも左にいる
-			if (yA <= mp_garbage[i]->GetY() + 256 && xA <= mp_garbage[i]->GetX() + 256)
-			{
-				mp_character->HitGarbageNow(static_cast<int>(i), static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
-			}
+		SBox charaCollBox;
+		charaCollBox.left = mp_character->GetAreaX() - mp_character->GetSize() * 0.25f;
+		charaCollBox.right = charaCollBox.left + mp_character->GetSize() * 0.5f;
+		charaCollBox.top = mp_character->GetAreaY() + ((192.0f - mp_character->GetSize()) + (mp_character->GetSize() * 0.25f));
+		charaCollBox.bottom = charaCollBox.top + mp_character->GetSize() * 0.5f;
 
-			// 下端が障害物の上端に当たって過ぎる 左端が障害物の右端よりも中にいる
-			if (yB >= mp_garbage[i]->GetY() && xA <= mp_garbage[i]->GetX() + 256)
-			{
-				if (yA <= mp_garbage[i]->GetY() + 256)
-				{
-					mp_character->HitGarbageNow(static_cast<int>(i), static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
-				}
-			}
+		SBox garbageCollBox;
+		garbageCollBox.left = mp_garbage[i]->GetX();
+		garbageCollBox.right = mp_garbage[i]->GetX() + 256;
+		garbageCollBox.top = mp_garbage[i]->GetY();
+		garbageCollBox.bottom = mp_garbage[i]->GetY() + 256;
+
+		if (CheckColl(charaCollBox, garbageCollBox))
+		{
+			mp_character->HitGarbageNow(static_cast<int>(i), static_cast<Character::EHitGarbageID>(mp_garbage[i]->GetID()));
 		}
 	}
+}
+
+
+
+/// ---------------------------------------------------------------------------------------
+bool Game::CheckColl(const SBox t_boxA, const SBox t_boxB)
+{
+	if ((t_boxA.right > t_boxB.left) && (t_boxA.left < t_boxB.right))
+	{
+		if ((t_boxA.bottom > t_boxB.top) && (t_boxA.top < t_boxB.bottom))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 

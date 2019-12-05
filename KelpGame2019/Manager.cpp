@@ -114,11 +114,19 @@ void Manager::SceneChange()
 /// ---------------------------------------------------------------------------------------
 Manager::Manager()
 {
+#ifdef _DEBUG
+	BASICPARAM::e_preScene = ESceneNumber::GAME;
+	BASICPARAM::e_nowScene = ESceneNumber::GAME;
+
+	p_baseMove = nullptr;
+	p_baseMove = new Game(1);
+#elif NDEBUG
 	BASICPARAM::e_preScene = ESceneNumber::LOGO;
 	BASICPARAM::e_nowScene = ESceneNumber::LOGO;
 
 	p_baseMove = nullptr;
 	p_baseMove = new Logo();
+#endif
 
 
 	switch (BASICPARAM::e_nowScene)

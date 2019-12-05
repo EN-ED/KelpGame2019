@@ -196,7 +196,7 @@ public:
 	
 	const int GetAreaY() const;
 	
-	const int GetSize() const;
+	const float GetSize() const;
 	
 	const bool GetNowDamage() const;
 	
