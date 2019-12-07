@@ -41,6 +41,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);	// 背景描画
 	SetMouseDispFlag(FALSE);		// マウスカーソルを非表示にする
 
+	SetUseDXArchiveFlag(TRUE);
+
 	SoundProcess::Init();
 
 	KeyData::UpDate();
